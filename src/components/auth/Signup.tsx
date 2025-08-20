@@ -183,11 +183,11 @@ const Signup: React.FC = () => {
             <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
               <Music className="h-6 w-6 text-white" />
             </div>
-            <h1 className="text-2xl font-extrabold text-white tracking-wider">
-              <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
-                AbhiMusicKeys
-              </span>
-            </h1>
+                          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-wider">
+                <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
+                  AbhiMusicKeys
+                </span>
+              </h1>
           </div>
           
           {/* Navigation Buttons */}

@@ -146,7 +146,7 @@ const AdvancedCourseOverview: React.FC = () => {
               <div className="p-2 sm:p-3 bg-gradient-to-r from-pink-400 via-fuchsia-500 to-pink-600 rounded-xl shadow-lg">
                 <Music className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
               </div>
-              <h1 className="text-lg sm:text-xl lg:text-2xl font-extrabold text-white tracking-wider">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-pink-100 via-fuchsia-100 to-pink-200 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>

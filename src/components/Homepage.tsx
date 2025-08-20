@@ -307,10 +307,10 @@ const Homepage: React.FC = () => {
           <div className="relative flex justify-between items-center p-4 sm:p-6">
             {/* Enhanced Logo */}
             <div className="flex items-center gap-2 sm:gap-3">
-                             <div className="p-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                <Music className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                             <div className="p-2 sm:p-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+                <Music className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                </div>
-              <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-wider">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>
@@ -632,7 +632,7 @@ const Homepage: React.FC = () => {
         {/* Mobile-Optimized Hero Section */}
         <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 text-center py-8 sm:py-12 pb-16 sm:pb-24">
           <div className="max-w-6xl mx-auto w-full">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold mb-4 sm:mb-8 leading-tight tracking-tight text-white drop-shadow-2xl">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold mb-4 sm:mb-8 leading-tight tracking-tight text-white drop-shadow-2xl">
               Master Piano with
               <br />
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-lg">
@@ -640,7 +640,7 @@ const Homepage: React.FC = () => {
               </span>
             </h1>
             
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white/90 dark:text-white/80 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed font-medium drop-shadow-lg px-4">
+            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white/90 dark:text-white/80 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed font-medium drop-shadow-lg px-4">
               Learn keyboard from scratch with easy-to-follow lessons.
             </p>
 
@@ -660,8 +660,8 @@ const Homepage: React.FC = () => {
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-200">
                   <Unlock className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-4 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200">Basic</h3>
-                <p className="text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-300 mb-4 flex-1">Perfect for complete beginners. Start your piano journey with fundamental lessons.</p>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-4 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200">Basic</h3>
+                <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 mb-4 flex-1">Perfect for complete beginners. Start your piano journey with fundamental lessons.</p>
                 
                 {/* Course Rating */}
                 <div className="flex items-center justify-between mb-3">
@@ -669,7 +669,7 @@ const Homepage: React.FC = () => {
                   <span className="text-xs text-slate-500 dark:text-slate-400">4.9 (2.1k)</span>
                  </div>
                 
-                <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-sm sm:text-base">
+                <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-base sm:text-lg">
                    Start Learning
                  </div>
                </motion.div>
@@ -688,8 +688,8 @@ const Homepage: React.FC = () => {
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-200">
                   <Lock className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-4 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-200">Intermediate</h3>
-                <p className="text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-300 mb-4 flex-1">Build on your foundation with advanced techniques and complex pieces.</p>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-4 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-200">Intermediate</h3>
+                <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 mb-4 flex-1">Build on your foundation with advanced techniques and complex pieces.</p>
                 
                 {/* Course Rating */}
                 <div className="flex items-center justify-between mb-3">
@@ -697,7 +697,7 @@ const Homepage: React.FC = () => {
                   <span className="text-xs text-slate-500 dark:text-slate-400">4.7 (1.8k)</span>
                  </div>
                 
-                <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-sm sm:text-base">
+                <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-base sm:text-lg">
                    Premium Access
                  </div>
                </motion.div>
@@ -716,8 +716,8 @@ const Homepage: React.FC = () => {
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-200">
                   <Lock className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200">Advanced</h3>
-                <p className="text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-300 mb-4 flex-1">Master complex compositions and professional-level techniques.</p>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200">Advanced</h3>
+                <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 mb-4 flex-1">Master complex compositions and professional-level techniques.</p>
                 
                 {/* Course Rating */}
                 <div className="flex items-center justify-between mb-3">
@@ -725,9 +725,9 @@ const Homepage: React.FC = () => {
                   <span className="text-xs text-slate-500 dark:text-slate-400">4.8 (1.5k)</span>
                  </div>
                 
-                <div className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-sm sm:text-base">
+                                <div className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-base sm:text-lg">
                    Premium Access
-                                  </div>
+                 </div>
                </motion.div>
              </div>
            
@@ -763,15 +763,15 @@ const Homepage: React.FC = () => {
               {/* Mobile-Optimized Why AbhiMusicKeys Section */}
          <section className="py-12 sm:py-16 px-4 sm:px-6">
            <div className="max-w-6xl mx-auto">
-             <motion.h2 
-               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center text-white mb-8 sm:mb-12 drop-shadow-lg px-4"
-               initial={{ opacity: 0, y: 30 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.6 }}
-               viewport={{ once: true }}
-             >
-               Why Choose <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">AbhiMusicKeys</span>?
-             </motion.h2>
+                           <motion.h2 
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center text-white mb-8 sm:mb-12 drop-shadow-lg px-4"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                Why Choose <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">AbhiMusicKeys</span>?
+              </motion.h2>
              
              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
                 {/* Community Support */}
@@ -785,8 +785,8 @@ const Homepage: React.FC = () => {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                     <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-white mb-2 sm:mb-3">Community Support</h3>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">Join our community of learners and get support whenever you need help.</p>
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-3">Community Support</h3>
+                  <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300">Join our community of learners and get support whenever you need help.</p>
                 </motion.div>
 
                 {/* Flexible Learning */}
@@ -800,8 +800,8 @@ const Homepage: React.FC = () => {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                     <Unlock className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-white mb-2 sm:mb-3">Flexible Learning</h3>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">Learn at your own pace with 24/7 access to all course materials.</p>
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-3">Flexible Learning</h3>
+                  <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300">Learn at your own pace with 24/7 access to all course materials.</p>
                 </motion.div>
 
                 {/* PDF Resources */}
@@ -815,8 +815,8 @@ const Homepage: React.FC = () => {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                     <Youtube className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-white mb-2 sm:mb-3">Video Lessons</h3>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">Video tutorials covering piano fundamentals and advanced techniques.</p>
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-3">Video Lessons</h3>
+                  <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300">Video tutorials covering piano fundamentals and advanced techniques.</p>
                 </motion.div>
               </div>
            </div>
@@ -832,9 +832,9 @@ const Homepage: React.FC = () => {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-800 dark:text-white mb-4">
-                What My Students Say
-              </h2>
+                             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-800 dark:text-white mb-4">
+                 What My Students Say
+               </h2>
               <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
                 Join thousands of satisfied learners who have transformed their piano skills with AbhiMusicKeys
               </p>

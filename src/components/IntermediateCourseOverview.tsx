@@ -124,7 +124,7 @@ const IntermediateCourseOverview: React.FC = () => {
   const intermediateChords = [
     {
       name: 'C7',
-      notes: ['C', 'E', 'G', 'Bb'],
+      notes: ['C', 'E', 'G', 'A#'],
       description: 'Dominant 7th chord - commonly used in blues and jazz',
       category: '7th Chords',
       difficulty: 'Intermediate'
@@ -171,7 +171,7 @@ const IntermediateCourseOverview: React.FC = () => {
     {
       name: 'Dorian Mode',
       root: 'C',
-      notes: ['C', 'D', 'Eb', 'F', 'G', 'A', 'Bb', 'C'],
+      notes: ['C', 'D', 'D#', 'F', 'G', 'A', 'A#', 'C'],
       description: 'Jazz and blues scale with minor 3rd and major 6th',
       category: 'Modes',
       difficulty: 'Intermediate'
@@ -195,7 +195,7 @@ const IntermediateCourseOverview: React.FC = () => {
     {
       name: 'Melodic Minor',
       root: 'C',
-      notes: ['C', 'D', 'Eb', 'F', 'G', 'A', 'B', 'C'],
+      notes: ['C', 'D', 'D#', 'F', 'G', 'A', 'B', 'C'],
       description: 'Minor scale with raised 6th and 7th ascending',
       category: 'Minor Scales',
       difficulty: 'Advanced'
@@ -294,7 +294,7 @@ const IntermediateCourseOverview: React.FC = () => {
               <div className="p-2 sm:p-3 bg-gradient-to-r from-orange-400 via-yellow-500 to-orange-600 rounded-xl shadow-lg">
                 <Music className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
               </div>
-              <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold text-white tracking-wider">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-orange-100 via-yellow-100 to-orange-200 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>

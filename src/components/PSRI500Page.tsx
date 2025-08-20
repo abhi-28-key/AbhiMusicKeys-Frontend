@@ -185,7 +185,7 @@ const PSRI500Page: React.FC = () => {
                                <div className="p-2 sm:p-3 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 rounded-xl shadow-lg">
                   <Music className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
                 </div>
-                <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold text-white tracking-wider">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
                   <span className="bg-gradient-to-r from-green-100 via-emerald-100 to-green-200 bg-clip-text text-transparent">
                     AbhiMusicKeys
                   </span>
@@ -318,7 +318,7 @@ const PSRI500Page: React.FC = () => {
                          {/* Style Numbers List */}
              <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-red-200/50 dark:border-red-700/50 shadow-lg">
                <div className="text-center mb-6 sm:mb-8">
-                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">PSR-I500 Style Numbers</h2>
+                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">PSR-I500 Style Numbers</h2>
                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">
                    Here are all the available style numbers for your PSR-I500 keyboard
                  </p>
@@ -334,7 +334,7 @@ const PSRI500Page: React.FC = () => {
                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-red-500 to-pink-600 rounded-lg flex items-center justify-center mx-auto mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300">
                          <Music className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                        </div>
-                       <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Style Number</p>
+                       <p className="text-base sm:text-lg font-medium text-gray-600 dark:text-gray-400">Style Number</p>
                        <p className="text-sm sm:text-lg font-bold text-gray-800 dark:text-white">{styleNumber}</p>
                      </div>
                    </div>
@@ -345,7 +345,7 @@ const PSRI500Page: React.FC = () => {
                          {/* Note Section */}
              <div className="mt-8 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-amber-200/50 dark:border-amber-700/50 shadow-lg">
                <div className="text-center">
-                 <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">**Note:**</h3>
+                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">**Note:**</h3>
                  <p className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-4xl mx-auto mb-4 sm:mb-6 px-2">
                    <em>These 27 styles are very useful for church songs. I will use them regularly in my church. Your task is to check all styles, know what type of songs fit each one, and how to use them in the best way.</em>
                  </p>
@@ -355,7 +355,7 @@ const PSRI500Page: React.FC = () => {
                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                        <Music className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                      </div>
-                                           <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-sm sm:text-base">Style - 92</h4>
+                                           <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-lg sm:text-xl">Style - 92</h4>
                       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                         Best for Worship songs like:<br/>
                         • <span className="inline-block font-extrabold text-amber-300 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-md ring-1 ring-amber-400/30 shadow-sm">"Athunatha Simhanamupai"</span><br/>
@@ -368,7 +368,7 @@ const PSRI500Page: React.FC = () => {
                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                        <Music className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                      </div>
-                                           <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-sm sm:text-base">Style - 203</h4>
+                                           <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-lg sm:text-xl">Style - 203</h4>
                       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                         Best for Worship song like:<br/>
                         • <span className="inline-block font-extrabold text-amber-300 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-md ring-1 ring-amber-400/30 shadow-sm">"Yesu Neve Kavalaya"</span>
@@ -379,7 +379,7 @@ const PSRI500Page: React.FC = () => {
                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                        <Music className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                      </div>
-                                           <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-sm sm:text-base">Style - 28</h4>
+                                           <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-lg sm:text-xl">Style - 28</h4>
                       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                         Best for Worship song like:<br/>
                         • <span className="inline-block font-extrabold text-amber-300 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-md ring-1 ring-amber-400/30 shadow-sm">"Ninne Preminthunu"</span>
@@ -394,7 +394,7 @@ const PSRI500Page: React.FC = () => {
                              className="mt-12 sm:mt-16 bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-red-200/50 dark:border-red-700/50 shadow-lg"
             >
                                                            <div className="text-center mb-6 sm:mb-8">
-                                   <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">Indian Backup for PSR-I500</h2>
+                                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">Indian Backup for PSR-I500</h2>
                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">
                      I have Indian Styles backup
                    </p>

@@ -112,7 +112,7 @@ const PricingPage: React.FC = () => {
 
 
 
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 sm:mb-6"
               >
                 Choose Your
                 <br />
@@ -124,7 +124,7 @@ const PricingPage: React.FC = () => {
 
 
 
-                className="text-base sm:text-lg md:text-xl text-white/80 max-w-3xl mx-auto px-4"
+                className="text-lg sm:text-xl md:text-2xl text-white/80 max-w-3xl mx-auto px-4"
               >
                 Start your musical journey with our comprehensive piano courses. 
                 Choose the plan that best fits your learning goals and budget.

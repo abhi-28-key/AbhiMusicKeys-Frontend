@@ -715,9 +715,9 @@ const BasicLearning: React.FC = () => {
       { name: 'A Major', notes: { chord: ['A', 'C#', 'E', 'A'], up: ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#', 'A'], down: ['A', 'G#', 'F#', 'E', 'D', 'C#', 'B', 'A'] } },
       { name: 'E Major', notes: { chord: ['E', 'G#', 'B', 'E'], up: ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#', 'E'], down: ['E', 'D#', 'C#', 'B', 'A', 'G#', 'F#', 'E'] } },
       { name: 'B Major', notes: { chord: ['B', 'D#', 'F#', 'B'], up: ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#', 'B'], down: ['B', 'A#', 'G#', 'F#', 'E', 'D#', 'C#', 'B'] } },
-      { name: 'F Major', notes: { chord: ['F', 'A', 'C', 'F'], up: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F'], down: ['F', 'E', 'D', 'C', 'Bb', 'A', 'G', 'F'] } },
-      { name: 'Bb Major', notes: { chord: ['Bb', 'D', 'F', 'Bb'], up: ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A', 'Bb'], down: ['Bb', 'A', 'G', 'F', 'Eb', 'D', 'C', 'Bb'] } },
-      { name: 'Eb Major', notes: { chord: ['Eb', 'G', 'Bb', 'Eb'], up: ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D', 'Eb'], down: ['Eb', 'D', 'C', 'Bb', 'Ab', 'G', 'F', 'Eb'] } }
+      { name: 'F Major', notes: { chord: ['F', 'A', 'C', 'F'], up: ['F', 'G', 'A', 'A#', 'C', 'D', 'E', 'F'], down: ['F', 'E', 'D', 'C', 'A#', 'A', 'G', 'F'] } },
+      { name: 'A# Major', notes: { chord: ['A#', 'D', 'F', 'A#'], up: ['A#', 'C', 'D', 'D#', 'F', 'G', 'A', 'A#'], down: ['A#', 'A', 'G', 'F', 'D#', 'D', 'C', 'A#'] } },
+      { name: 'D# Major', notes: { chord: ['D#', 'G', 'A#', 'D#'], up: ['D#', 'F', 'G', 'G#', 'A#', 'C', 'D', 'D#'], down: ['D#', 'D', 'C', 'A#', 'G#', 'G', 'F', 'D#'] } }
     ];
 
     const isSharp = (note: string) => {
@@ -1308,7 +1308,7 @@ const BasicLearning: React.FC = () => {
                 <div className="absolute top-1 sm:top-2 left-31 sm:left-44 w-6 sm:w-8 lg:w-16 h-3 sm:h-4 lg:h-8 bg-white/30 rounded-sm"></div>
               </div>
               <div className="relative z-10">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3">🎼 Let's Learn the Keys & Fingers!</h2>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">🎼 Let's Learn the Keys & Fingers!</h2>
                 <p className="text-sm sm:text-base lg:text-lg mb-2 sm:mb-3">Welcome to the basics of piano playing! We'll learn about the keys and how to use your fingers.</p>
               </div>
             </div>
@@ -1632,7 +1632,7 @@ const BasicLearning: React.FC = () => {
                 { name: 'C Major', notes: { chord: ['C', 'E', 'G', 'C'], up: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'], down: ['C', 'B', 'A', 'G', 'F', 'E', 'D', 'C'] } },
                 { name: 'D Major', notes: { chord: ['D', 'F#', 'A', 'D'], up: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#', 'D'], down: ['D', 'C#', 'B', 'A', 'G', 'F#', 'E', 'D'] } },
                 { name: 'E Major', notes: { chord: ['E', 'G#', 'B', 'E'], up: ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#', 'E'], down: ['E', 'D#', 'C#', 'B', 'A', 'G#', 'F#', 'E'] } },
-                { name: 'F Major', notes: { chord: ['F', 'A', 'C', 'F'], up: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F'], down: ['F', 'E', 'D', 'C', 'Bb', 'A', 'G', 'F'] } },
+                { name: 'F Major', notes: { chord: ['F', 'A', 'C', 'F'], up: ['F', 'G', 'A', 'A#', 'C', 'D', 'E', 'F'], down: ['F', 'E', 'D', 'C', 'A#', 'A', 'G', 'F'] } },
                 { name: 'G Major', notes: { chord: ['G', 'B', 'D', 'G'], up: ['G', 'A', 'B', 'C', 'D', 'E', 'F#', 'G'], down: ['G', 'F#', 'E', 'D', 'C', 'B', 'A', 'G'] } },
                 { name: 'A Major', notes: { chord: ['A', 'C#', 'E', 'A'], up: ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#', 'A'], down: ['A', 'G#', 'F#', 'E', 'D', 'C#', 'B', 'A'] } },
                 { name: 'B Major', notes: { chord: ['B', 'D#', 'F#', 'B'], up: ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#', 'B'], down: ['B', 'A#', 'G#', 'F#', 'E', 'D#', 'C#', 'B'] } }
@@ -2018,11 +2018,11 @@ const BasicLearning: React.FC = () => {
             {/* Minor Scales Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { name: 'C Minor', notes: { chord: ['C', 'Eb', 'G', 'C'], up: ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb', 'C'], down: ['C', 'Bb', 'Ab', 'G', 'F', 'Eb', 'D', 'C'] } },
-                { name: 'D Minor', notes: { chord: ['D', 'F', 'A', 'D'], up: ['D', 'E', 'F', 'G', 'A', 'Bb', 'C', 'D'], down: ['D', 'C', 'Bb', 'A', 'G', 'F', 'E', 'D'] } },
+                { name: 'C Minor', notes: { chord: ['C', 'D#', 'G', 'C'], up: ['C', 'D', 'D#', 'F', 'G', 'G#', 'A#', 'C'], down: ['C', 'A#', 'G#', 'G', 'F', 'D#', 'D', 'C'] } },
+                { name: 'D Minor', notes: { chord: ['D', 'F', 'A', 'D'], up: ['D', 'E', 'F', 'G', 'A', 'A#', 'C', 'D'], down: ['D', 'C', 'A#', 'A', 'G', 'F', 'E', 'D'] } },
                 { name: 'E Minor', notes: { chord: ['E', 'G', 'B', 'E'], up: ['E', 'F#', 'G', 'A', 'B', 'C', 'D', 'E'], down: ['E', 'D', 'C', 'B', 'A', 'G', 'F#', 'E'] } },
-                { name: 'F Minor', notes: { chord: ['F', 'Ab', 'C', 'F'], up: ['F', 'G', 'Ab', 'Bb', 'C', 'Db', 'Eb', 'F'], down: ['F', 'Eb', 'Db', 'C', 'Bb', 'Ab', 'G', 'F'] } },
-                { name: 'G Minor', notes: { chord: ['G', 'Bb', 'D', 'G'], up: ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F', 'G'], down: ['G', 'F', 'Eb', 'D', 'C', 'Bb', 'A', 'G'] } },
+                { name: 'F Minor', notes: { chord: ['F', 'G#', 'C', 'F'], up: ['F', 'G', 'G#', 'A#', 'C', 'C#', 'D#', 'F'], down: ['F', 'D#', 'C#', 'C', 'A#', 'G#', 'G', 'F'] } },
+                { name: 'G Minor', notes: { chord: ['G', 'A#', 'D', 'G'], up: ['G', 'A', 'A#', 'C', 'D', 'D#', 'F', 'G'], down: ['G', 'F', 'D#', 'D', 'C', 'A#', 'A', 'G'] } },
                 { name: 'A Minor', notes: { chord: ['A', 'C', 'E', 'A'], up: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'A'], down: ['A', 'G', 'F', 'E', 'D', 'C', 'B', 'A'] } },
                 { name: 'B Minor', notes: { chord: ['B', 'D', 'F#', 'B'], up: ['B', 'C#', 'D', 'E', 'F#', 'G', 'A', 'B'], down: ['B', 'A', 'G', 'F#', 'E', 'D', 'C#', 'B'] } }
               ].map((scale, index) => (
