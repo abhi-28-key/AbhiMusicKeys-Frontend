@@ -1,0 +1,39 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+public/downloads/
+
+# Google Drive credentials
+google-drive-key.json
+
+# Environment variables
+.env
+
+# Backend (exclude completely)
+backend/
+
+# Firebase admin SDK
+abhimusickeys-firebase-adminsdk-fbsvc-72dba066be.json
+
+# Client secrets
+client_secret_*.json
