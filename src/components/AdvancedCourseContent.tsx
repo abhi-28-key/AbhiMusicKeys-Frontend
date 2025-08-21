@@ -48,7 +48,8 @@ const AdvancedCourseContent: React.FC = () => {
   useEffect(() => {
     const checkPaymentStatus = () => {
       if (!currentUser) {
-        setIsCheckingPayment(false);
+        // If user is not logged in, redirect to login
+        navigate('/login');
         return;
       }
 
@@ -61,19 +62,18 @@ const AdvancedCourseContent: React.FC = () => {
         return;
       }
 
-      // Check if user has advanced course access
-      const advancedAccess = localStorage.getItem(`advanced_access_${currentUser.uid}`);
-      const hasPaid = advancedAccess === 'true';
+      // Check if user has advanced course enrollment
+      const advancedEnrollment = localStorage.getItem(`enrolled_${currentUser.uid}_advanced`);
+      const hasEnrolled = advancedEnrollment === 'true';
       
-      setHasAdvancedAccess(hasPaid);
-      setIsCheckingPayment(false);
-
-      if (!hasPaid) {
-        // Redirect to pricing page after a short delay
-        setTimeout(() => {
-          navigate('/pricing');
-        }, 2000);
+      if (!hasEnrolled) {
+        // If not enrolled, redirect to overview page
+        navigate('/advanced-overview');
+        return;
       }
+
+      setHasAdvancedAccess(true);
+      setIsCheckingPayment(false);
     };
 
     checkPaymentStatus();
@@ -1595,7 +1595,7 @@ const AdvancedCourseContent: React.FC = () => {
                         className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 hover:scale-105 group mb-2"
                       >
                         <Music className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
-                        <span className="font-medium text-xs sm:text-sm">PSR-I500 Styles</span>
+                        <span className="font-medium text-sm sm:text-xs">PSR-I500 Styles</span>
                       </button>
                       <button
                         onClick={() => {
@@ -1605,14 +1605,14 @@ const AdvancedCourseContent: React.FC = () => {
                         className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-lg transition-all duration-300 hover:scale-105 group mb-2"
                       >
                         <Download className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
-                        <span className="font-medium text-xs sm:text-sm">Downloads</span>
+                        <span className="font-medium text-sm sm:text-xs">Downloads</span>
                       </button>
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 hover:scale-105 group"
                       >
                         <LogOut className="h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
-                        <span className="font-medium text-xs sm:text-sm">Logout</span>
+                        <span className="font-medium text-sm sm:text-xs">Logout</span>
                       </button>
                     </div>
                   </div>

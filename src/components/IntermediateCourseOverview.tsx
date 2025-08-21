@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Play, Lock, Check, Star, Clock, BookOpen, Music, Piano, Guitar, Headphones, Users, Target, Zap, ChevronDown, LogOut, Download, Menu, Home, GraduationCap, Award, Calendar, Bookmark, Eye, EyeOff, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { getUserPlanStatus } from '../utils/userPlanUtils';
 
 const IntermediateCourseOverview: React.FC = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const IntermediateCourseOverview: React.FC = () => {
   const [activeSection, setActiveSection] = useState('introduction');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [userMembership, setUserMembership] = useState('');
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   // Check user's payment status and initialize theme from localStorage
   useEffect(() => {
@@ -37,6 +39,10 @@ const IntermediateCourseOverview: React.FC = () => {
       } else {
         setUserMembership('');
       }
+
+      // Check intermediate course enrollment
+      const intermediateEnrollment = localStorage.getItem(`enrolled_${currentUser.uid}_intermediate`);
+      setIsEnrolled(intermediateEnrollment === 'true');
     }
   }, [currentUser]);
   const [selectedChord, setSelectedChord] = useState<any>(null);
@@ -118,6 +124,10 @@ const IntermediateCourseOverview: React.FC = () => {
     }
     // If user is logged in, redirect to the pricing page to subscribe
     navigate('/pricing');
+  };
+
+  const handleContinueLearning = () => {
+    navigate('/intermediate-content');
   };
 
   // Intermediate Chords Data
@@ -294,7 +304,7 @@ const IntermediateCourseOverview: React.FC = () => {
               <div className="p-2 sm:p-3 bg-gradient-to-r from-orange-400 via-yellow-500 to-orange-600 rounded-xl shadow-lg">
                 <Music className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
               </div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
+              <h1 className="text-2xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-orange-100 via-yellow-100 to-orange-200 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>
@@ -348,14 +358,12 @@ const IntermediateCourseOverview: React.FC = () => {
                             <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                               {currentUser.email}
                             </p>
-                            {userMembership === 'premium' && (
-                              <div className="flex items-center gap-1.5 mt-1.5">
-                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0"></div>
-                                <span className="text-xs text-green-600 dark:text-green-400 font-medium truncate">
-                                  Premium Member
-                                </span>
-                              </div>
-                            )}
+                            <div className="flex items-center gap-1.5 mt-1.5">
+                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0"></div>
+                              <span className="text-xs text-green-600 dark:text-green-400 font-medium truncate">
+                                {getUserPlanStatus(currentUser)}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -674,14 +682,19 @@ const IntermediateCourseOverview: React.FC = () => {
             {/* Enrollment CTA */}
             <div className="text-center mt-8 sm:mt-12">
               <button
-                onClick={handleEnroll}
+                onClick={isEnrolled ? handleContinueLearning : handleEnroll}
                 className="bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-600 hover:from-orange-600 hover:via-yellow-600 hover:to-orange-700 text-white font-bold py-3 sm:py-4 lg:py-5 px-6 sm:px-8 lg:px-10 rounded-xl sm:rounded-2xl shadow-2xl hover:shadow-orange-500/25 transform hover:scale-105 transition-all duration-300 text-base sm:text-lg lg:text-xl relative overflow-hidden group w-full sm:w-auto"
               >
-                <span className="relative z-10">Subscribe to Intermediate Plan</span>
+                <span className="relative z-10">
+                  {isEnrolled ? 'Continue Learning' : 'Subscribe to Intermediate Plan'}
+                </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 via-yellow-400/20 to-orange-500/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
               </button>
               <p className="text-gray-600 dark:text-gray-300 mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg px-2">
-                Unlock all intermediate content and take your piano skills to the next level
+                {isEnrolled 
+                  ? 'Resume your intermediate course progress' 
+                  : 'Unlock all intermediate content and take your piano skills to the next level'
+                }
               </p>
             </div>
           </div>

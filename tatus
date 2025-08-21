@@ -1,0 +1,89 @@
+[1mdiff --git a/src/components/AdvancedCourseContent.tsx b/src/components/AdvancedCourseContent.tsx[m
+[1mindex 2980068..dd648e4 100644[m
+[1m--- a/src/components/AdvancedCourseContent.tsx[m
+[1m+++ b/src/components/AdvancedCourseContent.tsx[m
+[36m@@ -1546,7 +1546,7 @@[m [mconst AdvancedCourseContent: React.FC = () => {[m
+               <div className="p-1.5 bg-gradient-to-r from-pink-500 to-fuchsia-600 rounded-lg">[m
+                 <Music className="h-4 w-4 sm:h-5 sm:w-5 text-white" />[m
+               </div>[m
+[31m-              <h1 className="text-base sm:text-lg lg:text-xl font-extrabold text-white tracking-wider">[m
+[32m+[m[32m              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">[m
+                 <span className="bg-gradient-to-r from-white via-pink-100 to-fuchsia-100 bg-clip-text text-transparent">[m
+                   AbhiMusicKeys[m
+                 </span>[m
+[1mdiff --git a/src/components/AdvancedCourseOverview.tsx b/src/components/AdvancedCourseOverview.tsx[m
+[1mindex f776105..baa3313 100644[m
+[1m--- a/src/components/AdvancedCourseOverview.tsx[m
+[1m+++ b/src/components/AdvancedCourseOverview.tsx[m
+[36m@@ -146,7 +146,7 @@[m [mconst AdvancedCourseOverview: React.FC = () => {[m
+               <div className="p-2 sm:p-3 bg-gradient-to-r from-pink-400 via-fuchsia-500 to-pink-600 rounded-xl shadow-lg">[m
+                 <Music className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />[m
+               </div>[m
+[31m-              <h1 className="text-lg sm:text-xl lg:text-2xl font-extrabold text-white tracking-wider">[m
+[32m+[m[32m              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">[m
+                 <span className="bg-gradient-to-r from-pink-100 via-fuchsia-100 to-pink-200 bg-clip-text text-transparent">[m
+                   AbhiMusicKeys[m
+                 </span>[m
+[1mdiff --git a/src/components/BasicCourseOverview.tsx b/src/components/BasicCourseOverview.tsx[m
+[1mindex e6a9d4d..6f8a616 100644[m
+[1m--- a/src/components/BasicCourseOverview.tsx[m
+[1m+++ b/src/components/BasicCourseOverview.tsx[m
+[36m@@ -139,11 +139,11 @@[m [mconst BasicCourseOverview: React.FC = () => {[m
+             <div className="p-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">[m
+               <Music className="h-4 w-4 sm:h-5 sm:w-5 text-white" />[m
+             </div>[m
+[31m-            <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-wider">[m
+[31m-              <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">[m
+[31m-                AbhiMusicKeys[m
+[31m-              </span>[m
+[31m-            </h1>[m
+[32m+[m[32m                          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">[m
+[32m+[m[32m                <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">[m
+[32m+[m[32m                  AbhiMusicKeys[m
+[32m+[m[32m                </span>[m
+[32m+[m[32m              </h1>[m
+           </div>[m
+           [m
+           {/* Desktop Navigation */}[m
+[1mdiff --git a/src/components/BasicLearning.tsx b/src/components/BasicLearning.tsx[m
+[1mindex 1a35cdc..a188f98 100644[m
+[1m--- a/src/components/BasicLearning.tsx[m
+[1m+++ b/src/components/BasicLearning.tsx[m
+[36m@@ -715,9 +715,9 @@[m [mconst BasicLearning: React.FC = () => {[m
+       { name: 'A Major', notes: { chord: ['A', 'C#', 'E', 'A'], up: ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#', 'A'], down: ['A', 'G#', 'F#', 'E', 'D', 'C#', 'B', 'A'] } },[m
+       { name: 'E Major', notes: { chord: ['E', 'G#', 'B', 'E'], up: ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#', 'E'], down: ['E', 'D#', 'C#', 'B', 'A', 'G#', 'F#', 'E'] } },[m
+       { name: 'B Major', notes: { chord: ['B', 'D#', 'F#', 'B'], up: ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#', 'B'], down: ['B', 'A#', 'G#', 'F#', 'E', 'D#', 'C#', 'B'] } },[m
+[31m-      { name: 'F Major', notes: { chord: ['F', 'A', 'C', 'F'], up: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F'], down: ['F', 'E', 'D', 'C', 'Bb', 'A', 'G', 'F'] } },[m
+[31m-      { name: 'Bb Major', notes: { chord: ['Bb', 'D', 'F', 'Bb'], up: ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A', 'Bb'], down: ['Bb', 'A', 'G', 'F', 'Eb', 'D', 'C', 'Bb'] } },[m
+[31m-      { name: 'Eb Major', notes: { chord: ['Eb', 'G', 'Bb', 'Eb'], up: ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D', 'Eb'], down: ['Eb', 'D', 'C', 'Bb', 'Ab', 'G', 'F', 'Eb'] } }[m
+[32m+[m[32m      { name: 'F Major', notes: { chord: ['F', 'A', 'C', 'F'], up: ['F', 'G', 'A', 'A#', 'C', 'D', 'E', 'F'], down: ['F', 'E', 'D', 'C', 'A#', 'A', 'G', 'F'] } },[m
+[32m+[m[32m      { name: 'A# Major', notes: { chord: ['A#', 'D', 'F', 'A#'], up: ['A#', 'C', 'D', 'D#', 'F', 'G', 'A', 'A#'], down: ['A#', 'A', 'G', 'F', 'D#', 'D', 'C', 'A#'] } },[m
+[32m+[m[32m      { name: 'D# Major', notes: { chord: ['D#', 'G', 'A#', 'D#'], up: ['D#', 'F', 'G', 'G#', 'A#', 'C', 'D', 'D#'], down: ['D#', 'D', 'C', 'A#', 'G#', 'G', 'F', 'D#'] } }[m
+     ];[m
+ [m
+     const isSharp = (note: string) => {[m
+[36m@@ -1308,7 +1308,7 @@[m [mconst BasicLearning: React.FC = () => {[m
+                 <div className="absolute top-1 sm:top-2 left-31 sm:left-44 w-6 sm:w-8 lg:w-16 h-3 sm:h-4 lg:h-8 bg-white/30 rounded-sm"></div>[m
+               </div>[m
+               <div className="relative z-10">[m
+[31m-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3">🎼 Let's Learn the Keys & Fingers!</h2>[m
+[32m+[m[32m                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3">🎼 Let's Learn the Keys & Fingers!</h2>[m
+                 <p className="text-sm sm:text-base lg:text-lg mb-2 sm:mb-3">Welcome to the basics of piano playing! We'll learn about the keys and how to use your fingers.</p>[m
+               </div>[m
+             </div>[m
+[36m@@ -1632,7 +1632,7 @@[m [mconst BasicLearning: React.FC = () => {[m
+                 { name: 'C Major', notes: { chord: ['C', 'E', 'G', 'C'], up: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'], down: ['C', 'B', 'A', 'G', 'F', 'E', 'D', 'C'] } },[m
+                 { name: 'D Major', notes: { chord: ['D', 'F#', 'A', 'D'], up: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#', 'D'], down: ['D', 'C#', 'B', 'A', 'G', 'F#', 'E', 'D'] } },[m
+                 { name: 'E Major', notes: { chord: ['E', 'G#', 'B', 'E'], up: ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#', 'E'], down: ['E', 'D#', 'C#', 'B', 'A', 'G#', 'F#', 'E'] } },[m
+[31m-                { name: 'F Major', notes: { chord: ['F', 'A', 'C', 'F'], up: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F'], down: ['F', 'E', 'D', 'C', 'Bb', 'A', 'G', 'F'] } },[m
+[32m+[m[32m                { name: 'F Major', notes: { chord: ['F', 'A', 'C', 'F'], up: ['F', 'G', 'A', 'A#', 'C', 'D', 'E', 'F'], down: ['F', 'E', 'D', 'C', 'A#', 'A', 'G', 'F'] } },[m
+                 { name: 'G Major', notes: { chord: ['G', 'B', 'D', 'G'], up: ['G', 'A', 'B', 'C', 'D', 'E', 'F#', 'G'], down: ['G', 'F#', 'E', 'D', 'C', 'B', 'A', 'G'] } },[m
+                 { name: 'A Major', notes: { chord: ['A', 'C#', 'E', 'A'], up: ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#', 'A'], down: ['A', 'G#', 'F#', 'E', 'D', 'C#', 'B', 'A'] } },[m
+                 { name: 'B Major', notes: { chord: ['B', 'D#', 'F#', 'B'], up: ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#', 'B'], down: ['B', 'A#', 'G#', 'F#', 'E', 'D#', 'C#', 'B'] } }[m
+[36m@@ -2018,11 +2018,11 @@[m [mconst BasicLearning: React.FC = () => {[m
+             {/* Minor Scales Grid */}[m
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">[m
+               {[[m
+[31m-                { name: 'C Minor', notes: { chord: ['C', 'Eb', 'G', 'C'], up: ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb', 'C'], down: ['C', 'Bb', 'Ab', 'G', 'F', 'Eb', 'D', 'C'] } },[m
+[31m-                { name: 'D Minor', notes: { chord: ['D', 'F', 'A', 'D'], up: ['D', 'E', 'F', 'G', 'A', 'Bb', 'C', 'D'], down: ['D', 'C', 'Bb', 'A', 'G', 'F', 'E', 'D'] } },[m
+[32m+[m[32m        

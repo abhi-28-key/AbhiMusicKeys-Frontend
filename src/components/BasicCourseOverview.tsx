@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
-import { ArrowLeft, Play, Lock, Check, Star, Clock, BookOpen, Music, Piano, Guitar, Headphones, Users, Target, Zap, ChevronDown, LogOut, Download, Menu, Home, GraduationCap, Award, Calendar, Bookmark } from 'lucide-react';
+import { ArrowLeft, Play, Lock, Check, Star, Clock, BookOpen, Music, Piano, Guitar, Headphones, Users, Target, Zap, ChevronDown, LogOut, Download, Menu, Home, GraduationCap, Award, Calendar, Bookmark, X, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeToggle } from './ui/theme-toggle';
+import { getUserPlanStatus } from '../utils/userPlanUtils';
 
 const BasicCourseOverview: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [showPopup, setShowPopup] = useState(true);
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -43,12 +47,29 @@ const BasicCourseOverview: React.FC = () => {
     document.documentElement.classList.toggle('dark');
   };
 
+  // Check enrollment status when component mounts
+  React.useEffect(() => {
+    if (currentUser) {
+      const enrollmentStatus = localStorage.getItem(`enrolled_${currentUser.uid}_basic`);
+      setIsEnrolled(enrollmentStatus === 'true');
+    }
+  }, [currentUser]);
+
   const handleEnroll = () => {
     if (!currentUser) {
       navigate('/login');
       return;
     }
+    
+    // Mark user as enrolled in basic course
+    localStorage.setItem(`enrolled_${currentUser.uid}_basic`, 'true');
+    setIsEnrolled(true);
+    
     // If user is logged in, redirect to the actual course
+    navigate('/basic-learning');
+  };
+
+  const handleContinueLearning = () => {
     navigate('/basic-learning');
   };
 
@@ -91,7 +112,7 @@ const BasicCourseOverview: React.FC = () => {
        icon: Users,
        description: 'Learn how major chords work together in families',
        isFree: true,
-       topics: ['C-Major Family', 'D-Major Family', 'E-Major Family', 'F-Major Family', 'G-Major Family', 'A-Major Family', 'B-Major Family', 'Sharp Major Families']
+       topics: ['Major Families','Sharpe Major Families']
      },
      {
        id: 'minor-family-chords',
@@ -99,7 +120,7 @@ const BasicCourseOverview: React.FC = () => {
        icon: Users,
        description: 'Master minor chord families for emotional progressions',
        isFree: true,
-       topics: ['C-Minor Family', 'D-Minor Family', 'E-Minor Family', 'F-Minor Family', 'G-Minor Family', 'A-Minor Family', 'B-Minor Family', 'Sharp Minor Families']
+       topics: ['Minor Families','Sharpe Minor Families']
      },
            {
         id: 'inversions',
@@ -139,7 +160,7 @@ const BasicCourseOverview: React.FC = () => {
             <div className="p-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
               <Music className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
-                          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
+                          <h1 className="text-2xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>
@@ -148,6 +169,15 @@ const BasicCourseOverview: React.FC = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-3 relative z-[99999]">
+            {/* Back to Home Button */}
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span>Back to Home</span>
+            </button>
+            
             {currentUser ? (
               <div className="relative user-menu">
                 {/* User Avatar with Dropdown */}
@@ -181,7 +211,7 @@ const BasicCourseOverview: React.FC = () => {
                           <div className="flex items-center gap-2 mt-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                             <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                              Free Plan
+                              {getUserPlanStatus(currentUser)}
                             </span>
                           </div>
                         </div>
@@ -242,6 +272,15 @@ const BasicCourseOverview: React.FC = () => {
 
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center gap-2">
+            {/* Back to Home Button */}
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center gap-1 px-3 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm"
+            >
+              <ArrowLeft className="h-3 w-3" />
+              <span>Home</span>
+            </button>
+            
             {/* Mobile Menu Button */}
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
@@ -267,6 +306,12 @@ const BasicCourseOverview: React.FC = () => {
                       <p className="text-xs text-slate-500 dark:text-slate-400">
                         {currentUser.email}
                       </p>
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                          {getUserPlanStatus(currentUser)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <button
@@ -334,47 +379,79 @@ const BasicCourseOverview: React.FC = () => {
         </div>
       </header>
 
+      {/* Background Blur Overlay */}
+      {showPopup && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+          onClick={() => setShowPopup(false)}
+        />
+      )}
+
+      {/* Popup Message */}
+      {showPopup && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          className="fixed inset-0 flex items-center justify-center z-50 p-4"
+        >
+          <div className="w-full max-w-md">
+            <div className="bg-gradient-to-br from-red-500 via-pink-500 to-red-600 rounded-2xl shadow-2xl border-2 border-red-300">
+              <div className="p-5">
+                <div className="flex items-start justify-between mb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                      <AlertTriangle className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 className="text-white font-extrabold text-xl tracking-wide">Important Notice</h3>
+                  </div>
+                  <button
+                    onClick={() => setShowPopup(false)}
+                    className="text-white hover:text-red-200 transition-colors p-1 rounded-full hover:bg-white/10"
+                  >
+                    <X className="h-6 w-6" />
+                  </button>
+                </div>
+                <p className="text-white font-bold mb-6 text-center text-lg leading-relaxed tracking-wide">
+                  If You Know All Basics About Keyboard You Can <span className="text-yellow-300 font-extrabold text-xl">SKIP</span> This
+                </p>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => navigate('/intermediate-overview')}
+                    className="bg-white text-red-600 hover:bg-red-50 px-8 py-3 rounded-xl font-extrabold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl tracking-wide"
+                  >
+                    See Intermediate Course
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        {/* Back to Home Button */}
-        <div className="mb-6">
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span>Back to Home</span>
-          </button>
-        </div>
+      <div className="container mx-auto px-4 py-2 sm:py-8">
 
         {/* Course Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <GraduationCap className="h-8 w-8 text-white" />
+        <div className="text-center mb-2 sm:mb-12">
+          <div className="inline-flex items-center gap-2 sm:gap-3 mb-1 sm:mb-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <GraduationCap className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-800 dark:text-white">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-slate-800 dark:text-white">
               Basic Piano Course
             </h1>
           </div>
-                     <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-6">
-             Learn Basics, scales, chords, and Practice well If Any doubts I am Here for You @AbhiMusicKeys
+                                            <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-3 sm:mb-6">
+             Learn Basics, scales, chords, and Practice well 
+             - @AbhiMusicKeys
            </p>
            
-           {/* Important Note */}
-           <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-xl p-4 border border-red-200 dark:border-red-800 max-w-2xl mx-auto mb-8">
-             <div className="flex items-center gap-3">
-               <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                 <BookOpen className="h-4 w-4 text-white" />
-               </div>
-               <p className="text-red-700 dark:text-red-300 font-medium">
-                 <strong>Note:</strong> Just completing this basic course won't make you perfect — real learning comes from your daily practice.
-               </p>
-             </div>
-           </div>
-           
-                      {/* Course Stats */}
-           <div className="flex flex-wrap justify-center gap-6 mb-8">
+                       {/* Course Stats */}
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-4 sm:mb-8">
              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
                <BookOpen className="h-5 w-5" />
                <span className="font-semibold">8 Modules</span>
@@ -383,134 +460,136 @@ const BasicCourseOverview: React.FC = () => {
                <Award className="h-5 w-5" />
                <span className="font-semibold">Beginner Level</span>
              </div>
-             <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-               <Star className="h-5 w-5 text-yellow-500" />
-               <span className="font-semibold">Free Course</span>
-             </div>
-           </div>
-           
-           {/* Time Note */}
-           <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl p-4 border border-yellow-200 dark:border-yellow-800 max-w-2xl mx-auto mb-8">
-             <div className="flex items-center gap-3">
-               <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                 <Clock className="h-4 w-4 text-white" />
-               </div>
-                               <p className="text-slate-700 dark:text-slate-300 font-medium">
-                  <strong>Those Who really Practice Well</strong> They can Learn Just in <strong>ONE MONTH</strong>
-                </p>
-             </div>
+
            </div>
         </div>
 
-        {/* Course Modules */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12">
-          {courseModules.map((module, index) => {
-            const IconComponent = module.icon;
-            return (
-              <div
-                key={module.id}
-                className="bg-white dark:bg-slate-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700"
-              >
-                <div className="p-4 sm:p-6">
-                  {/* Module Header */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-white break-words">
-                        {module.title}
-                      </h3>
-                      <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                        {module.isFree && (
-                          <span className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap">
-                            Free
-                          </span>
-                        )}
+        {/* Course Modules - Horizontal Scrolling Cards */}
+        <div className="mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white mb-6 text-center">
+            Course Modules
+          </h2>
+          <div className="relative">
+            <div className="flex overflow-x-auto gap-4 sm:gap-6 pb-4 scrollbar-hide">
+              {courseModules.map((module, index) => {
+                const IconComponent = module.icon;
+                return (
+                  <div
+                    key={module.id}
+                    className="bg-white dark:bg-slate-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700 flex-shrink-0 w-80 sm:w-96"
+                  >
+                    <div className="p-4 sm:p-6">
+                      {/* Module Header */}
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-white break-words">
+                            {module.title}
+                          </h3>
+                          <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                            {module.isFree && (
+                              <span className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap">
+                                Free
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Module Description */}
+                      <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
+                        {module.description}
+                      </p>
+
+                      {/* Module Topics */}
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">What you'll learn:</h4>
+                        <ul className="space-y-1">
+                          {module.topics.map((topic, topicIndex) => (
+                            <li key={topicIndex} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                              <Check className="h-3 w-3 text-green-500 flex-shrink-0 mt-0.5" />
+                              <span className="break-words">{topic}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   </div>
-
-                  {/* Module Description */}
-                  <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
-                    {module.description}
-                  </p>
-
-                  {/* Module Topics */}
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">What you'll learn:</h4>
-                    <ul className="space-y-1">
-                      {module.topics.map((topic, topicIndex) => (
-                        <li key={topicIndex} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
-                          <Check className="h-3 w-3 text-green-500 flex-shrink-0 mt-0.5" />
-                          <span className="break-words">{topic}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+            
+            {/* Scroll Indicators */}
+            <div className="flex justify-center mt-4 gap-2">
+              {courseModules.map((_, index) => (
+                <div
+                  key={index}
+                  className="w-2 h-2 bg-slate-300 dark:bg-slate-600 rounded-full transition-all duration-300"
+                />
+              ))}
+            </div>
+          </div>
         </div>
 
                  {/* My Journey Section */}
-         <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-2xl p-8 text-white text-center mb-8">
+         <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-800 dark:via-slate-700 dark:to-slate-600 rounded-2xl p-8 text-slate-800 dark:text-white text-center mb-8 shadow-xl">
            <div className="max-w-4xl mx-auto">
-             <div className="flex flex-col lg:flex-row items-center gap-8 mb-8">
+             <div className="flex flex-col lg:flex-row items-start gap-8 mb-8">
                {/* Profile Image */}
-               <div className="flex-shrink-0">
-                 <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full border-4 border-white/30 shadow-2xl overflow-hidden">
+               <div className="flex-shrink-0 lg:ml-0">
+                 <div className="w-48 h-48 lg:w-56 lg:h-56 rounded-full border-4 border-white/50 shadow-2xl overflow-hidden">
                    <img src="/images/abhi-profile.jpg.jpg" alt="AbhiMusicKeys" className="w-full h-full object-cover" />
                  </div>
                </div>
                
                {/* Journey Content */}
                <div className="flex-1 text-left">
-                                    <h2 className="text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent">
-                     MY JOURNEY to KEYBOARD
-                   </h2>
+                 <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-800 dark:text-white">
+                   MY JOURNEY to KEYBOARD
+                 </h2>
                  <div className="space-y-4 text-lg">
                    <div className="flex items-start gap-3">
-                     <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                        <span className="text-white text-sm font-bold">1</span>
                      </div>
-                     <p>I didn't have my own piano or any special resources when I started.</p>
+                     <p className="text-slate-700 dark:text-slate-200">I didn't have my own piano or any special resources when I started.</p>
                    </div>
                    <div className="flex items-start gap-3">
-                     <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                        <span className="text-white text-sm font-bold">2</span>
                      </div>
-                     <p>I didn't take any paid course — I learned everything by myself with God's help.</p>
+                     <p className="text-slate-700 dark:text-slate-200">I didn't take any paid course — I learned everything by myself with God's help.</p>
                    </div>
                    <div className="flex items-start gap-3">
-                     <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                        <span className="text-white text-sm font-bold">3</span>
                      </div>
-                     <p>I followed my inspiration players, used chord books, and practiced every day.</p>
+                     <p className="text-slate-700 dark:text-slate-200">I followed my inspiration players, used chord books, and practiced every day.</p>
                    </div>
                    <div className="flex items-start gap-3">
-                     <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                        <span className="text-white text-sm font-bold">4</span>
                      </div>
-                     <p>I faced many problems, but I never gave up — now I play in God's ministry.</p>
+                     <p className="text-slate-700 dark:text-slate-200">I faced many problems, but I never gave up — now I play in God's ministry.</p>
                    </div>
                    <div className="flex items-start gap-3">
-                     <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                        <span className="text-white text-sm font-bold">5</span>
                      </div>
-                     <p>Listen to Christian songs, watch live playing videos, and keep learning new things.</p>
+                     <p className="text-slate-700 dark:text-slate-200">Listen to Christian songs, watch live playing videos, and keep learning new things.</p>
                    </div>
                  </div>
                </div>
              </div>
              
              {/* Call to Action */}
-             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl p-6 border border-slate-200 dark:border-slate-600 shadow-lg">
                <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
                  <div className="text-left">
-                   <p className="text-xl font-bold mb-2">I'm the proof this works — check my journey on YouTube @AbhiMusicKeys 🙏🎹</p>
-                   <p className="text-lg opacity-90">I made this course free to support you — use it well and be a blessing in God's ministry.</p>
+                   <p className="text-xl font-bold mb-2 text-slate-800 dark:text-white">I'm the proof this works — check my journey on YouTube @AbhiMusicKeys 🙏🎹</p>
+                   <p className="text-lg text-slate-600 dark:text-slate-300">I made this course free to support you — use it well and be a blessing in God's ministry.</p>
                  </div>
                  <div className="flex-shrink-0">
                    <button
@@ -528,40 +607,65 @@ const BasicCourseOverview: React.FC = () => {
            </div>
          </div>
 
-         {/* Enrollment Section */}
-         <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-8 text-white text-center">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4">Ready to Start Your Piano Journey?</h2>
-            <p className="text-lg mb-6 font-bold text-yellow-300 bg-red-600/20 px-4 py-2 rounded-lg border-2 border-yellow-400">
-              ⚠️ If You Know All Basics About Keyboard You Can SKIP This ⚠️
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {currentUser ? (
-                <button
-                  onClick={handleEnroll}
-                  className="px-8 py-4 bg-white text-blue-600 hover:bg-blue-50 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  🎹 Start Learning Now
-                </button>
-              ) : (
-                <button
-                  onClick={() => navigate('/signup')}
-                  className="px-8 py-4 bg-white text-blue-600 hover:bg-blue-50 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  🎹 Enroll for Free
-                </button>
-              )}
-              
-              <button
-                onClick={() => navigate('/')}
-                className="px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105"
-              >
-                Browse Other Courses
-              </button>
+
+        
+        {/* Combined Important Notes Section */}
+        <div className="max-w-4xl mx-auto mt-12">
+          <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-xl p-6 border border-red-200 dark:border-red-800">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <BookOpen className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-red-800 dark:text-red-200 mb-3">Important Notes</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-red-700 dark:text-red-300 font-medium">
+                      Just completing this basic course won't make you perfect — real learning comes from your daily practice.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-red-700 dark:text-red-300 font-medium">
+                      Those who really practice well can learn just in <strong className="text-red-900 dark:text-red-100">ONE MONTH</strong>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Fixed Enroll Now Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={isEnrolled ? handleContinueLearning : handleEnroll}
+          className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 hover:from-green-600 hover:via-emerald-600 hover:to-teal-700 text-white font-bold px-8 py-4 rounded-full shadow-2xl border-2 border-white/20 backdrop-blur-sm transition-all duration-300 transform hover:shadow-3xl"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <GraduationCap className="h-4 w-4 text-white" />
+            </div>
+            <div className="text-left">
+              <div className="text-sm font-semibold">
+                {isEnrolled ? 'Continue Learning' : 'Enroll Now'}
+              </div>
+              <div className="text-xs opacity-90">
+                {isEnrolled ? 'Resume Your Progress' : 'Start Learning Today'}
+              </div>
+            </div>
+            <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+              <ArrowLeft className="h-3 w-3 text-white rotate-180" />
+            </div>
+          </div>
+        </motion.button>
       </div>
     </div>
   );

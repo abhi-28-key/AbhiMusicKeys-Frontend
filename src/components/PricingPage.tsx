@@ -4,6 +4,7 @@ import { Check, Star, Crown, Zap, Shield, Clock, Users } from 'lucide-react';
 import { usePayment } from '../contexts/PaymentContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { getUserPlanStatus } from '../utils/userPlanUtils';
 
 const PricingPage: React.FC = () => {
   const { plans, isProcessing, processPayment, grantSubscription } = usePayment();
@@ -17,32 +18,25 @@ const PricingPage: React.FC = () => {
       return;
     }
 
-    // Handle free Basic Plan
+    // Handle free Basic Plan - redirect to Basic Overview page
     if (plan.price === 0) {
-      try {
-        // For free plan, directly grant access without payment
-        console.log('Granting free access to Basic Plan');
-        
-        // Grant subscription
-        grantSubscription('basic');
-        
-        alert('Free access granted! Welcome to the Basic Plan.');
-        navigate('/basic-learning'); // Redirect to basic learning page
-        return;
-      } catch (error) {
-        console.error('Failed to grant free access:', error);
-        alert('Failed to grant free access. Please try again.');
-        return;
-      }
-    }
-
-    // Handle Advanced Plan - redirect to overview first
-    if (plan.id === 'advanced') {
-      navigate('/advanced-overview');
+      navigate('/basic');
       return;
     }
 
-    // Handle paid plans
+    // Handle Advanced Plan - initialize Razorpay directly
+    if (plan.id === 'advanced') {
+      try {
+        await processPayment(plan);
+        // Payment success will be handled in PaymentSuccess component
+      } catch (error) {
+        console.error('Payment failed:', error);
+        alert('Payment failed. Please try again.');
+      }
+      return;
+    }
+
+    // Handle other paid plans (like Intermediate)
     try {
       await processPayment(plan);
       // Payment success will be handled in PaymentSuccess component
@@ -55,13 +49,13 @@ const PricingPage: React.FC = () => {
   const getPlanIcon = (planId: string) => {
     switch (planId) {
       case 'basic':
-        return <Zap className="h-5 w-5 sm:h-6 sm:w-6" />;
+        return <Zap className="h-6 w-6 sm:h-7 sm:w-7" />;
       case 'intermediate':
-        return <Star className="h-5 w-5 sm:h-6 sm:w-6" />;
+        return <Star className="h-6 w-6 sm:h-7 sm:w-7" />;
       case 'advanced':
-        return <Crown className="h-5 w-5 sm:h-6 sm:w-6" />;
+        return <Crown className="h-6 w-6 sm:h-7 sm:w-7" />;
       default:
-        return <Check className="h-5 w-5 sm:h-6 sm:w-6" />;
+        return <Check className="h-6 w-6 sm:h-7 sm:w-7" />;
     }
   };
 
@@ -88,7 +82,7 @@ const PricingPage: React.FC = () => {
               <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
                 <Crown className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
-              <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold text-white tracking-wider">
+              <h1 className="text-2xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>
@@ -109,16 +103,9 @@ const PricingPage: React.FC = () => {
             {/* Mobile-Optimized Header Section */}
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
               <h1 
-
-
-
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 sm:mb-6"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 sm:mb-6"
               >
-                Choose Your
-                <br />
-                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-                  Learning Plan
-                </span>
+                Choose Your <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">Learning Plan</span>
               </h1>
               <p 
 
@@ -152,38 +139,38 @@ const PricingPage: React.FC = () => {
                                        }`}>
                                          {plan.price === 0 && (
                                            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                                             <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                             <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-bold px-4 py-2 rounded-full">
                                                FREE
                                              </span>
                                            </div>
                                          )}
                                          {plan.isRecommended && (
                                            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                                             <span className="bg-gradient-to-r from-purple-500 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                             <span className="bg-gradient-to-r from-purple-500 to-pink-600 text-white text-sm font-bold px-4 py-2 rounded-full">
                                                RECOMMENDED
                                              </span>
                                            </div>
                                          )}
-                                              <div className="text-center mb-4 sm:mb-6">
-                          <div className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full mb-2 sm:mb-3 ${
+                                              <div className="text-center mb-6 sm:mb-8">
+                          <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full mb-3 sm:mb-4 ${
                             plan.price === 0 
                               ? 'bg-gradient-to-r from-green-500 to-emerald-600' 
                               : 'bg-gradient-to-r from-blue-500 to-purple-600'
                           }`}>
                             {getPlanIcon(plan.id)}
                           </div>
-                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2">{plan.name}</h3>
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2">{plan.name}</h3>
                         <div className="mb-2 sm:mb-3">
                           {plan.price === 0 ? (
                             <div>
-                              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-green-400">FREE</span>
-                              <span className="text-white/60 ml-2 text-xs sm:text-sm">for registered users</span>
+                              <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-400">FREE</span>
+                              <span className="text-white/60 ml-2 text-sm sm:text-base">for registered users</span>
                             </div>
                           ) : (
                             <>
-                              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white">₹{plan.price}</span>
+                              <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">₹{plan.price}</span>
                               {plan.duration && (
-                                <span className="text-white/60 ml-2 text-xs sm:text-sm">/{plan.duration}</span>
+                                <span className="text-white/60 ml-2 text-sm sm:text-base">/{plan.duration}</span>
                               )}
                             </>
                           )}
@@ -191,13 +178,13 @@ const PricingPage: React.FC = () => {
                       </div>
 
                       {/* Features */}
-                      <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+                      <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                         {plan.features.map((feature, featureIndex) => (
                           <div key={featureIndex} className="flex items-start gap-2">
-                            <div className="flex-shrink-0 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full flex items-center justify-center mt-0.5">
-                              <Check className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-white" />
+                            <div className="flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 bg-green-500 rounded-full flex items-center justify-center mt-0.5">
+                              <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
                             </div>
-                            <span className="text-white/90 text-xs sm:text-sm">{feature}</span>
+                            <span className="text-white/90 text-sm sm:text-base">{feature}</span>
                           </div>
                         ))}
                       </div>
@@ -206,7 +193,7 @@ const PricingPage: React.FC = () => {
                       <button
                         onClick={() => handleSubscribe(plan)}
                         disabled={isProcessing}
-                        className={`w-full py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-semibold text-white transition-all duration-300 text-xs sm:text-sm ${
+                        className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-semibold text-white transition-all duration-300 text-sm sm:text-base ${
                           plan.price === 0 
                             ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700' 
                             : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'

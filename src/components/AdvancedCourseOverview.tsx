@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { ThemeToggle } from './ui/theme-toggle';
+import { getUserPlanStatus } from '../utils/userPlanUtils';
 
 const AdvancedCourseOverview: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const AdvancedCourseOverview: React.FC = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [activeSection, setActiveSection] = useState('introduction');
   const [userMembership, setUserMembership] = useState('');
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -39,6 +41,10 @@ const AdvancedCourseOverview: React.FC = () => {
       } else {
         setUserMembership('');
       }
+
+      // Check advanced course enrollment
+      const advancedEnrollment = localStorage.getItem(`enrolled_${currentUser.uid}_advanced`);
+      setIsEnrolled(advancedEnrollment === 'true');
     }
   }, [currentUser]);
 
@@ -55,6 +61,19 @@ const AdvancedCourseOverview: React.FC = () => {
       sessionStorage.clear();
       window.location.href = '/';
     }
+  };
+
+  const handleEnroll = () => {
+    if (!currentUser) {
+      navigate('/signup');
+      return;
+    }
+    // If user is logged in, redirect to the pricing page to subscribe
+    navigate('/pricing');
+  };
+
+  const handleContinueLearning = () => {
+    navigate('/advanced-content');
   };
 
   // Function to get user initials from email
@@ -143,10 +162,7 @@ const AdvancedCourseOverview: React.FC = () => {
           <div className="relative flex justify-between items-center p-3 sm:p-4 lg:p-6">
             {/* Modern Logo */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-3 bg-gradient-to-r from-pink-400 via-fuchsia-500 to-pink-600 rounded-xl shadow-lg">
-                <Music className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
-              </div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">
+              <h1 className="text-2xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-pink-100 via-fuchsia-100 to-pink-200 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>
@@ -192,9 +208,9 @@ const AdvancedCourseOverview: React.FC = () => {
                               {currentUser.email}
                             </p>
                             <div className="flex items-center gap-1.5 mt-1.5">
-                              <div className={`w-1.5 h-1.5 rounded-full ${userMembership === 'premium' ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-                              <span className={`text-xs font-medium truncate ${userMembership === 'premium' ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}`}>
-                                {userMembership === 'premium' ? 'Premium Member' : 'Free Member'}
+                              <div className={`w-1.5 h-1.5 rounded-full ${getUserPlanStatus(currentUser) === 'Premium' ? 'bg-green-500' : 'bg-green-500'}`}></div>
+                              <span className={`text-xs font-medium truncate ${getUserPlanStatus(currentUser) === 'Premium' ? 'text-green-600 dark:text-green-400' : 'text-green-600 dark:text-green-400'}`}>
+                                {getUserPlanStatus(currentUser)}
                               </span>
                             </div>
                           </div>
@@ -206,14 +222,14 @@ const AdvancedCourseOverview: React.FC = () => {
                           className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-colors duration-200 text-sm"
                         >
                           <Music className="h-4 w-4 flex-shrink-0" />
-                          <span className="text-xs sm:text-sm truncate">PSR-I500 Styles</span>
+                          <span className="text-sm sm:text-xs truncate">PSR-I500 Styles</span>
                         </button>
                         <button
                           onClick={() => navigate('/downloads')}
                           className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors duration-200 text-sm"
                         >
                           <Download className="h-4 w-4 flex-shrink-0" />
-                          <span className="text-xs sm:text-sm truncate">Downloads</span>
+                          <span className="text-sm sm:text-xs truncate">Downloads</span>
                         </button>
                         <button
                           onClick={() => {
@@ -227,14 +243,14 @@ const AdvancedCourseOverview: React.FC = () => {
                           ) : (
                             <Moon className="h-4 w-4 flex-shrink-0" />
                           )}
-                          <span className="text-xs sm:text-sm truncate">{isDark ? 'Light Mode' : 'Dark Mode'}</span>
+                          <span className="text-sm sm:text-xs truncate">{isDark ? 'Light Mode' : 'Dark Mode'}</span>
                         </button>
                         <button
                           onClick={handleLogout}
                           className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 text-sm"
                         >
                           <LogOut className="h-4 w-4 flex-shrink-0" />
-                          <span className="text-xs sm:text-sm truncate">Log Out</span>
+                          <span className="text-sm sm:text-xs truncate">Log Out</span>
                         </button>
                       </div>
                     </div>
@@ -352,10 +368,12 @@ const AdvancedCourseOverview: React.FC = () => {
             {/* Subscribe Button */}
             <div className="text-center mt-8 sm:mt-12">
               <button
-                onClick={() => navigate('/pricing')}
+                onClick={isEnrolled ? handleContinueLearning : handleEnroll}
                 className="bg-gradient-to-r from-pink-500 via-fuchsia-500 to-pink-600 hover:from-pink-600 hover:via-fuchsia-600 hover:to-pink-700 text-white font-bold py-3 sm:py-4 lg:py-5 px-6 sm:px-8 lg:px-10 rounded-xl sm:rounded-2xl shadow-2xl hover:shadow-pink-500/25 transform hover:scale-105 transition-all duration-300 text-base sm:text-lg lg:text-xl relative overflow-hidden group w-full sm:w-auto"
               >
-                <span className="relative z-10">Subscribe to Advance Plan</span>
+                <span className="relative z-10">
+                  {isEnrolled ? 'Continue Learning' : 'Subscribe to Advance Plan'}
+                </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 via-fuchsia-400/20 to-pink-500/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
               </button>
               

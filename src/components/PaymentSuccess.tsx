@@ -20,6 +20,15 @@ const PaymentSuccess: React.FC = () => {
     if (planId && currentUser) {
       grantSubscription(planId);
       console.log(`Subscription granted for plan: ${planId}`);
+      
+      // Mark user as enrolled based on plan
+      if (planId === 'intermediate') {
+        localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
+        console.log('User enrolled in intermediate course');
+      } else if (planId === 'advanced') {
+        localStorage.setItem(`enrolled_${currentUser.uid}_advanced`, 'true');
+        console.log('User enrolled in advanced course');
+      }
     }
 
     // Auto-redirect based on plan type
@@ -27,7 +36,7 @@ const PaymentSuccess: React.FC = () => {
       if (planId === 'intermediate') {
         navigate('/intermediate-content'); // Redirect to intermediate course content
       } else if (planId === 'advanced') {
-        navigate('/advanced-overview'); // Redirect to advanced course overview
+        navigate('/advanced-content'); // Redirect to advanced course content
       } else {
         navigate('/'); // Default redirect to homepage
       }

@@ -44,7 +44,8 @@ const IntermediateCourseContent: React.FC = () => {
   useEffect(() => {
     const checkPaymentStatus = () => {
       if (!currentUser) {
-        setIsCheckingPayment(false);
+        // If user is not logged in, redirect to login
+        navigate('/login');
         return;
       }
 
@@ -57,19 +58,18 @@ const IntermediateCourseContent: React.FC = () => {
         return;
       }
 
-      // Check if user has intermediate course access
-      const intermediateAccess = localStorage.getItem(`intermediate_access_${currentUser.uid}`);
-      const hasPaid = intermediateAccess === 'true';
+      // Check if user has intermediate course enrollment
+      const intermediateEnrollment = localStorage.getItem(`enrolled_${currentUser.uid}_intermediate`);
+      const hasEnrolled = intermediateEnrollment === 'true';
       
-      setHasIntermediateAccess(hasPaid);
-      setIsCheckingPayment(false);
-
-      if (!hasPaid) {
-        // Redirect to pricing page after a short delay
-        setTimeout(() => {
-          navigate('/pricing');
-        }, 2000);
+      if (!hasEnrolled) {
+        // If not enrolled, redirect to overview page
+        navigate('/intermediate-overview');
+        return;
       }
+
+      setHasIntermediateAccess(true);
+      setIsCheckingPayment(false);
     };
 
     checkPaymentStatus();

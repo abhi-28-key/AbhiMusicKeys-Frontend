@@ -78,15 +78,14 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       id: 'advanced',
       name: 'Advanced Plan',
       price: 699,
-      duration: '',
+      duration: 'Lifetime Access',
       features: [
         'Everything in Intermediate Plan',
         'Advanced Major & Minor Families (C, D, E, F, G, A, B & C#, D#, F#, G#, A#)',
         '15 Traditional Indian Ragas with Chord Progressions',
         'Scale Identification Techniques',
         'Professional Interlude Playing Mastery',
-        'Lifetime Access to All Content',
-        'Certificate upon completion'
+        'Lifetime Access to All Content'
       ],
       isRecommended: true
     }
@@ -179,6 +178,9 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
                 const verificationData = await verifyResponse.json();
                 
+                // Grant subscription locally
+                grantSubscription(plan.id);
+                
                 // Update user subscription in Firebase
                 // You'll need to implement this based on your Firebase structure
                 console.log('Payment successful:', verificationData);
@@ -264,6 +266,9 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } else if (planId === 'advanced') {
       localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
     }
+    
+    // Trigger a page refresh to update the UI
+    window.location.reload();
   };
 
   const revokeSubscription = () => {

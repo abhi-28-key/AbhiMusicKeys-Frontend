@@ -10,6 +10,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { collection, getDocs, query, where, orderBy, limit, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { getUserPlanStatus } from '../utils/userPlanUtils';
 
 const Homepage: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
@@ -310,7 +311,7 @@ const Homepage: React.FC = () => {
                              <div className="p-2 sm:p-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
                 <Music className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                </div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
+              <h1 className="text-2xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>
@@ -351,9 +352,9 @@ const Homepage: React.FC = () => {
                             </p>
                             <div className="flex items-center gap-1.5 mt-1.5">
                               <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0"></div>
-                              <span className="text-xs text-green-600 dark:text-green-400 font-medium truncate">
-                                Free Plan
-                              </span>
+                                                              <span className="text-xs text-green-600 dark:text-green-400 font-medium truncate">
+                                  {getUserPlanStatus(currentUser)}
+                                </span>
                             </div>
                           </div>
                         </div>
@@ -377,14 +378,14 @@ const Homepage: React.FC = () => {
                           className="w-full flex items-center gap-2 sm:gap-3 px-2.5 sm:px-3 py-1.5 sm:py-2 text-left text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors duration-200 mb-1.5"
                         >
                           <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
-                          <span className="text-sm font-medium truncate min-w-0 flex-1">Downloads</span>
+                          <span className="font-medium text-sm sm:text-xs">Downloads</span>
                         </button>
                         <button
                           onClick={handleLogout}
                           className="w-full flex items-center gap-2 sm:gap-3 px-2.5 sm:px-3 py-1.5 sm:py-2 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200"
                         >
                           <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
-                          <span className="text-sm font-medium truncate min-w-0 flex-1">Logout</span>
+                          <span className="font-medium text-sm sm:text-xs">Logout</span>
                         </button>
                       </div>
                     </div>
@@ -534,7 +535,7 @@ const Homepage: React.FC = () => {
                           <div className="w-6 h-6 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                             <Music className="h-3 w-3 text-white" />
                           </div>
-                          <span className="font-medium text-xs">PSR-I500 Styles</span>
+                          <span className="font-medium text-sm sm:text-xs">PSR-I500 Styles</span>
                         </button>
                         <button
 
@@ -635,7 +636,7 @@ const Homepage: React.FC = () => {
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold mb-4 sm:mb-8 leading-tight tracking-tight text-white drop-shadow-2xl">
               Master Piano with
               <br />
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-lg">
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-lg text-5xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl">
                 AbhiMusicKeys
               </span>
             </h1>
@@ -649,7 +650,22 @@ const Homepage: React.FC = () => {
                              {/* Basic Card */}
                <motion.div 
                 className="professional-card p-3 sm:p-4 lg:p-6 text-center cursor-pointer group backdrop-blur-sm bg-white/90 dark:bg-slate-800/90 border border-white/20 dark:border-slate-700/50 hover:scale-105 hover:-translate-y-2 transition-all duration-300 min-h-[180px] sm:min-h-[220px] lg:min-h-[250px] flex flex-col justify-center touch-manipulation"
-                onClick={() => navigate('/basic')}
+                onClick={() => {
+                  if (currentUser) {
+                    // Check if user is enrolled in basic course
+                    const isEnrolled = localStorage.getItem(`enrolled_${currentUser.uid}_basic`) === 'true';
+                    if (isEnrolled) {
+                      // If enrolled, go directly to learning page
+                      navigate('/basic-learning');
+                    } else {
+                      // If not enrolled, go to overview page
+                      navigate('/basic');
+                    }
+                  } else {
+                    // If not logged in, go to overview page
+                    navigate('/basic');
+                  }
+                }}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 whileHover={{ scale: 1.08, y: -8 }}
@@ -669,6 +685,13 @@ const Homepage: React.FC = () => {
                   <span className="text-xs text-slate-500 dark:text-slate-400">4.9 (2.1k)</span>
                  </div>
                 
+                {/* Free Tag - Top Right */}
+                <div className="absolute top-2 right-2 z-20">
+                  <div className="bg-gradient-to-r from-emerald-400 via-green-500 to-teal-600 text-white px-5 py-2.5 rounded-full text-lg font-extrabold shadow-2xl border-3 border-white dark:border-slate-800 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                    <span className="drop-shadow-lg">FREE</span>
+                  </div>
+                 </div>
+                
                 <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-base sm:text-lg">
                    Start Learning
                  </div>
@@ -677,7 +700,22 @@ const Homepage: React.FC = () => {
                              {/* Intermediate Card */}
                <motion.div 
                 className="professional-card p-4 sm:p-6 lg:p-8 text-center cursor-pointer group backdrop-blur-sm bg-white/90 dark:bg-slate-800/90 border border-white/20 dark:border-slate-700/50 hover:scale-105 hover:-translate-y-2 transition-all duration-300 min-h-[200px] sm:min-h-[250px] flex flex-col justify-center"
-                onClick={() => navigate('/intermediate-overview')}
+                onClick={() => {
+                  if (currentUser) {
+                    // Check if user is enrolled in intermediate course
+                    const isEnrolled = localStorage.getItem(`enrolled_${currentUser.uid}_intermediate`) === 'true';
+                    if (isEnrolled) {
+                      // If enrolled, go directly to learning page
+                      navigate('/intermediate-content');
+                    } else {
+                      // If not enrolled, go to overview page
+                      navigate('/intermediate-overview');
+                    }
+                  } else {
+                    // If not logged in, go to overview page
+                    navigate('/intermediate-overview');
+                  }
+                }}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 whileHover={{ scale: 1.08, y: -8 }}
@@ -705,7 +743,22 @@ const Homepage: React.FC = () => {
                              {/* Advanced Card */}
                <motion.div 
                 className="professional-card p-4 sm:p-6 lg:p-8 text-center cursor-pointer group backdrop-blur-sm bg-white/90 dark:bg-slate-800/90 border border-white/20 dark:border-slate-700/50 hover:scale-105 hover:-translate-y-2 transition-all duration-300 min-h-[200px] sm:min-h-[250px] flex flex-col justify-center sm:col-span-2 lg:col-span-1"
-                onClick={() => navigate('/advanced-overview')}
+                onClick={() => {
+                  if (currentUser) {
+                    // Check if user is enrolled in advanced course
+                    const isEnrolled = localStorage.getItem(`enrolled_${currentUser.uid}_advanced`) === 'true';
+                    if (isEnrolled) {
+                      // If enrolled, go directly to learning page
+                      navigate('/advanced-content');
+                    } else {
+                      // If not enrolled, go to overview page
+                      navigate('/advanced-overview');
+                    }
+                  } else {
+                    // If not logged in, go to overview page
+                    navigate('/advanced-overview');
+                  }
+                }}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 whileHover={{ scale: 1.08, y: -8 }}

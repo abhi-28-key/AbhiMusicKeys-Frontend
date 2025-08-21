@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import { ArrowLeft, Play, Lock, Check, Star, Clock, BookOpen, Music, Piano, Guitar, Headphones, Users, Target, Zap, ChevronDown, LogOut, Download, Menu, Home, GraduationCap, Award, Calendar, Bookmark, Volume2, Settings, Heart, Share2 } from 'lucide-react';
+import { ArrowLeft, Play, Lock, Check, Star, Clock, BookOpen, Music, Piano, Guitar, Headphones, Users, Target, Zap, ChevronDown, LogOut, Download, Menu, Home, GraduationCap, Award, Calendar, Bookmark, Volume2, Settings, Heart, Share2, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { usePayment } from '../contexts/PaymentContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { ThemeToggle } from './ui/theme-toggle';
+import { getUserPlanStatus } from '../utils/userPlanUtils';
 
 const PSRI500Page: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,18 @@ const PSRI500Page: React.FC = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+
+  // Close dropdown menu on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (showUserMenu) {
+        setShowUserMenu(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [showUserMenu]);
 
   const handleLogout = async () => {
     try {
@@ -185,7 +198,7 @@ const PSRI500Page: React.FC = () => {
                                <div className="p-2 sm:p-3 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 rounded-xl shadow-lg">
                   <Music className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
                 </div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
+                <h1 className="text-2xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
                   <span className="bg-gradient-to-r from-green-100 via-emerald-100 to-green-200 bg-clip-text text-transparent">
                     AbhiMusicKeys
                   </span>
@@ -206,7 +219,7 @@ const PSRI500Page: React.FC = () => {
               </div>
               
                                                            {currentUser ? (
-                 <div className="relative z-[999999]">
+                 <div className="relative z-[9999999]">
                    <button
                      onClick={() => setShowUserMenu(!showUserMenu)}
                      className="flex items-center gap-2 hover:scale-105 transition-all duration-300 user-menu-toggle"
@@ -219,49 +232,68 @@ const PSRI500Page: React.FC = () => {
 
                                        {/* User Dropdown Menu */}
                     {showUserMenu && (
-                      <div className="fixed sm:absolute top-16 sm:top-12 left-4 sm:left-auto sm:right-0 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 w-64 sm:w-auto sm:min-w-48 z-[9999999] backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 animate-in slide-in-from-top-2 duration-200 transform origin-top-right scale-100 user-menu-dropdown overflow-hidden">
-                       <div className="p-3 sm:p-4 border-b border-slate-200/50 dark:border-slate-700/50">
-                         <div className="flex items-center gap-2 sm:gap-3">
-                           <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg ring-2 ring-white/20 flex-shrink-0">
-                             {getUserInitials(currentUser.email || '')}
-                           </div>
-                           <div className="flex-1 min-w-0 overflow-hidden">
-                             <p className="text-sm font-semibold text-slate-800 dark:text-white mb-0.5 truncate">
-                               {getUserDisplayName(currentUser.email || '')}
-                             </p>
-                             <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                               {currentUser.email}
-                             </p>
-                             <div className="flex items-center gap-1.5 mt-1.5">
-                               <div className="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></div>
-                               <span className="text-xs text-gray-600 dark:text-gray-400 font-medium truncate">
-                                 Free Member
-                               </span>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                       <div className="p-1.5 sm:p-2">
-                         <button
-                           onClick={() => {
-                             navigate('/downloads');
-                             setShowUserMenu(false);
-                           }}
-                           className="w-full flex items-center gap-2 sm:gap-3 px-2.5 sm:px-3 py-1.5 sm:py-2 text-left text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors duration-200 mb-1.5"
-                         >
-                           <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
-                           <span className="text-sm font-medium truncate min-w-0 flex-1">Downloads</span>
-                         </button>
-                         <button
-                           onClick={handleLogout}
-                           className="w-full flex items-center gap-2 sm:gap-3 px-2.5 sm:px-3 py-1.5 sm:py-2 text-left text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors duration-200"
-                         >
-                           <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
-                           <span className="text-sm font-medium truncate min-w-0 flex-1">Sign Out</span>
-                         </button>
-                       </div>
-                     </div>
-                   )}
+                      <div className="fixed top-16 right-4 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 w-64 min-w-48 backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 animate-in slide-in-from-top-2 duration-200 transform origin-top-right scale-100 user-menu-dropdown overflow-hidden z-[9999999]">
+                          <div className="p-3 sm:p-4 border-b border-slate-200/50 dark:border-slate-700/50">
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg ring-2 ring-white/20 flex-shrink-0">
+                                {getUserInitials(currentUser.email || '')}
+                              </div>
+                              <div className="flex-1 min-w-0 overflow-hidden">
+                                <p className="text-sm font-semibold text-slate-800 dark:text-white mb-0.5 truncate">
+                                  {getUserDisplayName(currentUser.email || '')}
+                                </p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                                  {currentUser.email}
+                                </p>
+                                <div className="flex items-center gap-1.5 mt-1.5">
+                                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></div>
+                                                                      <span className="text-xs text-gray-600 dark:text-gray-400 font-medium truncate">
+                                      {getUserPlanStatus(currentUser)}
+                                    </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="p-1.5 sm:p-2">
+                            <button
+                              onClick={() => {
+                                navigate('/downloads');
+                                setShowUserMenu(false);
+                              }}
+                              className="w-full flex items-center gap-2 sm:gap-3 px-2.5 sm:px-3 py-1.5 sm:py-2 text-left text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors duration-200 mb-1.5"
+                            >
+                              <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                              <span className="text-sm font-medium truncate min-w-0 flex-1">Downloads</span>
+                            </button>
+                            
+                            {/* Theme Toggle for Mobile */}
+                            <button
+                              onClick={() => {
+                                toggleTheme();
+                                setShowUserMenu(false);
+                              }}
+                              className="w-full flex items-center gap-2 sm:gap-3 px-2.5 sm:px-3 py-1.5 sm:py-2 text-left text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors duration-200 mb-1.5 md:hidden"
+                            >
+                              {isDark ? (
+                                <Sun className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                              ) : (
+                                <Moon className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                              )}
+                              <span className="text-sm font-medium truncate min-w-0 flex-1">
+                                {isDark ? 'Light Mode' : 'Dark Mode'}
+                              </span>
+                            </button>
+                            
+                            <button
+                              onClick={handleLogout}
+                              className="w-full flex items-center gap-2 sm:gap-3 px-2.5 sm:px-3 py-1.5 sm:py-2 text-left text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors duration-200"
+                            >
+                              <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                              <span className="text-sm font-medium truncate min-w-0 flex-1">Log out</span>
+                            </button>
+                          </div>
+                        </div>
+                    )}
                  </div>
                ) : (
                  <div className="flex items-center gap-3">
@@ -358,9 +390,9 @@ const PSRI500Page: React.FC = () => {
                                            <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-lg sm:text-xl">Style - 92</h4>
                       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                         Best for Worship songs like:<br/>
-                        • <span className="inline-block font-extrabold text-amber-300 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-md ring-1 ring-amber-400/30 shadow-sm">"Athunatha Simhanamupai"</span><br/>
-                        • <span className="inline-block font-extrabold text-amber-300 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-md ring-1 ring-amber-400/30 shadow-sm">"Mahimaneke Prabu"</span><br/>
-                        • <span className="inline-block font-extrabold text-amber-300 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-md ring-1 ring-amber-400/30 shadow-sm">"Aradanaku Youguyda"</span>
+                        • <span className="inline-block font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-lg ring-1 ring-blue-200 dark:ring-blue-700 shadow-sm text-sm sm:text-base mb-1">"Athunatha Simhanamupai"</span><br/>
+                        • <span className="inline-block font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-lg ring-1 ring-blue-200 dark:ring-blue-700 shadow-sm text-sm sm:text-base mb-1">"Mahimaneke Prabu"</span><br/>
+                        • <span className="inline-block font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-lg ring-1 ring-blue-200 dark:ring-blue-700 shadow-sm text-sm sm:text-base">"Aradanaku Youguyda"</span>
                       </p>
                    </div>
                    
@@ -371,7 +403,7 @@ const PSRI500Page: React.FC = () => {
                                            <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-lg sm:text-xl">Style - 203</h4>
                       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                         Best for Worship song like:<br/>
-                        • <span className="inline-block font-extrabold text-amber-300 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-md ring-1 ring-amber-400/30 shadow-sm">"Yesu Neve Kavalaya"</span>
+                        • <span className="inline-block font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-lg ring-1 ring-blue-200 dark:ring-blue-700 shadow-sm text-sm sm:text-base">"Yesu Neve Kavalaya"</span>
                       </p>
                    </div>
                    
@@ -382,7 +414,7 @@ const PSRI500Page: React.FC = () => {
                                            <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-lg sm:text-xl">Style - 28</h4>
                       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                         Best for Worship song like:<br/>
-                        • <span className="inline-block font-extrabold text-amber-300 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-md ring-1 ring-amber-400/30 shadow-sm">"Ninne Preminthunu"</span>
+                        • <span className="inline-block font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-lg ring-1 ring-blue-200 dark:ring-blue-700 shadow-sm text-sm sm:text-base">"Ninne Preminthunu"</span>
                       </p>
                    </div>
                  </div>

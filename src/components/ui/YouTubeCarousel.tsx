@@ -97,17 +97,17 @@ const YouTubeCarousel: React.FC = () => {
                   
                   {/* Channel Avatar */}
                   <div className="relative flex items-center justify-center mb-2 sm:mb-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-pink-500 via-purple-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:shadow-purple-500/60 transition-all duration-300 group-hover:scale-110">
-                      <span className="text-white font-bold text-xs sm:text-sm md:text-lg">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-pink-500 via-purple-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:shadow-purple-500/60 transition-all duration-300 group-hover:scale-110">
+                      <span className="text-white font-bold text-sm sm:text-base md:text-lg">
                         {channel.letter}
                       </span>
                     </div>
                     {/* Glow around avatar */}
-                    <div className="absolute inset-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-pink-500/60 via-purple-400/50 to-blue-500/60 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-0 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-pink-500/60 via-purple-400/50 to-blue-500/60 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
                   
                   {/* Channel Name */}
-                  <h4 className="font-semibold text-white text-xs sm:text-sm md:text-base mb-1 sm:mb-2 group-hover:text-purple-200 transition-colors duration-300 relative z-10 leading-tight line-clamp-2 px-1">
+                  <h4 className="font-semibold text-white text-lg sm:text-base md:text-lg mb-1 sm:mb-2 group-hover:text-purple-200 transition-colors duration-300 relative z-10 leading-tight line-clamp-2 px-1">
                     {channel.name}
                   </h4>
                   

@@ -81,12 +81,27 @@ const BasicLearning: React.FC = () => {
       const enrollmentStatus = localStorage.getItem(`enrolled_${currentUser.uid}_basic`);
       if (enrollmentStatus === 'true') {
         setHasEnrolled(true);
+      } else {
+        // If user is not enrolled, redirect to overview page
+        navigate('/basic');
+        return;
       }
       
       // Load progress from localStorage
       loadProgress();
+    } else {
+      // If user is not logged in, redirect to login
+      navigate('/login');
+      return;
     }
-  }, [currentUser]);
+  }, [currentUser, navigate]);
+
+  // Additional check for direct access without login
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, [currentUser, navigate]);
 
   // Load progress from localStorage
   const loadProgress = () => {
@@ -3128,6 +3143,15 @@ const BasicLearning: React.FC = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-3 relative z-[99999]">
+            {/* Back to Home Button - Desktop */}
+            <button
+              onClick={() => window.location.href = '/'}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            >
+              <Home className="h-4 w-4" />
+              <span>Back to Home</span>
+            </button>
+            
             {currentUser ? (
               <div className="relative user-menu">
                 {/* User Avatar with Dropdown */}
@@ -3225,30 +3249,30 @@ const BasicLearning: React.FC = () => {
       <div className="flex flex-col lg:flex-row">
         {/* Mobile Menu Toggle Button */}
         <div className="lg:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-3">
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="flex items-center gap-2 text-slate-800 dark:text-white font-medium"
-          >
-            <Menu className="h-5 w-5" />
-            <span>Course Menu</span>
-            <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} />
-          </button>
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="flex items-center gap-2 text-slate-800 dark:text-white font-medium"
+            >
+              <Menu className="h-5 w-5" />
+              <span>Course Menu</span>
+              <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {/* Back to Home Button - Mobile */}
+            <button
+              onClick={() => window.location.href = '/'}
+              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm"
+            >
+              <Home className="h-4 w-4" />
+              <span>Home</span>
+            </button>
+          </div>
         </div>
 
         {/* Left Sidebar Menu - Mobile Responsive */}
         <div className={`${isMenuOpen ? 'block' : 'hidden'} lg:block w-full lg:w-80 bg-white dark:bg-slate-800 shadow-lg border-b lg:border-r border-slate-200 dark:border-slate-700 min-h-auto lg:min-h-screen overflow-y-auto max-h-[70vh] lg:max-h-none`}>
           <div className="p-3 sm:p-4 lg:p-6">
-            {/* Back to Home Button */}
-            <div className="mb-4 sm:mb-6">
-              <button
-                onClick={() => window.location.href = '/'}
-                className="w-full flex items-center justify-center gap-2 p-3 sm:p-3 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm sm:text-base"
-              >
-                <Home className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span>Back to Home</span>
-              </button>
-            </div>
-
             <h2 className="text-base sm:text-lg font-bold text-slate-800 dark:text-white mb-3 sm:mb-4 lg:mb-6">Course Sections</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 lg:space-y-2">
               {menuSections.map((section) => {
