@@ -114,9 +114,21 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
              // Create order first (before loading script)
        console.log('Creating order with backend...');
        
-       // Get API URL with fallback
-       const apiUrl = process.env.REACT_APP_API_URL || 'https://abhimusickeys-backend.onrender.com';
-       console.log('Using API URL:', apiUrl);
+       // Use hardcoded backend URL for mobile compatibility
+       const apiUrl = 'https://abhimusickeys-backend.onrender.com';
+       console.log('Using backend URL:', apiUrl);
+       
+       // Test backend connectivity
+       try {
+         const healthResponse = await fetch(`${apiUrl}/api/health`);
+         if (healthResponse.ok) {
+           console.log('Backend is accessible');
+         } else {
+           console.warn('Backend health check failed');
+         }
+       } catch (error) {
+         console.error('Backend connectivity test failed:', error);
+       }
        
               let orderResponse;
        try {
