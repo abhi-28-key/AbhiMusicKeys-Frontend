@@ -100,99 +100,98 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       console.log('Starting payment process for plan:', plan.name);
       console.log('Razorpay Key:', process.env.REACT_APP_RAZORPAY_KEY_ID);
+      console.log('API URL:', process.env.REACT_APP_API_URL);
       
-             // Load Razorpay script
-       const script = document.createElement('script');
-       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-       script.async = true;
-       script.crossOrigin = 'anonymous';
-       
-       // Add timeout for script loading
-       const scriptTimeout = setTimeout(() => {
-         console.error('Razorpay script loading timeout');
-         throw new Error('Razorpay script loading timeout');
-       }, 10000); // 10 seconds timeout
-       
-       document.body.appendChild(script);
+      // Check if we're on mobile
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      console.log('Is Mobile Device:', isMobile);
+      
+      // Create order first (before loading script)
+      console.log('Creating order with backend...');
+      const orderResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/create-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          planId: plan.id,
+          amount: plan.price * 100, // Razorpay expects amount in paise
+          currency: 'INR',
+          userId: currentUser.uid,
+          userEmail: currentUser.email,
+        }),
+      });
 
-             script.onload = async () => {
-         try {
-           clearTimeout(scriptTimeout); // Clear timeout on successful load
-           console.log('Razorpay script loaded successfully');
-          
-          // Create order on your backend
-          console.log('Creating order with backend...');
-          const orderResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/create-order`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              planId: plan.id,
-              amount: plan.price * 100, // Razorpay expects amount in paise
-              currency: 'INR',
-              userId: currentUser.uid,
-              userEmail: currentUser.email,
-            }),
-          });
+      console.log('Order response status:', orderResponse.status);
+      
+      if (!orderResponse.ok) {
+        const errorText = await orderResponse.text();
+        console.error('Order creation failed:', errorText);
+        throw new Error(`Failed to create order: ${errorText}`);
+      }
 
-          console.log('Order response status:', orderResponse.status);
-          
-          if (!orderResponse.ok) {
-            const errorText = await orderResponse.text();
-            console.error('Order creation failed:', errorText);
-            throw new Error(`Failed to create order: ${errorText}`);
-          }
+      const orderData = await orderResponse.json();
+      console.log('Order created successfully:', orderData);
+      
+      // Load Razorpay script
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+      
+      // Add timeout for script loading
+      const scriptTimeout = setTimeout(() => {
+        console.error('Razorpay script loading timeout');
+        throw new Error('Razorpay script loading timeout');
+      }, 15000); // 15 seconds timeout for mobile
+      
+      document.body.appendChild(script);
 
-          const orderData = await orderResponse.json();
-          console.log('Order created successfully:', orderData);
+                           script.onload = async () => {
+          try {
+            clearTimeout(scriptTimeout); // Clear timeout on successful load
+            console.log('Razorpay script loaded successfully');
 
           // Initialize Razorpay
           const razorpayKey = process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_test_YOUR_KEY_ID';
           console.log('Using Razorpay key:', razorpayKey);
           
-          const options = {
-            key: razorpayKey,
-            amount: orderData.order.amount,
-            currency: orderData.order.currency,
-            name: 'AbhiMusicKeys',
-            description: `${plan.name}${plan.duration ? ` - ${plan.duration}` : ''}`,
-            image: 'https://abhi-music-keys-frontend.vercel.app/favicon.ico', // Use your actual logo
-            order_id: orderData.order.id,
-            // Mobile-specific options
-            modal: {
-              ondismiss: function() {
-                console.log('Payment modal dismissed');
-              }
-            },
-            // Better mobile handling
-            config: {
-              display: {
-                blocks: {
-                  banks: {
-                    name: "Pay using UPI",
-                    instruments: [
-                      {
-                        method: "card"
-                      },
-                      {
-                        method: "netbanking"
-                      },
-                      {
-                        method: "wallet"
-                      },
-                      {
-                        method: "upi"
-                      }
-                    ]
-                  }
-                },
-                sequence: ["block.banks"],
-                preferences: {
-                  show_default_blocks: false
-                }
-              }
-            },
+                     const options = {
+             key: razorpayKey,
+             amount: orderData.order.amount,
+             currency: orderData.order.currency,
+             name: 'AbhiMusicKeys',
+             description: `${plan.name}${plan.duration ? ` - ${plan.duration}` : ''}`,
+             image: 'https://abhi-music-keys-frontend.vercel.app/favicon.ico',
+             order_id: orderData.order.id,
+             // Simplified mobile options
+             modal: {
+               ondismiss: function() {
+                 console.log('Payment modal dismissed');
+                 setIsProcessing(false);
+               }
+             },
+             // Mobile-optimized configuration (simplified for better compatibility)
+           ...(isMobile ? {
+             config: {
+               display: {
+                 blocks: {
+                   upi: {
+                     name: "Pay via UPI",
+                     instruments: [
+                       {
+                         method: "upi"
+                       }
+                     ]
+                   }
+                 },
+                 sequence: ["block.upi"],
+                 preferences: {
+                   show_default_blocks: false
+                 }
+               }
+             }
+           } : {}),
             handler: async (response: any) => {
               try {
                 // Verify payment on your backend
@@ -248,28 +247,64 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
             },
           };
 
-          console.log('Initializing Razorpay with options:', options);
-          
-          // Check if Razorpay is available
-          if (typeof (window as any).Razorpay === 'undefined') {
-            throw new Error('Razorpay script not loaded properly');
-          }
-          
-          const razorpay = new (window as any).Razorpay(options);
-          
-          // Add error handling for mobile
-          razorpay.on('payment.failed', function (resp: any) {
-            console.error('Payment failed:', resp.error);
-            alert(`Payment failed: ${resp.error.description || 'Unknown error'}`);
-          });
-          
-          razorpay.on('payment.cancelled', function (resp: any) {
-            console.log('Payment cancelled by user');
-            alert('Payment was cancelled');
-          });
-          
-          // Open payment modal
-          razorpay.open();
+                     console.log('Initializing Razorpay with options:', options);
+           
+           // Check if Razorpay is available
+           if (typeof (window as any).Razorpay === 'undefined') {
+             throw new Error('Razorpay script not loaded properly');
+           }
+           
+           const razorpay = new (window as any).Razorpay(options);
+           
+           // Enhanced error handling for mobile
+           razorpay.on('payment.failed', function (resp: any) {
+             console.error('Payment failed:', resp.error);
+             setIsProcessing(false);
+             alert(`Payment failed: ${resp.error.description || 'Unknown error'}. Please try again.`);
+           });
+           
+           razorpay.on('payment.cancelled', function (resp: any) {
+             console.log('Payment cancelled by user');
+             setIsProcessing(false);
+             alert('Payment was cancelled. You can try again anytime.');
+           });
+           
+           razorpay.on('payment.error', function (resp: any) {
+             console.error('Payment error:', resp.error);
+             setIsProcessing(false);
+             alert(`Payment error: ${resp.error.description || 'Something went wrong'}. Please try again.`);
+           });
+           
+           // Open payment modal
+           console.log('Opening Razorpay modal...');
+           
+           // Try to open with error handling
+           try {
+             razorpay.open();
+           } catch (openError) {
+             console.error('Failed to open Razorpay modal:', openError);
+             
+             // Fallback for mobile - try with minimal configuration
+             if (isMobile) {
+               console.log('Trying fallback mobile configuration...');
+               const fallbackOptions = {
+                 key: razorpayKey,
+                 amount: orderData.order.amount,
+                 currency: orderData.order.currency,
+                 name: 'AbhiMusicKeys',
+                 description: `${plan.name}${plan.duration ? ` - ${plan.duration}` : ''}`,
+                 order_id: orderData.order.id,
+                 handler: options.handler,
+                 prefill: options.prefill,
+                 theme: options.theme,
+               };
+               
+               const fallbackRazorpay = new (window as any).Razorpay(fallbackOptions);
+               fallbackRazorpay.open();
+             } else {
+               throw openError;
+             }
+           }
 
         } catch (error) {
           console.error('Payment initialization failed:', error);
