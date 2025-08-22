@@ -113,7 +113,7 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
           
           // Create order on your backend
           console.log('Creating order with backend...');
-          const orderResponse = await fetch('http://localhost:5000/api/create-order', {
+          const orderResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/create-order`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
             handler: async (response: any) => {
               try {
                 // Verify payment on your backend
-                const verifyResponse = await fetch('http://localhost:5000/api/verify-payment', {
+                const verifyResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/verify-payment`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
