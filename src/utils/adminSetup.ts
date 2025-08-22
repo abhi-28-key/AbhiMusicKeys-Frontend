@@ -53,6 +53,19 @@ export const getCurrentAdminUrl = (): string => {
   return generateAdminUrl();
 };
 
+// Generate secure admin setup URL
+export const generateAdminSetupUrl = (): string => {
+  const timestamp = Date.now();
+  const data = `${ADMIN_SECRET_KEY}_setup_${timestamp}`;
+  const hash = btoa(data).replace(/[+/=]/g, '').substring(0, 16);
+  return `/${ADMIN_URL_PREFIX}/${hash}/setup`;
+};
+
+// Get the current admin setup URL for display
+export const getCurrentAdminSetupUrl = (): string => {
+  return generateAdminSetupUrl();
+};
+
 // Display current admin URL in console
 export const displayAdminUrl = (): string => {
   const adminUrl = generateAdminUrl();
@@ -61,6 +74,16 @@ export const displayAdminUrl = (): string => {
   console.log('📝 Copy this URL to access your admin panel');
   console.log('⚠️  Keep this URL private and secure!');
   return adminUrl;
+};
+
+// Display current admin setup URL in console
+export const displayAdminSetupUrl = (): string => {
+  const setupUrl = generateAdminSetupUrl();
+  console.log('🔧 SECURE ADMIN SETUP URL:');
+  console.log('🌐', window.location.origin + setupUrl);
+  console.log('📝 Copy this URL to access your admin setup page');
+  console.log('⚠️  Keep this URL private and secure!');
+  return setupUrl;
 };
 
 export const isAuthorizedAdmin = (email: string): boolean => {
@@ -112,11 +135,15 @@ export const setupAdminUser = async (email: string, password: string, displayNam
 // Make functions available globally for console access
 if (typeof window !== 'undefined') {
   (window as any).displayAdminUrl = displayAdminUrl;
+  (window as any).displayAdminSetupUrl = displayAdminSetupUrl;
   (window as any).generateAdminUrl = generateAdminUrl;
+  (window as any).generateAdminSetupUrl = generateAdminSetupUrl;
   (window as any).getCurrentAdminUrl = getCurrentAdminUrl;
+  (window as any).getCurrentAdminSetupUrl = getCurrentAdminSetupUrl;
   (window as any).setupAdminUser = setupAdminUser;
   
   console.log('🔐 Admin functions loaded! Use displayAdminUrl() to get your secure admin URL');
+  console.log('🔧 Use displayAdminSetupUrl() to get your secure admin setup URL');
   console.log('🔧 Use setupAdminUser(email, password, displayName) to create admin account');
 }
 

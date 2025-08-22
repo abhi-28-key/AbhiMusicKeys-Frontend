@@ -545,7 +545,7 @@ const IntermediateCourseOverview: React.FC = () => {
           <div className="max-w-6xl mx-auto">
             {/* Course Header */}
             <div className="text-center mb-8 sm:mb-12">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-3 sm:mb-4 text-gray-800 dark:text-white drop-shadow-lg bg-gradient-to-r from-orange-600 via-orange-700 to-yellow-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-3 sm:mb-4 text-gray-800 dark:text-white drop-shadow-lg bg-gradient-to-r from-orange-600 via-orange-700 to-yellow-600 bg-clip-text text-transparent">
                 Intermediate Piano Course
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium drop-shadow-md px-2">
@@ -614,18 +614,28 @@ const IntermediateCourseOverview: React.FC = () => {
 
             {/* Dynamic Content Based on Active Section */}
             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 border border-orange-200/50 dark:border-slate-600/50 shadow-lg">
-              {/* Practice Quote */}
-              <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
-                <p className="text-red-700 font-medium italic text-sm sm:text-base">
-                  "Practice well, then only you will get knowledge - Mastery comes through dedicated practice!"
-                </p>
-              </div>
-              
-              {/* Lifetime Access Note */}
-              <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg">
-                <p className="text-green-700 font-bold text-base sm:text-lg">
-                  ✨ One-time purchase gives you lifetime access! ✨
-                </p>
+              {/* Combined Notes Section */}
+              <div className="text-center mb-4 sm:mb-6 p-4 sm:p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-l-4 border-blue-500 rounded-r-lg">
+                {/* Practice Quote */}
+                <div className="mb-3 sm:mb-4">
+                  <p className="text-red-700 dark:text-red-300 font-medium italic text-sm sm:text-base">
+                    "Practice well, then only you will get knowledge - Mastery comes through dedicated practice!"
+                  </p>
+                </div>
+                
+                {/* Lifetime Access Note */}
+                <div className="mb-3 sm:mb-4">
+                  <p className="text-green-700 dark:text-green-300 font-bold text-base sm:text-lg">
+                    ✨ One-time purchase gives you lifetime access! ✨
+                  </p>
+                </div>
+                
+                {/* Access Note */}
+                {/* <div>
+                  <p className="text-blue-700 dark:text-blue-300 font-medium text-sm sm:text-base lg:text-lg">
+                    💎 If You Purchase This Plan You Can Access to Intermediate and Basic Courses 💎
+                  </p>
+                </div> */}
               </div>
               {activeSection === 'advanced-chords' && (
                 <div>

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
-import { ArrowLeft, Play, Lock, Check, Star, Clock, BookOpen, Music, Piano, Guitar, Headphones, Users, Target, Zap, ChevronDown, LogOut, Download, Menu, Home, GraduationCap, Award, Calendar, Bookmark, X, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Play, Lock, Check, Star, Clock, BookOpen, Music, Piano, Guitar, Headphones, Users, Target, Zap, ChevronDown, LogOut, Download, Menu, Home, GraduationCap, Award, Calendar, Bookmark, X, AlertTriangle, Video } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigation } from '../contexts/NavigationContext';
 import { ThemeToggle } from './ui/theme-toggle';
 import { getUserPlanStatus } from '../utils/userPlanUtils';
 
 const BasicCourseOverview: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
+  const { goBack } = useNavigation();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [showPopup, setShowPopup] = useState(true);
@@ -125,7 +127,7 @@ const BasicCourseOverview: React.FC = () => {
            {
         id: 'inversions',
         title: 'Inversions of Chords',
-        icon: Target,
+        icon: Video,
         description: 'Learn chord inversions to play Family chords with Left Hand',
         isFree: true,
         topics: ['First Inversion', 'Second Inversion']
@@ -133,7 +135,7 @@ const BasicCourseOverview: React.FC = () => {
            {
         id: 'practicing',
         title: 'Practicing',
-        icon: Zap,
+        icon: Play,
         description: '',
         isFree: true,
         topics: ['Small tip for Finger Practicing']
@@ -171,11 +173,11 @@ const BasicCourseOverview: React.FC = () => {
           <div className="hidden md:flex items-center gap-3 relative z-[99999]">
             {/* Back to Home Button */}
             <button
-              onClick={() => navigate('/')}
+              onClick={goBack}
               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span>Back to Home</span>
+              <span>Back</span>
             </button>
             
             {currentUser ? (
@@ -446,7 +448,7 @@ const BasicCourseOverview: React.FC = () => {
             </h1>
           </div>
           <br />
-          <br />
+      
                                             <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-3 sm:mb-6">
              Learn Basics, scales, chords, and Practice well 
              - @AbhiMusicKeys
@@ -538,10 +540,10 @@ const BasicCourseOverview: React.FC = () => {
                  {/* My Journey Section */}
          <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-800 dark:via-slate-700 dark:to-slate-600 rounded-2xl p-8 text-slate-800 dark:text-white text-center mb-8 shadow-xl">
            <div className="max-w-4xl mx-auto">
-             <div className="flex flex-col lg:flex-row items-start gap-8 mb-8">
+             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 mb-8">
                {/* Profile Image */}
-               <div className="flex-shrink-0 lg:ml-0">
-                 <div className="w-48 h-48 lg:w-56 lg:h-56 rounded-full border-4 border-white/50 shadow-2xl overflow-hidden">
+               <div className="flex-shrink-0 flex justify-center lg:justify-start lg:ml-0">
+                 <div className="w-48 h-48 lg:w-56 lg:h-56 rounded-xl lg:rounded-full border-0 lg:border-4 lg:border-white/50 shadow-2xl hover:shadow-3xl transition-shadow duration-300 overflow-hidden">
                    <img src="/images/abhi-profile.jpg.jpg" alt="AbhiMusicKeys" className="w-full h-full object-cover" />
                  </div>
                </div>

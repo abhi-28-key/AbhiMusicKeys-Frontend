@@ -8,12 +8,14 @@ import YouTubeCarousel from './ui/YouTubeCarousel';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useRating } from '../contexts/RatingContext';
 import { collection, getDocs, query, where, orderBy, limit, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { getUserPlanStatus } from '../utils/userPlanUtils';
 
 const Homepage: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
+  const { getCourseRating } = useRating();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -681,8 +683,10 @@ const Homepage: React.FC = () => {
                 
                 {/* Course Rating */}
                 <div className="flex items-center justify-between mb-3">
-                  <Rating value={4.9} readonly size="sm" />
-                  <span className="text-xs text-slate-500 dark:text-slate-400">4.9 (2.1k)</span>
+                  <Rating value={getCourseRating('basic')?.rating || 4.9} readonly size="sm" />
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
+                    {getCourseRating('basic')?.rating || 4.9} ({(getCourseRating('basic')?.reviewCount || 2100).toLocaleString()})
+                  </span>
                  </div>
                 
                 {/* Free Tag - Top Right */}
@@ -731,8 +735,10 @@ const Homepage: React.FC = () => {
                 
                 {/* Course Rating */}
                 <div className="flex items-center justify-between mb-3">
-                  <Rating value={4.7} readonly size="sm" />
-                  <span className="text-xs text-slate-500 dark:text-slate-400">4.7 (1.8k)</span>
+                  <Rating value={getCourseRating('intermediate')?.rating || 4.7} readonly size="sm" />
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
+                    {getCourseRating('intermediate')?.rating || 4.7} ({(getCourseRating('intermediate')?.reviewCount || 1800).toLocaleString()})
+                  </span>
                  </div>
                 
                 <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-base sm:text-lg">
@@ -774,8 +780,10 @@ const Homepage: React.FC = () => {
                 
                 {/* Course Rating */}
                 <div className="flex items-center justify-between mb-3">
-                  <Rating value={4.8} readonly size="sm" />
-                  <span className="text-xs text-slate-500 dark:text-slate-400">4.8 (1.5k)</span>
+                  <Rating value={getCourseRating('advanced')?.rating || 4.8} readonly size="sm" />
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
+                    {getCourseRating('advanced')?.rating || 4.8} ({(getCourseRating('advanced')?.reviewCount || 1500).toLocaleString()})
+                  </span>
                  </div>
                 
                                 <div className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold group-hover:shadow-lg transition-all duration-200 text-base sm:text-lg">

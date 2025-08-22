@@ -319,47 +319,49 @@ const AnnouncementManagement: React.FC = () => {
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
             <div className="flex items-center">
               <button
                 onClick={() => navigate('/admin/dashboard')}
-                className="mr-4 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+                className="mr-3 sm:mr-4 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Announcement Management</h1>
-                <p className="text-gray-600">Create and manage platform announcements</p>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Announcement Management</h1>
+                <p className="text-sm sm:text-base text-gray-600">Create and manage platform announcements</p>
               </div>
             </div>
-            <div className="flex space-x-2">
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center justify-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
               >
-                <Plus className="w-5 h-5 mr-2" />
-                Create Announcement
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Create Announcement</span>
+                <span className="sm:hidden">Create</span>
               </button>
               <button
                 onClick={() => setShowImagePosterModal(true)}
-                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="flex items-center justify-center px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm sm:text-base"
               >
-                <Image className="w-5 h-5 mr-2" />
-                Create Image Poster
+                <Image className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Create Image Poster</span>
+                <span className="sm:hidden">Image Poster</span>
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Announcements Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {announcements.map((announcement) => (
             <div key={announcement.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
+              <div className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(announcement.type)}`}>
                       {announcement.type}
                     </span>
@@ -367,7 +369,7 @@ const AnnouncementManagement: React.FC = () => {
                       {announcement.targetAudience}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center gap-1">
                     {announcement.isPinned && (
                       <div title="Pinned">
                         <Pin className="w-4 h-4 text-yellow-500" />
@@ -379,13 +381,13 @@ const AnnouncementManagement: React.FC = () => {
                   </div>
                 </div>
                 
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{announcement.title}</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 line-clamp-2">{announcement.title}</h3>
                 {announcement.imageUrl && (
                   <div className="mb-4">
                     <img 
                       src={announcement.imageUrl} 
                       alt={announcement.title}
-                      className="w-full h-32 object-cover rounded-lg"
+                      className="w-full h-24 sm:h-32 object-cover rounded-lg"
                     />
                   </div>
                 )}
@@ -398,11 +400,11 @@ const AnnouncementManagement: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between">
-                  <div className="flex space-x-2">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                  <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => handleToggleActive(announcement.id, announcement.isActive)}
-                      className={`px-3 py-1 text-xs rounded-lg transition-colors ${
+                      className={`px-2 sm:px-3 py-1 text-xs rounded-lg transition-colors ${
                         announcement.isActive 
                           ? 'bg-red-100 text-red-700 hover:bg-red-200' 
                           : 'bg-green-100 text-green-700 hover:bg-green-200'
@@ -412,7 +414,7 @@ const AnnouncementManagement: React.FC = () => {
                     </button>
                     <button
                       onClick={() => handleTogglePinned(announcement.id, announcement.isPinned)}
-                      className={`px-3 py-1 text-xs rounded-lg transition-colors ${
+                      className={`px-2 sm:px-3 py-1 text-xs rounded-lg transition-colors ${
                         announcement.isPinned 
                           ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' 
                           : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
@@ -421,17 +423,17 @@ const AnnouncementManagement: React.FC = () => {
                       {announcement.isPinned ? 'Unpin' : 'Pin'}
                     </button>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex gap-2">
                     <button
                       onClick={() => openEditModal(announcement)}
-                      className="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg"
+                      className="p-1.5 sm:p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg"
                       title="Edit Announcement"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDeleteAnnouncement(announcement.id)}
-                      className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg"
+                      className="p-1.5 sm:p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg"
                       title="Delete Announcement"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -444,17 +446,17 @@ const AnnouncementManagement: React.FC = () => {
         </div>
 
         {announcements.length === 0 && (
-          <div className="text-center py-12">
-            <Bell className="mx-auto h-12 w-12 text-gray-400" />
+          <div className="text-center py-8 sm:py-12">
+            <Bell className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900">No announcements found</h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 px-4">
               Get started by creating your first announcement.
             </p>
             <button
               onClick={() => setShowAddModal(true)}
-              className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="mt-4 inline-flex items-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm sm:text-base"
             >
-              <Plus className="w-5 h-5 mr-2" />
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
               Create Announcement
             </button>
           </div>
@@ -464,7 +466,7 @@ const AnnouncementManagement: React.FC = () => {
       {/* Add Announcement Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-4 sm:top-20 mx-auto p-4 sm:p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white max-h-[90vh] overflow-y-auto">
             <div className="mt-3">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Create New Announcement</h3>
               <form onSubmit={handleAddAnnouncement} className="space-y-4">
@@ -539,7 +541,7 @@ const AnnouncementManagement: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="flex justify-end space-x-3">
+                <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
@@ -563,7 +565,7 @@ const AnnouncementManagement: React.FC = () => {
       {/* Edit Announcement Modal */}
       {showEditModal && selectedAnnouncement && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-4 sm:top-20 mx-auto p-4 sm:p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white max-h-[90vh] overflow-y-auto">
             <div className="mt-3">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Edit Announcement</h3>
               <form onSubmit={handleEditAnnouncement} className="space-y-4">
@@ -638,7 +640,7 @@ const AnnouncementManagement: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="flex justify-end space-x-3">
+                <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
                   <button
                     type="button"
                     onClick={() => setShowEditModal(false)}
@@ -662,7 +664,7 @@ const AnnouncementManagement: React.FC = () => {
       {/* Image Poster Modal */}
       {showImagePosterModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-4 sm:top-20 mx-auto p-4 sm:p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white max-h-[90vh] overflow-y-auto">
             <div className="mt-3">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Create Image Poster</h3>
               <form onSubmit={handleImagePosterSubmit} className="space-y-4">
@@ -774,7 +776,7 @@ const AnnouncementManagement: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="flex justify-end space-x-3">
+                <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
                   <button
                     type="button"
                     onClick={() => {

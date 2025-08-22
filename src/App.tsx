@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './contexts/AuthContext';
 import { PaymentProvider } from './contexts/PaymentContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { NavigationProvider } from './contexts/NavigationContext';
+import { RatingProvider } from './contexts/RatingContext';
 import Homepage from './components/Homepage';
 import BasicCourseOverview from './components/BasicCourseOverview';
 import IntermediateCourseOverview from './components/IntermediateCourseOverview';
@@ -41,6 +43,8 @@ function App() {
       <PaymentProvider>
         <ThemeProvider>
         <Router>
+        <NavigationProvider>
+        <RatingProvider>
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/basic" element={<BasicCourseOverview />} />
@@ -150,6 +154,13 @@ function App() {
               </SecureAdminRoute>
             } />
             
+            {/* Admin Setup - Only accessible with encrypted URL */}
+            <Route path="/secure-admin-panel/:hash/setup" element={
+              <SecureAdminRoute>
+                <AdminSetup />
+              </SecureAdminRoute>
+            } />
+            
             {/* Admin Login - Direct access with encrypted URL (must be last) */}
             <Route path="/secure-admin-panel/*" element={
               <SecureAdminRoute>
@@ -160,6 +171,8 @@ function App() {
             {/* Catch-all route for invalid admin URLs */}
             <Route path="/admin/*" element={<Navigate to="/" replace />} />
           </Routes>
+        </RatingProvider>
+        </NavigationProvider>
         </Router>
         </ThemeProvider>
       </PaymentProvider>

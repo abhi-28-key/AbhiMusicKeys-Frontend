@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { setupAdminUser, isAuthorizedAdmin } from '../../utils/adminSetup';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { setupAdminUser, isAuthorizedAdmin, generateAdminUrl } from '../../utils/adminSetup';
 import { Shield, User, Lock, CheckCircle, AlertTriangle } from 'lucide-react';
 
 const AdminSetup: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,6 +15,12 @@ const AdminSetup: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  // Extract the encrypted hash from the current URL
+  const getEncryptedHash = () => {
+    const parts = location.pathname.split('/');
+    return parts[2]; // The hash part of /secure-admin-panel/{hash}/setup
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +52,9 @@ const AdminSetup: React.FC = () => {
       await setupAdminUser(formData.email, formData.password, formData.displayName);
       setSuccess(true);
       setTimeout(() => {
-        navigate('/admin/login');
+        // Redirect to secure admin login URL
+        const hash = getEncryptedHash();
+        navigate(`/secure-admin-panel/${hash}`);
       }, 3000);
     } catch (error: any) {
       console.error('Setup error:', error);

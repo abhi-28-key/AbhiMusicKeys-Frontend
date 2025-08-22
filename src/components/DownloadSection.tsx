@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { usePayment } from '../contexts/PaymentContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
+import { useNavigation } from '../contexts/NavigationContext';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
@@ -24,6 +25,7 @@ const DownloadSection: React.FC = () => {
   const { currentUser } = useAuth();
   const { hasSubscription } = usePayment();
   const navigate = useNavigate();
+  const { goBack } = useNavigation();
   const [downloading, setDownloading] = useState<string | null>(null);
   const [files, setFiles] = useState<DownloadItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -197,14 +199,14 @@ const DownloadSection: React.FC = () => {
               </p>
             </div>
             <motion.button
-              onClick={() => navigate('/')}
+              onClick={goBack}
               className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              Back
             </motion.button>
           </div>
         </div>

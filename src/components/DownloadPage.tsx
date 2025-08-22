@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import { Download, CheckCircle, Music, FileText, Star, Clock, Users } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigation } from '../contexts/NavigationContext';
 
 const DownloadPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { currentUser } = useAuth();
+  const { goBack } = useNavigation();
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
 
@@ -202,10 +204,10 @@ const DownloadPage: React.FC = () => {
               </h1>
             </div>
             <button
-              onClick={() => navigate('/')}
+              onClick={goBack}
               className="text-white hover:text-green-300 transition-colors duration-300 text-sm sm:text-base px-3 py-2 rounded-lg hover:bg-white/10"
             >
-              ← Back to Home
+              ← Back
             </button>
           </div>
         </header>

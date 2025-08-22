@@ -411,7 +411,7 @@ const PSRI500Page: React.FC = () => {
                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                        <Music className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                      </div>
-                                           <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-lg sm:text-xl">Style - 28</h4>
+                                           <h4 className="font-bold text-gray-800 dark:text-white mb-2 text-lg sm:text-xl">Style - 128</h4>
                       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                         Best for Worship song like:<br/>
                         • <span className="inline-block font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-lg ring-1 ring-blue-200 dark:ring-blue-700 shadow-sm text-sm sm:text-base">"Ninne Preminthunu"</span>

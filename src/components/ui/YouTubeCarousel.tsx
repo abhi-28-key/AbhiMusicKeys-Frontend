@@ -90,13 +90,13 @@ const YouTubeCarousel: React.FC = () => {
                   href={channel.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block relative bg-gradient-to-br from-purple-600/30 via-pink-500/25 to-blue-600/20 border border-purple-400/60 rounded-xl p-3 sm:p-4 md:p-6 text-center hover:from-purple-600/40 hover:via-pink-500/35 hover:to-blue-600/30 hover:border-purple-400/80 transition-all duration-500 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-purple-500/50 overflow-hidden backdrop-blur-sm h-[140px] sm:h-[160px] flex flex-col justify-center"
+                  className="block relative bg-gradient-to-br from-purple-600/30 via-pink-500/25 to-blue-600/20 border border-purple-400/60 rounded-xl p-3 sm:p-4 md:p-6 text-center hover:from-purple-600/40 hover:via-pink-500/35 hover:to-blue-600/30 hover:border-purple-400/80 transition-all duration-500 group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-purple-500/50 overflow-hidden backdrop-blur-sm h-[160px] sm:h-[180px] md:h-[200px] flex flex-col justify-between"
                 >
                   {/* Background Glow Effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-pink-500/15 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   
                   {/* Channel Avatar */}
-                  <div className="relative flex items-center justify-center mb-2 sm:mb-3">
+                  <div className="relative flex items-center justify-center mb-3 sm:mb-4">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-pink-500 via-purple-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:shadow-purple-500/60 transition-all duration-300 group-hover:scale-110">
                       <span className="text-white font-bold text-sm sm:text-base md:text-lg">
                         {channel.letter}
@@ -107,7 +107,7 @@ const YouTubeCarousel: React.FC = () => {
                   </div>
                   
                   {/* Channel Name */}
-                  <h4 className="font-semibold text-white text-lg sm:text-base md:text-lg mb-1 sm:mb-2 group-hover:text-purple-200 transition-colors duration-300 relative z-10 leading-tight line-clamp-2 px-1">
+                  <h4 className="font-semibold text-white text-sm sm:text-xs md:text-base lg:text-lg mb-2 sm:mb-3 group-hover:text-purple-200 transition-colors duration-300 relative z-10 leading-tight px-1 min-h-[1.5rem] flex items-center justify-center">
                     {channel.name}
                   </h4>
                   

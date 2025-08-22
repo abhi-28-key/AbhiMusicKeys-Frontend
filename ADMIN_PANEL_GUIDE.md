@@ -24,20 +24,37 @@
    const ADMIN_EMAIL = 'your-actual-email@example.com'; // ⚠️ CHANGE THIS
    ```
 
+### 🔐 Secure URL Access
+
+Both admin setup and admin panel access use encrypted URLs for security:
+
+- **Admin Setup URL**: `/secure-admin-panel/{hash}/setup`
+- **Admin Panel URL**: `/secure-admin-panel/{hash}`
+
+These URLs are dynamically generated and change periodically for security.
+
 ### Step 2: Create Your Admin Account
 
-1. Navigate to `/admin/setup` in your browser
-2. Fill in your details:
+1. **Get your secure setup URL** by opening browser console (F12) and running:
+   ```javascript
+   displayAdminSetupUrl()
+   ```
+2. Copy the generated URL and navigate to it in your browser
+3. Fill in your details:
    - **Full Name**: Your name
    - **Email**: Must match the ADMIN_EMAIL you set in step 1
    - **Password**: Use a strong, unique password
-3. Click "Create Admin Account"
+4. Click "Create Admin Account"
 
 ### Step 3: Access Admin Panel
 
-1. Go to `/admin/login`
-2. Enter your admin credentials
-3. Access the dashboard at `/admin/dashboard`
+1. **Get your secure admin URL** by opening browser console (F12) and running:
+   ```javascript
+   displayAdminUrl()
+   ```
+2. Copy the generated URL and navigate to it in your browser
+3. Enter your admin credentials
+4. Access the dashboard
 
 ---
 

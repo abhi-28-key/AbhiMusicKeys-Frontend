@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Play, Lock, Check, Star, Clock, BookOpen, Music, Piano, Guitar, Headphones, Users, Target, Zap, ChevronDown, LogOut, Download, Menu, Home, Video } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigation } from '../contexts/NavigationContext';
+import { useRating } from '../contexts/RatingContext';
 import RatingModal from './ui/RatingModal';
 import { ThemeToggle } from './ui/theme-toggle';
 import GoogleDriveVideo from './ui/GoogleDriveVideo';
@@ -10,6 +12,8 @@ import GoogleDriveVideo from './ui/GoogleDriveVideo';
 const BasicLearning: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
+  const { goBack } = useNavigation();
+  const { addReview } = useRating();
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showGuidedLearningCompleteModal, setShowGuidedLearningCompleteModal] = useState(false);
   const [hasEnrolled, setHasEnrolled] = useState(false);
@@ -294,6 +298,9 @@ const BasicLearning: React.FC = () => {
 
   const handleRatingSubmit = async (rating: number, feedback: string) => {
     try {
+      // Add review to live rating system
+      addReview('basic', rating);
+
       // Store the review in localStorage for public display
       const newReview = {
         id: Date.now(),
@@ -311,17 +318,11 @@ const BasicLearning: React.FC = () => {
       existingReviews.push(newReview);
       localStorage.setItem('publicReviews', JSON.stringify(existingReviews));
 
-      // Update average rating
-      const totalRating = existingReviews.reduce((sum: number, review: any) => sum + review.rating, 0);
-      const newAverageRating = totalRating / existingReviews.length;
-      localStorage.setItem('averageRating', newAverageRating.toString());
-      localStorage.setItem('totalRatings', existingReviews.length.toString());
-
       console.log('Review submitted:', newReview);
-      console.log('New average rating:', newAverageRating);
+      console.log('Live rating updated for Basic course');
       
       // Show success message
-      alert('Thank you for your feedback! Your review has been published.');
+      alert('Thank you for your feedback! Your review has been published and live ratings updated.');
       
       // Close the rating modal
       setShowRatingModal(false);
@@ -842,7 +843,7 @@ const BasicLearning: React.FC = () => {
             <span className="font-semibold text-sm sm:text-base lg:text-lg text-slate-800 dark:text-white">Practice Tip</span>
           </div>
           <p className="text-xs sm:text-sm lg:text-base text-slate-700 dark:text-slate-300">
-            Practice each scale minimum 100 times because I did like that only. So I am suggesting to you also!
+            Practice each scale as much you can do!
           </p>
         </div>
 
@@ -963,7 +964,7 @@ const BasicLearning: React.FC = () => {
             <span className="font-semibold text-xs sm:text-sm lg:text-base text-slate-800 dark:text-white">Practice Tip</span>
           </div>
           <p className="text-xs sm:text-sm lg:text-base text-slate-700 dark:text-slate-300">
-            Practice each sharp major scale minimum 100 times because I did like that only. So I am suggesting to you also!
+            Practice each sharp major scale as much you can do!
           </p>
         </div>
 
@@ -1082,7 +1083,7 @@ const BasicLearning: React.FC = () => {
             <span className="font-semibold text-sm text-slate-800 dark:text-white">Practice Tip</span>
           </div>
           <p className="text-xs sm:text-sm lg:text-base text-slate-700 dark:text-slate-300">
-            Practice each sharp minor scale minimum 100 times because I did like that only. So I am suggesting to you also!
+            Practice each sharp minor scale as much you can do!
           </p>
         </div>
 
@@ -1128,22 +1129,22 @@ const BasicLearning: React.FC = () => {
 
             {/* What is a Keyboard/Digital Piano Section */}
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-200">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
                     <Piano className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-800 dark:text-white">What is a Keyboard / Digital Piano?</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white break-words">What is a Keyboard / Digital Piano?</h3>
                 </div>
                 <button
                   onClick={() => markSubsectionCompleted('keyboardIntro')}
-                  className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-300 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
                     sectionProgress.keyboardIntro
                       ? 'bg-green-600 text-white'
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
                   }`}
                 >
-                  {sectionProgress.keyboardIntro ? '✅ Completed' : 'Mark Complete'}
+                  {sectionProgress.keyboardIntro ? '✅ Complete' : 'Mark Complete'}
                 </button>
               </div>
               
@@ -1174,22 +1175,22 @@ const BasicLearning: React.FC = () => {
 
             {/* What is an Octave Section */}
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-200">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center flex-shrink-0">
                     <Music className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-800 dark:text-white">What is an Octave?</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white break-words">What is an Octave?</h3>
                 </div>
                 <button
                   onClick={() => markSubsectionCompleted('octaveIntro')}
-                  className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-300 text-sm sm:text-base whitespace-nowrap flex-shrink-0 ${
                     sectionProgress.octaveIntro
                       ? 'bg-green-600 text-white'
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
                   }`}
                 >
-                  {sectionProgress.octaveIntro ? '✅ Completed' : 'Mark Complete'}
+                  {sectionProgress.octaveIntro ? '✅ Complete' : 'Mark Complete'}
                 </button>
               </div>
               
@@ -1768,7 +1769,7 @@ const BasicLearning: React.FC = () => {
                             <span className="font-semibold text-xs text-slate-800 dark:text-white">Practice Tip</span>
                           </div>
                           <p className="text-xs text-slate-700 dark:text-slate-300">
-                            Practice each scale minimum 100 times because I did like that only. So I am suggesting to you also!
+                            Practice each scale as much you can do!
                           </p>
                         </div>
 
@@ -1933,7 +1934,7 @@ const BasicLearning: React.FC = () => {
                           <span className="font-semibold text-xs text-slate-800 dark:text-white">Practice Tip</span>
                         </div>
                         <p className="text-xs text-slate-700 dark:text-slate-300">
-                          Practice each sharp major scale minimum 100 times because I did like that only. So I am suggesting to you also!
+                          Practice each sharp major scale as much you can do!
                         </p>
                       </div>
 
@@ -2157,7 +2158,7 @@ const BasicLearning: React.FC = () => {
                           <span className="font-semibold text-sm text-slate-800 dark:text-white">Practice Tip</span>
                         </div>
                         <p className="text-xs text-slate-700 dark:text-slate-300">
-                          Practice each minor scale minimum 100 times because I did like that only. So I am suggesting to you also!
+                          Practice each minor scale as much you can do!
                         </p>
                       </div>
 
@@ -2322,7 +2323,7 @@ const BasicLearning: React.FC = () => {
                           <span className="font-semibold text-xs text-slate-800 dark:text-white">Practice Tip</span>
                         </div>
                         <p className="text-xs text-slate-700 dark:text-slate-300">
-                          Practice each sharp minor scale minimum 100 times because I did like that only. So I am suggesting to you also!
+                          Practice each sharp minor scale as much you can do!
                         </p>
                       </div>
 
@@ -2618,7 +2619,7 @@ const BasicLearning: React.FC = () => {
                           <span className="font-semibold text-sm text-slate-800 dark:text-white">Practice Tip</span>
                         </div>
                         <p className="text-xs text-slate-700 dark:text-slate-300">
-                          Practice each family chord progression minimum 100 times because I did like that only. So I am suggesting to you also!
+                          Practice each family chord progression as much you can do!
                         </p>
                       </div>
 
@@ -2730,7 +2731,7 @@ const BasicLearning: React.FC = () => {
                           <span className="font-semibold text-sm text-slate-800 dark:text-white">Practice Tip</span>
                         </div>
                         <p className="text-xs text-slate-700 dark:text-slate-300">
-                          Practice each sharp family chord progression minimum 100 times because I did like that only. So I am suggesting to you also!
+                          Practice each sharp family chord progression as much you can do!
                         </p>
                       </div>
 
@@ -2903,7 +2904,7 @@ const BasicLearning: React.FC = () => {
                           <span className="font-semibold text-sm text-slate-800 dark:text-white">Practice Tip</span>
                         </div>
                         <p className="text-xs text-slate-700 dark:text-slate-300">
-                          Practice each minor family chord progression minimum 100 times because I did like that only. So I am suggesting to you also!
+                          Practice each minor family chord progression as much you can do!
                         </p>
                       </div>
 
@@ -3015,7 +3016,7 @@ const BasicLearning: React.FC = () => {
                           <span className="font-semibold text-sm text-slate-800 dark:text-white">Practice Tip</span>
                         </div>
                         <p className="text-xs text-slate-700 dark:text-slate-300">
-                          Practice each sharp minor family chord progression minimum 100 times because I did like that only. So I am suggesting to you also!
+                          Practice each sharp minor family chord progression as much you can do!
                         </p>
                       </div>
 
@@ -3142,11 +3143,11 @@ const BasicLearning: React.FC = () => {
           <div className="hidden md:flex items-center gap-3 relative z-[99999]">
             {/* Back to Home Button - Desktop */}
             <button
-              onClick={() => window.location.href = '/'}
+              onClick={goBack}
               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               <Home className="h-4 w-4" />
-              <span>Back to Home</span>
+              <span>Back</span>
             </button>
             
             {currentUser ? (
@@ -3258,11 +3259,11 @@ const BasicLearning: React.FC = () => {
             
             {/* Back to Home Button - Mobile */}
             <button
-              onClick={() => window.location.href = '/'}
+              onClick={goBack}
               className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm"
             >
               <Home className="h-4 w-4" />
-              <span>Home</span>
+              <span>Back</span>
             </button>
           </div>
         </div>
