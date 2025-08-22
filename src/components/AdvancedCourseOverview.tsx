@@ -88,12 +88,6 @@ const AdvancedCourseOverview: React.FC = () => {
     return name.charAt(0).toUpperCase() + name.slice(1);
   };
 
-
-
-
-
-
-
   // Course Sections - Updated to match actual content from Advanced Course Content
   const courseSections = [
     {
@@ -162,6 +156,9 @@ const AdvancedCourseOverview: React.FC = () => {
           <div className="relative flex justify-between items-center p-3 sm:p-4 lg:p-6">
             {/* Modern Logo */}
             <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-3 bg-gradient-to-r from-pink-400 via-fuchsia-500 to-pink-600 rounded-xl shadow-lg">
+                <Music className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
+              </div>
               <h1 className="text-2xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-pink-100 via-fuchsia-100 to-pink-200 bg-clip-text text-transparent">
                   AbhiMusicKeys
@@ -275,97 +272,150 @@ const AdvancedCourseOverview: React.FC = () => {
                 </div>
               )}
 
-              {/* Theme Toggle for Desktop */}
-              <div className="hidden md:block">
-                <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
-              </div>
-              
-              {/* Theme Toggle for Mobile */}
-              <div className="block md:hidden">
-                <button
-                  onClick={toggleTheme}
-                  className="p-1.5 sm:p-2 bg-white/20 hover:bg-white/30 text-white border border-white/50 hover:border-white/70 backdrop-blur-sm transition-all duration-300 rounded-lg shadow-lg"
-                >
-                  {isDark ? (
-                    <Sun className="h-4 w-4" />
-                  ) : (
-                    <Moon className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
+
             </div>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 py-4 sm:py-6 lg:py-8 px-3 sm:px-4 lg:px-8">
+        <main className="flex-1 px-3 sm:px-6 py-6 sm:py-12">
           <div className="max-w-6xl mx-auto">
             {/* Course Header */}
-            <div className="text-center mb-6 sm:mb-8 lg:mb-12">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-800 dark:text-white mb-3 sm:mb-4">
+            <div className="text-center mb-8 sm:mb-12">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-3 sm:mb-4 text-gray-800 dark:text-white drop-shadow-lg bg-gradient-to-r from-pink-600 via-fuchsia-700 to-pink-600 bg-clip-text text-transparent">
                 Advanced Piano Course
               </h1>
-              <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-4 sm:mb-6 px-2">
-                Master advanced major and minor chord families, explore traditional Indian ragas, and learn professional techniques for scale identification and interlude playing. 
-                Take your musicianship to the highest level with expert guidance.
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium drop-shadow-md px-2">
+                Master advanced major and minor chord families, explore traditional Indian ragas, and learn professional techniques
               </p>
-              <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                <span className="flex items-center gap-1">
-                  <Music className="h-3 w-3 sm:h-4 sm:w-4" />
-                  <span className="text-xs sm:text-sm">5 Advanced Modules</span>
-                </span>
-              </div>
             </div>
 
-            {/* Course Navigation */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-              {courseSections.map((section, index) => (
-                <div
-                  key={section.id}
-                  onClick={() => setActiveSection(section.id)}
-                  className={`bg-gradient-to-br from-pink-50 to-fuchsia-50 dark:from-slate-800 dark:to-slate-700 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-pink-200/50 dark:border-slate-600 hover:border-pink-300/70 dark:hover:border-slate-500 hover:bg-gradient-to-br hover:from-pink-100 hover:to-fuchsia-100 dark:hover:from-slate-700 dark:hover:to-slate-600 transition-all duration-300 hover:scale-105 group shadow-lg cursor-pointer ${
-                    activeSection === section.id ? 'ring-2 ring-pink-500' : ''
-                  }`}
-                >
-                  <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-pink-500 via-fuchsia-500 to-pink-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      <section.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="font-bold text-slate-800 dark:text-white text-sm sm:text-base lg:text-lg truncate">{section.title}</h3>
-                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{section.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-500 dark:text-slate-400">Course</span>
-                    {section.isCompleted ? (
-                      <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
-                    ) : (
-                      <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-pink-500" />
-                    )}
-                  </div>
+            {/* Course Modules - Horizontal Scrolling Cards */}
+            <div className="mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+                Course Modules
+              </h2>
+              <div className="relative">
+                {/* Desktop: Grid layout without scrolling */}
+                <div className="hidden lg:grid lg:grid-cols-3 gap-6">
+                  {courseSections.map((section, index) => {
+                    const IconComponent = section.icon;
+                    return (
+                      <div
+                        key={section.id}
+                        onClick={() => setActiveSection(section.id)}
+                        className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700 cursor-pointer ${
+                          activeSection === section.id ? 'ring-2 ring-pink-500' : ''
+                        }`}
+                      >
+                        <div className="p-6">
+                          {/* Module Header */}
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-fuchsia-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <IconComponent className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-lg font-bold text-gray-800 dark:text-white break-words">
+                                {section.title}
+                              </h3>
+                              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap">
+                                  Advanced
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Module Description */}
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                            {section.description}
+                          </p>
+                          
+                          {/* Module Footer */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">Course</span>
+                            {section.isCompleted ? (
+                              <Check className="h-5 w-5 text-green-500" />
+                            ) : (
+                              <Lock className="h-5 w-5 text-pink-500" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
+
+                {/* Mobile/Tablet: Horizontal scrolling */}
+                <div className="lg:hidden flex overflow-x-auto gap-4 sm:gap-6 pb-4 scrollbar-hide">
+                  {courseSections.map((section, index) => {
+                    const IconComponent = section.icon;
+                    return (
+                      <div
+                        key={section.id}
+                        onClick={() => setActiveSection(section.id)}
+                        className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700 flex-shrink-0 w-80 sm:w-96 cursor-pointer ${
+                          activeSection === section.id ? 'ring-2 ring-pink-500' : ''
+                        }`}
+                      >
+                        <div className="p-4 sm:p-6">
+                          {/* Module Header */}
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-pink-500 to-fuchsia-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white break-words">
+                                {section.title}
+                              </h3>
+                              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap">
+                                  Advanced
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Module Description */}
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                            {section.description}
+                          </p>
+                          
+                          {/* Module Footer */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">Course</span>
+                            {section.isCompleted ? (
+                              <Check className="h-5 w-5 text-green-500" />
+                            ) : (
+                              <Lock className="h-5 w-5 text-pink-500" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
             {/* Dynamic Content Based on Active Section */}
             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 border border-pink-200/50 dark:border-slate-600/50 shadow-lg">
               {/* Practice Quote */}
-              <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 rounded-r-lg">
-                <p className="text-red-700 dark:text-red-300 font-medium italic text-sm sm:text-base">
+              <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
+                <p className="text-red-700 font-medium italic text-sm sm:text-base">
                   "Practice well, then only you will get knowledge - Mastery comes through dedicated practice!"
                 </p>
               </div>
               
               {/* Lifetime Access Note */}
-              <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 rounded-r-lg">
-                <p className="text-green-700 dark:text-green-300 font-bold text-base sm:text-lg">
+              <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg">
+                <p className="text-green-700 font-bold text-base sm:text-lg">
                   ✨ One-time purchase gives you lifetime access! ✨
                 </p>
               </div>
             </div>
 
-            {/* Subscribe Button */}
+            {/* Enrollment CTA */}
             <div className="text-center mt-8 sm:mt-12">
               <button
                 onClick={isEnrolled ? handleContinueLearning : handleEnroll}
@@ -376,6 +426,12 @@ const AdvancedCourseOverview: React.FC = () => {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 via-fuchsia-400/20 to-pink-500/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
               </button>
+              <p className="text-gray-600 dark:text-gray-300 mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg px-2">
+                {isEnrolled 
+                  ? 'Resume your advanced course progress' 
+                  : 'Unlock all advanced content and take your piano skills to the highest level'
+                }
+              </p>
               
               {/* Access Note */}
               <div className="text-center mt-4 sm:mt-6 p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-r-lg">
@@ -387,8 +443,6 @@ const AdvancedCourseOverview: React.FC = () => {
           </div>
         </main>
       </div>
-
-
     </div>
   );
 };

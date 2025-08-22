@@ -438,13 +438,15 @@ const BasicCourseOverview: React.FC = () => {
         {/* Course Header */}
         <div className="text-center mb-2 sm:mb-12">
           <div className="inline-flex items-center gap-2 sm:gap-3 mb-1 sm:mb-4">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-11 h-11 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
               <GraduationCap className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-slate-800 dark:text-white">
               Basic Piano Course
             </h1>
           </div>
+          <br />
+          <br />
                                             <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-3 sm:mb-6">
              Learn Basics, scales, chords, and Practice well 
              - @AbhiMusicKeys
@@ -647,23 +649,23 @@ const BasicCourseOverview: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={isEnrolled ? handleContinueLearning : handleEnroll}
-          className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 hover:from-green-600 hover:via-emerald-600 hover:to-teal-700 text-white font-bold px-8 py-4 rounded-full shadow-2xl border-2 border-white/20 backdrop-blur-sm transition-all duration-300 transform hover:shadow-3xl"
+          className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 hover:from-green-600 hover:via-emerald-600 hover:to-teal-700 text-white font-bold px-3 py-2 rounded-full shadow-2xl border-2 border-white/20 backdrop-blur-sm transition-all duration-300 transform hover:shadow-3xl"
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-              <GraduationCap className="h-4 w-4 text-white" />
+            <div className="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center">
+              <GraduationCap className="h-3 w-3 text-white" />
             </div>
             <div className="text-left">
-              <div className="text-sm font-semibold">
+              <div className="text-xs font-semibold">
                 {isEnrolled ? 'Continue Learning' : 'Enroll Now'}
               </div>
-              <div className="text-xs opacity-90">
+              {/* <div className="text-xs opacity-90">
                 {isEnrolled ? 'Resume Your Progress' : 'Start Learning Today'}
-              </div>
+              </div> */}
             </div>
-            <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+            {/* <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
               <ArrowLeft className="h-3 w-3 text-white rotate-180" />
-            </div>
+            </div> */}
           </div>
         </motion.button>
       </div>

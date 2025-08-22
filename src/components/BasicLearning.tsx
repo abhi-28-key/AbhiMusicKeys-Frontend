@@ -1156,7 +1156,7 @@ const BasicLearning: React.FC = () => {
                   <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-6 hover:shadow-md transition-all duration-200 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-800/30 dark:hover:to-purple-800/30">
                     <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-3">🎹 White Keys</h4>
                     <p className="text-slate-600 dark:text-slate-300">
-                      These are the main keys you'll use most often. They're like the foundation of your musical alphabet - A, B, C, D, E, F, G!
+                      These are the main keys you'll use most often. They're like the foundation of your musical alphabet - C, D, E, F, G, A, B!
                     </p>
                   </div>
                   
@@ -1168,17 +1168,7 @@ const BasicLearning: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl p-6 hover:shadow-md transition-all duration-200 hover:from-green-100 hover:to-blue-100 dark:hover:from-green-800/30 dark:hover:to-blue-800/30">
-                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-3">🤲 Your Hands on the Keyboard</h4>
-                  <p className="text-slate-600 dark:text-slate-300 mb-4">
-                    Imagine your hands are like gentle dancers on the keyboard. Your fingers will learn to move smoothly from key to key, creating beautiful melodies.
-                  </p>
-                  <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
-                    <span>• Keep your hands relaxed and curved</span>
-                    <span>• Use your fingertips, not your flat fingers</span>
-                    <span>• Start with simple songs and build up</span>
-                  </div>
-                </div>
+
               </div>
             </div>
 
@@ -1232,25 +1222,32 @@ const BasicLearning: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-6 hover:shadow-md transition-all duration-200 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-800/30 dark:hover:to-purple-800/30">
-                    <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-3">✨ Why Octaves Matter</h4>
-                    <ul className="space-y-2 text-slate-600 dark:text-slate-300">
-                      <li>• They help organize music into patterns</li>
-                      <li>• They make it easier to learn songs</li>
-                      <li>• They create beautiful harmonies</li>
-                      <li>• They're the building blocks of melodies</li>
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl p-6 hover:shadow-md transition-all duration-200 hover:from-green-100 hover:to-blue-100 dark:hover:from-green-800/30 dark:hover:to-blue-800/30">
-                    <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-3">🎯 Simple Tips</h4>
-                    <ul className="space-y-2 text-slate-600 dark:text-slate-300">
-                      <li>• Start with the C octave (middle of keyboard)</li>
-                      <li>• Practice going up and down the octave</li>
-                      <li>• Listen to how the notes sound together</li>
-                      <li>• Don't worry about speed - focus on accuracy</li>
-                    </ul>
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl p-6 hover:shadow-md transition-all duration-200 hover:from-green-100 hover:to-blue-100 dark:hover:from-green-800/30 dark:hover:to-blue-800/30">
+                  <h4 className="text-xl font-semibold text-slate-800 dark:text-white mb-4">🎯 Simple Tips</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Tip 1: Start with C octave */}
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-48 h-48 md:w-40 md:h-40 mb-3">
+                        <img 
+                          src="/tips/octave.jpeg" 
+                          alt="C octave on keyboard" 
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <p className="text-sm text-slate-600 dark:text-slate-300 font-medium">Start with C octave</p>
+                    </div>
+                    
+                    {/* Tip 3: Listen to notes */}
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-64 h-48 md:w-80 md:h-58 mb-3">
+                        <img 
+                          src="/tips/notes.png" 
+                          alt="Musical notes" 
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <p className="text-sm text-slate-600 dark:text-slate-300 font-medium">Listen to notes</p>
+                    </div>
                   </div>
                 </div>
               </div>

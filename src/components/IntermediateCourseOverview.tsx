@@ -304,7 +304,7 @@ const IntermediateCourseOverview: React.FC = () => {
               <div className="p-2 sm:p-3 bg-gradient-to-r from-orange-400 via-yellow-500 to-orange-600 rounded-xl shadow-lg">
                 <Music className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
               </div>
-              <h1 className="text-2xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wider">
+              <h1 className="text-2xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">
                 <span className="bg-gradient-to-r from-orange-100 via-yellow-100 to-orange-200 bg-clip-text text-transparent">
                   AbhiMusicKeys
                 </span>
@@ -312,23 +312,14 @@ const IntermediateCourseOverview: React.FC = () => {
             </div>
             
             {/* Navigation Buttons */}
-            <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
               <button
                 onClick={() => navigate('/')}
-                className="hidden sm:flex bg-white/20 hover:bg-white/30 text-white border border-white/50 hover:border-white/70 backdrop-blur-sm transition-all duration-300 font-medium text-xs px-2 sm:px-3 py-2 rounded-lg shadow-lg items-center gap-1 sm:gap-2"
+                className="bg-white/20 hover:bg-white/30 text-white border border-white/50 hover:border-white/70 backdrop-blur-sm transition-all duration-300 font-medium text-xs px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg shadow-lg flex items-center gap-1 sm:gap-2"
               >
                 <ArrowLeft className="h-3 w-3" />
                 <span className="hidden sm:inline">Back to Home</span>
                 <span className="sm:hidden">Home</span>
-              </button>
-
-              {/* Back to Home (Mobile) */}
-              <button
-                onClick={() => navigate('/')}
-                className="flex sm:hidden bg-white/20 hover:bg-white/30 text-white border border-white/50 hover:border-white/70 backdrop-blur-sm transition-all duration-300 font-medium text-[10px] px-2 py-1 rounded-lg shadow-lg items-center gap-1"
-              >
-                <ArrowLeft className="h-3 w-3" />
-                <span>Back to Home</span>
               </button>
               
               {currentUser ? (
@@ -564,35 +555,61 @@ const IntermediateCourseOverview: React.FC = () => {
 
 
 
-            {/* Course Navigation */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-              {courseSections.map((section, index) => (
-                <div
-                  key={section.id}
-                  onClick={() => setActiveSection(section.id)}
-                  className={`bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-slate-800 dark:to-slate-700 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-orange-200/50 dark:border-slate-600/50 hover:border-orange-300/70 dark:hover:border-slate-500/70 hover:bg-gradient-to-br hover:from-orange-100 hover:to-yellow-100 dark:hover:from-slate-700 dark:hover:to-slate-600 transition-all duration-300 hover:scale-105 group shadow-lg cursor-pointer ${
-                    activeSection === section.id ? 'ring-2 ring-orange-500' : ''
-                  }`}
-                >
-                  <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      <section.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-800 dark:text-white text-base sm:text-lg">{section.title}</h3>
-                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">{section.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">Course</span>
-                    {section.isCompleted ? (
-                      <Check className="h-5 w-5 text-green-500" />
-                    ) : (
-                      <Lock className="h-5 w-5 text-orange-500" />
-                    )}
-                  </div>
+            {/* Course Modules - Horizontal Scrolling Cards */}
+            <div className="mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+                Course Modules
+              </h2>
+              <div className="relative">
+                <div className="flex overflow-x-auto gap-4 sm:gap-6 pb-4 scrollbar-hide">
+                  {courseSections.map((section, index) => {
+                    const IconComponent = section.icon;
+                    return (
+                      <div
+                        key={section.id}
+                        onClick={() => setActiveSection(section.id)}
+                        className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700 flex-shrink-0 w-80 sm:w-96 cursor-pointer ${
+                          activeSection === section.id ? 'ring-2 ring-orange-500' : ''
+                        }`}
+                      >
+                        <div className="p-4 sm:p-6">
+                          {/* Module Header */}
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-orange-500 to-yellow-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white break-words">
+                                {section.title}
+                              </h3>
+                              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap">
+                                  Intermediate
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Module Description */}
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                            {section.description}
+                          </p>
+                          
+                          {/* Module Footer */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">Course</span>
+                            {section.isCompleted ? (
+                              <Check className="h-5 w-5 text-green-500" />
+                            ) : (
+                              <Lock className="h-5 w-5 text-orange-500" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
+              </div>
             </div>
 
             {/* Dynamic Content Based on Active Section */}

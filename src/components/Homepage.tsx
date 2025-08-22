@@ -687,7 +687,7 @@ const Homepage: React.FC = () => {
                 
                 {/* Free Tag - Top Right */}
                 <div className="absolute top-2 right-2 z-20">
-                  <div className="bg-gradient-to-r from-emerald-400 via-green-500 to-teal-600 text-white px-5 py-2.5 rounded-full text-lg font-extrabold shadow-2xl border-3 border-white dark:border-slate-800 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                  <div className="bg-gradient-to-r from-emerald-400 via-green-500 to-teal-600 text-white px-3 py-1.5 rounded-full text-sm font-extrabold shadow-2xl border-3 border-white dark:border-slate-800">
                     <span className="drop-shadow-lg">FREE</span>
                   </div>
                  </div>
