@@ -102,27 +102,43 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       console.log('Razorpay Key:', process.env.REACT_APP_RAZORPAY_KEY_ID);
       console.log('API URL:', process.env.REACT_APP_API_URL);
       
-      // Check if we're on mobile
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      console.log('Is Mobile Device:', isMobile);
+             // Check if we're on mobile
+       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+       console.log('Is Mobile Device:', isMobile);
+       
+       // Check network connectivity
+       if (!navigator.onLine) {
+         throw new Error('No internet connection. Please check your network and try again.');
+       }
       
-      // Create order first (before loading script)
-      console.log('Creating order with backend...');
-      const orderResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/create-order`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          planId: plan.id,
-          amount: plan.price * 100, // Razorpay expects amount in paise
-          currency: 'INR',
-          userId: currentUser.uid,
-          userEmail: currentUser.email,
-        }),
-      });
+             // Create order first (before loading script)
+       console.log('Creating order with backend...');
+       
+       // Get API URL with fallback
+       const apiUrl = process.env.REACT_APP_API_URL || 'https://abhimusickeys-backend.onrender.com';
+       console.log('Using API URL:', apiUrl);
+       
+              let orderResponse;
+       try {
+         orderResponse = await fetch(`${apiUrl}/api/create-order`, {
+           method: 'POST',
+           headers: {
+             'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({
+             planId: plan.id,
+             amount: plan.price * 100, // Razorpay expects amount in paise
+             currency: 'INR',
+             userId: currentUser.uid,
+             userEmail: currentUser.email,
+           }),
+         });
+       } catch (networkError) {
+         console.error('Network error:', networkError);
+         throw new Error(`Network error: Unable to connect to server. Please check your internet connection and try again.`);
+       }
 
-      console.log('Order response status:', orderResponse.status);
+       console.log('Order response status:', orderResponse.status);
       
       if (!orderResponse.ok) {
         const errorText = await orderResponse.text();
@@ -194,25 +210,31 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
            } : {}),
             handler: async (response: any) => {
               try {
-                // Verify payment on your backend
-                const verifyResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/verify-payment`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_signature: response.razorpay_signature,
-                    planId: plan.id,
-                    userId: currentUser.uid,
-                    userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'User',
-                    userEmail: currentUser.email || '',
-                    planName: plan.name,
-                    amount: plan.price,
-                    planDuration: plan.duration,
-                  }),
-                });
+                                                  // Verify payment on your backend
+                 let verifyResponse;
+                 try {
+                   verifyResponse = await fetch(`${apiUrl}/api/verify-payment`, {
+                     method: 'POST',
+                     headers: {
+                       'Content-Type': 'application/json',
+                     },
+                     body: JSON.stringify({
+                       razorpay_payment_id: response.razorpay_payment_id,
+                       razorpay_order_id: response.razorpay_order_id,
+                       razorpay_signature: response.razorpay_signature,
+                       planId: plan.id,
+                       userId: currentUser.uid,
+                       userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'User',
+                       userEmail: currentUser.email || '',
+                       planName: plan.name,
+                       amount: plan.price,
+                       planDuration: plan.duration,
+                     }),
+                   });
+                 } catch (networkError) {
+                   console.error('Payment verification network error:', networkError);
+                   throw new Error(`Network error during payment verification. Please contact support.`);
+                 }
 
                 if (!verifyResponse.ok) {
                   throw new Error('Payment verification failed');
