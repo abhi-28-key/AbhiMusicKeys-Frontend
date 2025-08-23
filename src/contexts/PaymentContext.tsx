@@ -264,8 +264,8 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 // Show success message and redirect
                 console.log('Payment successful:', verificationData);
                 
-                // Redirect to download page with payment details
-                window.location.href = `/download?planId=${plan.id}&paymentId=${response.razorpay_payment_id}`;
+                // Redirect to payment success page with payment details
+                window.location.href = `/payment-success?planId=${plan.id}&paymentId=${response.razorpay_payment_id}`;
                 
               } catch (error) {
                 console.error('Payment verification failed:', error);
