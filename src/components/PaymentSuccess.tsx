@@ -21,11 +21,13 @@ const PaymentSuccess: React.FC = () => {
       grantSubscription(planId);
       console.log(`Subscription granted for plan: ${planId}`);
       
-      // Mark user as enrolled based on plan
+      // Mark user as enrolled based on plan (using the same keys as ProtectedRoute)
       if (planId === 'intermediate') {
+        localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
         console.log('User enrolled in intermediate course');
       } else if (planId === 'advanced') {
+        localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_advanced`, 'true');
         console.log('User enrolled in advanced course');
       }

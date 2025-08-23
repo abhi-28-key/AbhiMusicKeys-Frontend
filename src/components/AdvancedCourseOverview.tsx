@@ -42,9 +42,10 @@ const AdvancedCourseOverview: React.FC = () => {
         setUserMembership('');
       }
 
-      // Check advanced course enrollment
+      // Check advanced course enrollment (check both enrollment systems)
       const advancedEnrollment = localStorage.getItem(`enrolled_${currentUser.uid}_advanced`);
-      setIsEnrolled(advancedEnrollment === 'true');
+      const advancedAccess = localStorage.getItem(`advanced_access_${currentUser.uid}`);
+      setIsEnrolled(advancedEnrollment === 'true' || advancedAccess === 'true');
     }
   }, [currentUser]);
 

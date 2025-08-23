@@ -58,9 +58,10 @@ const IntermediateCourseContent: React.FC = () => {
         return;
       }
 
-      // Check if user has intermediate course enrollment
+      // Check if user has intermediate course enrollment (check both enrollment systems)
       const intermediateEnrollment = localStorage.getItem(`enrolled_${currentUser.uid}_intermediate`);
-      const hasEnrolled = intermediateEnrollment === 'true';
+      const intermediateAccess = localStorage.getItem(`intermediate_access_${currentUser.uid}`);
+      const hasEnrolled = intermediateEnrollment === 'true' || intermediateAccess === 'true';
       
       if (!hasEnrolled) {
         // If not enrolled, redirect to overview page

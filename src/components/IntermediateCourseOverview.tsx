@@ -40,9 +40,10 @@ const IntermediateCourseOverview: React.FC = () => {
         setUserMembership('');
       }
 
-      // Check intermediate course enrollment
+      // Check intermediate course enrollment (check both enrollment systems)
       const intermediateEnrollment = localStorage.getItem(`enrolled_${currentUser.uid}_intermediate`);
-      setIsEnrolled(intermediateEnrollment === 'true');
+      const intermediateAccess = localStorage.getItem(`intermediate_access_${currentUser.uid}`);
+      setIsEnrolled(intermediateEnrollment === 'true' || intermediateAccess === 'true');
     }
   }, [currentUser]);
   const [selectedChord, setSelectedChord] = useState<any>(null);

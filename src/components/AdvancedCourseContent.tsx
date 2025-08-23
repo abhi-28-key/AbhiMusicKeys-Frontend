@@ -62,9 +62,10 @@ const AdvancedCourseContent: React.FC = () => {
         return;
       }
 
-      // Check if user has advanced course enrollment
+      // Check if user has advanced course enrollment (check both enrollment systems)
       const advancedEnrollment = localStorage.getItem(`enrolled_${currentUser.uid}_advanced`);
-      const hasEnrolled = advancedEnrollment === 'true';
+      const advancedAccess = localStorage.getItem(`advanced_access_${currentUser.uid}`);
+      const hasEnrolled = advancedEnrollment === 'true' || advancedAccess === 'true';
       
       if (!hasEnrolled) {
         // If not enrolled, redirect to overview page
