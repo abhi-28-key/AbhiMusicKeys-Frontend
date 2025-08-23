@@ -17,6 +17,11 @@ const DownloadPage: React.FC = () => {
   const planId = searchParams.get('planId');
 
   useEffect(() => {
+    console.log('DownloadPage useEffect triggered');
+    console.log('planId:', planId);
+    console.log('paymentId:', paymentId);
+    console.log('currentUser:', currentUser?.uid);
+    
     if (!currentUser) {
       navigate('/login');
       return;
@@ -24,18 +29,21 @@ const DownloadPage: React.FC = () => {
 
     // Check if this is a course purchase that should redirect to course content
     if (planId === 'intermediate' || planId === 'advanced') {
+      console.log('Course purchase detected, redirecting...');
       // Grant subscription and set enrollment flags
       if (planId === 'intermediate') {
         localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
         console.log('User enrolled in intermediate course');
-        navigate('/intermediate-content');
+        // Force hard redirect to bypass React routing issues
+        window.location.href = '/intermediate-content';
         return;
       } else if (planId === 'advanced') {
         localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_advanced`, 'true');
         console.log('User enrolled in advanced course');
-        navigate('/advanced-content');
+        // Force hard redirect to bypass React routing issues
+        window.location.href = '/advanced-content';
         return;
       }
     }
