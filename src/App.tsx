@@ -17,6 +17,7 @@ import PricingPage from './components/PricingPage';
 import PaymentSuccess from './components/PaymentSuccess';
 import ProtectedRoute from './components/ProtectedRoute';
 import DownloadSection from './components/DownloadSection';
+import DownloadsPage from './components/DownloadsPage';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 import PSRI500Page from './components/PSRI500Page';
@@ -73,7 +74,7 @@ function App() {
             } />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/downloads" element={<DownloadSection />} />
+            <Route path="/downloads" element={<DownloadsPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/psr-i500" element={<PSRI500Page />} />

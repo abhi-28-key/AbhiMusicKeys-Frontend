@@ -107,7 +107,7 @@ const YouTubeCarousel: React.FC = () => {
                   </div>
                   
                   {/* Channel Name */}
-                  <h4 className="font-semibold text-white text-sm sm:text-xs md:text-base lg:text-lg mb-2 sm:mb-3 group-hover:text-purple-200 transition-colors duration-300 relative z-10 leading-tight px-1 min-h-[1.5rem] flex items-center justify-center">
+                  <h4 className="font-semibold text-white text-lg sm:text-xs md:text-base lg:text-lg mb-2 sm:mb-3 group-hover:text-purple-200 transition-colors duration-300 relative z-10 leading-tight px-1 min-h-[1.5rem] flex items-center justify-center">
                     {channel.name}
                   </h4>
                   

@@ -32,6 +32,14 @@ const PaymentSuccess: React.FC = () => {
         localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
         console.log('User enrolled in advanced course (includes intermediate access)');
+      } else if (planId === 'styles-tones') {
+        localStorage.setItem(`styles_tones_access_${currentUser.uid}`, 'true');
+        localStorage.setItem(`enrolled_${currentUser.uid}_styles_tones`, 'true');
+        console.log('User enrolled in styles & tones plan');
+      } else if (planId === 'indian-styles') {
+        localStorage.setItem(`indian_styles_access_${currentUser.uid}`, 'true');
+        localStorage.setItem(`enrolled_${currentUser.uid}_indian_styles`, 'true');
+        console.log('User enrolled in indian styles plan');
       }
     }
   }, [planId, currentUser, grantSubscription]);
@@ -44,6 +52,9 @@ const PaymentSuccess: React.FC = () => {
         return 'Intermediate Plan';
       case 'advanced':
         return 'Advanced Plan';
+      case 'styles-tones':
+      case 'indian-styles':
+        return 'Styles & Tones Plan';
       default:
         return 'Premium Plan';
     }
@@ -57,6 +68,9 @@ const PaymentSuccess: React.FC = () => {
         return 'Lifetime Access';
       case 'advanced':
         return 'Lifetime';
+      case 'styles-tones':
+      case 'indian-styles':
+        return 'Lifetime Access';
       default:
         return 'Plan';
     }
@@ -70,6 +84,9 @@ const PaymentSuccess: React.FC = () => {
         return 399;
       case 'advanced':
         return 699;
+      case 'styles-tones':
+      case 'indian-styles':
+        return 299;
       default:
         return 0;
     }
@@ -97,7 +114,7 @@ const PaymentSuccess: React.FC = () => {
       navigate('/intermediate-content');
     } else if (planId === 'advanced') {
       navigate('/advanced-content');
-    } else if (planId === 'styles-tones') {
+    } else if (planId === 'styles-tones' || planId === 'indian-styles') {
       navigate('/downloads?paymentId=' + paymentId);
     } else {
       navigate('/');
@@ -183,10 +200,10 @@ const PaymentSuccess: React.FC = () => {
               className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg border border-white/30 hover:border-white/50 transition-all duration-300 text-sm sm:text-base flex items-center justify-center gap-2"
             >
               <Home className="h-4 w-4 sm:h-5 sm:w-5" />
-              {planId === 'intermediate' ? 'Go to Intermediate Course' : 
-               planId === 'advanced' ? 'Go to Advanced Course' : 
-               planId === 'styles-tones' ? 'Go to Downloads' :
-               'Go to Dashboard'}
+                             {planId === 'intermediate' ? 'Go to Intermediate Course' : 
+                planId === 'advanced' ? 'Go to Advanced Course' : 
+                (planId === 'styles-tones' || planId === 'indian-styles') ? 'Go to Downloads' :
+                'Go to Dashboard'}
             </button>
           </div>
         </div>

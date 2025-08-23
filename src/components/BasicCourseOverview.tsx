@@ -448,6 +448,7 @@ const BasicCourseOverview: React.FC = () => {
             </h1>
           </div>
           <br />
+          <br />
       
                                             <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-3 sm:mb-6">
              Learn Basics, scales, chords, and Practice well 
@@ -651,14 +652,14 @@ const BasicCourseOverview: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={isEnrolled ? handleContinueLearning : handleEnroll}
-          className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 hover:from-green-600 hover:via-emerald-600 hover:to-teal-700 text-white font-bold px-3 py-2 rounded-full shadow-2xl border-2 border-white/20 backdrop-blur-sm transition-all duration-300 transform hover:shadow-3xl"
+          className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 hover:from-green-600 hover:via-emerald-600 hover:to-teal-700 text-white font-bold px-4 py-3 rounded-full shadow-2xl border-2 border-white/20 backdrop-blur-sm transition-all duration-300 transform hover:shadow-3xl"
         >
           <div className="flex items-center gap-3">
-            <div className="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center">
-              <GraduationCap className="h-3 w-3 text-white" />
+            <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center">
+              <GraduationCap className="h-3.5 w-3.5 text-white" />
             </div>
             <div className="text-left">
-              <div className="text-xs font-semibold">
+              <div className="text-sm font-semibold">
                 {isEnrolled ? 'Continue Learning' : 'Enroll Now'}
               </div>
               {/* <div className="text-xs opacity-90">
