@@ -398,8 +398,8 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
     }
     
-    // Trigger a page refresh to update the UI
-    window.location.reload();
+    // No page reload - let React handle the state updates
+    console.log(`Subscription granted for plan: ${planId}`);
   };
 
   const revokeSubscription = () => {

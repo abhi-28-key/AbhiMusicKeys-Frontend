@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import { CheckCircle, Crown, Home, Download } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { downloadReceipt, getReceiptData } from '../utils/receiptGenerator';
@@ -16,50 +15,23 @@ const PaymentSuccess: React.FC = () => {
   const paymentId = searchParams.get('paymentId');
 
   useEffect(() => {
-    // Grant subscription if payment was successful
+    // Grant subscription immediately when component mounts
     if (planId && currentUser) {
       grantSubscription(planId);
       console.log(`Subscription granted for plan: ${planId}`);
       
-      // Mark user as enrolled based on plan (using the same keys as ProtectedRoute)
+      // Mark user as enrolled based on plan
       if (planId === 'intermediate') {
         localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
         console.log('User enrolled in intermediate course');
-        
-        // Immediate redirect for course purchases
-        setTimeout(() => {
-          navigate('/intermediate-content');
-        }, 1000);
-        return;
       } else if (planId === 'advanced') {
         localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_advanced`, 'true');
         console.log('User enrolled in advanced course');
-        
-        // Immediate redirect for course purchases
-        setTimeout(() => {
-          navigate('/advanced-content');
-        }, 1000);
-        return;
       }
     }
-
-    // Auto-redirect based on plan type
-    const timer = setTimeout(() => {
-      if (planId === 'intermediate') {
-        navigate('/intermediate-content'); // Redirect to intermediate course content
-      } else if (planId === 'advanced') {
-        navigate('/advanced-content'); // Redirect to advanced course content
-      } else if (planId === 'styles-tones') {
-        navigate('/downloads?paymentId=' + paymentId); // Redirect to downloads for styles/tones
-      } else {
-        navigate('/'); // Default redirect to homepage
-      }
-    }, 3000); // Reduced to 3 seconds for faster redirect
-
-    return () => clearTimeout(timer);
-  }, [navigate, planId, currentUser, grantSubscription]);
+  }, [planId, currentUser, grantSubscription]);
 
   const getPlanName = (id: string | null) => {
     switch (id) {
@@ -110,11 +82,23 @@ const PaymentSuccess: React.FC = () => {
       getPlanAmount(planId),
       'INR',
       paymentId,
-      `order_${Date.now()}`, // You can get the actual order ID from your backend
+      `order_${Date.now()}`,
       getPlanDuration(planId)
     );
     
     downloadReceipt(receiptData);
+  };
+
+  const handleNavigateToCourse = () => {
+    if (planId === 'intermediate') {
+      navigate('/intermediate-content');
+    } else if (planId === 'advanced') {
+      navigate('/advanced-content');
+    } else if (planId === 'styles-tones') {
+      navigate('/downloads?paymentId=' + paymentId);
+    } else {
+      navigate('/');
+    }
   };
 
   return (
@@ -132,48 +116,23 @@ const PaymentSuccess: React.FC = () => {
 
       {/* Mobile-Optimized Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
-        <div
-
-
-
-          className="max-w-2xl mx-auto text-center w-full"
-        >
+        <div className="max-w-2xl mx-auto text-center w-full">
           {/* Success Icon */}
-          <div
-
-
-
-            className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8"
-          >
+          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8">
             <CheckCircle className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
           </div>
 
           {/* Success Message */}
-          <h1
-
-
-
-            className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6"
-          >
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">
             Payment Successful!
           </h1>
 
-          <p
-
-
-
-            className="text-base sm:text-lg text-white/80 mb-6 sm:mb-8 max-w-lg mx-auto"
-          >
+          <p className="text-base sm:text-lg text-white/80 mb-6 sm:mb-8 max-w-lg mx-auto">
             Thank you for subscribing to {getPlanName(planId)}. Your payment has been processed successfully.
           </p>
 
           {/* Plan Details Card */}
-          <div
-
-
-
-            className="bg-white/10 backdrop-blur-md rounded-xl p-6 sm:p-8 mb-6 sm:mb-8 border border-white/20"
-          >
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 sm:p-8 mb-6 sm:mb-8 border border-white/20">
             <div className="flex items-center justify-center gap-3 mb-4 sm:mb-6">
               <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
                 <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
@@ -207,54 +166,30 @@ const PaymentSuccess: React.FC = () => {
           </div>
 
           {/* Action Buttons */}
-          <div
-
-
-
-            className="space-y-3 sm:space-y-4"
-          >
-              <button
-                onClick={handleDownloadReceipt}
+          <div className="space-y-3 sm:space-y-4">
+            <button
+              onClick={handleDownloadReceipt}
               className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm sm:text-base flex items-center justify-center gap-2"
-              >
+            >
               <Download className="h-4 w-4 sm:h-5 sm:w-5" />
-                Download Receipt
-              </button>
-              
-              <button
-                onClick={() => {
-                  if (planId === 'intermediate') {
-                    navigate('/intermediate-content');
-                  } else if (planId === 'advanced') {
-                    navigate('/advanced-content');
-                  } else if (planId === 'styles-tones') {
-                    navigate('/downloads?paymentId=' + paymentId);
-                  } else {
-                    navigate('/');
-                  }
-                }}
+              Download Receipt
+            </button>
+            
+            <button
+              onClick={handleNavigateToCourse}
               className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg border border-white/30 hover:border-white/50 transition-all duration-300 text-sm sm:text-base flex items-center justify-center gap-2"
-              >
+            >
               <Home className="h-4 w-4 sm:h-5 sm:w-5" />
               {planId === 'intermediate' ? 'Go to Intermediate Course' : 
                planId === 'advanced' ? 'Go to Advanced Course' : 
                planId === 'styles-tones' ? 'Go to Downloads' :
                'Go to Dashboard'}
-              </button>
+            </button>
           </div>
-
-          {/* Auto-redirect notice */}
-          <p
-            className="text-xs sm:text-sm text-white/50 mt-6 sm:mt-8"
-          >
-            You will be automatically redirected to {planId === 'intermediate' ? 'the intermediate course content' : 
-             planId === 'advanced' ? 'the advanced course' : 
-             'the dashboard'} in 10 seconds...
-          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default PaymentSuccess; 
+export default PaymentSuccess;
