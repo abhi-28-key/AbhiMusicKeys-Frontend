@@ -26,10 +26,22 @@ const PaymentSuccess: React.FC = () => {
         localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
         console.log('User enrolled in intermediate course');
+        
+        // Immediate redirect for course purchases
+        setTimeout(() => {
+          navigate('/intermediate-content');
+        }, 1000);
+        return;
       } else if (planId === 'advanced') {
         localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_advanced`, 'true');
         console.log('User enrolled in advanced course');
+        
+        // Immediate redirect for course purchases
+        setTimeout(() => {
+          navigate('/advanced-content');
+        }, 1000);
+        return;
       }
     }
 
@@ -44,7 +56,7 @@ const PaymentSuccess: React.FC = () => {
       } else {
         navigate('/'); // Default redirect to homepage
       }
-    }, 10000);
+    }, 3000); // Reduced to 3 seconds for faster redirect
 
     return () => clearTimeout(timer);
   }, [navigate, planId, currentUser, grantSubscription]);
