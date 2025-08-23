@@ -37,6 +37,8 @@ const PaymentSuccess: React.FC = () => {
         navigate('/intermediate-content'); // Redirect to intermediate course content
       } else if (planId === 'advanced') {
         navigate('/advanced-content'); // Redirect to advanced course content
+      } else if (planId === 'styles-tones') {
+        navigate('/downloads?paymentId=' + paymentId); // Redirect to downloads for styles/tones
       } else {
         navigate('/'); // Default redirect to homepage
       }
@@ -210,7 +212,9 @@ const PaymentSuccess: React.FC = () => {
                   if (planId === 'intermediate') {
                     navigate('/intermediate-content');
                   } else if (planId === 'advanced') {
-                    navigate('/advanced');
+                    navigate('/advanced-content');
+                  } else if (planId === 'styles-tones') {
+                    navigate('/downloads?paymentId=' + paymentId);
                   } else {
                     navigate('/');
                   }
@@ -220,6 +224,7 @@ const PaymentSuccess: React.FC = () => {
               <Home className="h-4 w-4 sm:h-5 sm:w-5" />
               {planId === 'intermediate' ? 'Go to Intermediate Course' : 
                planId === 'advanced' ? 'Go to Advanced Course' : 
+               planId === 'styles-tones' ? 'Go to Downloads' :
                'Go to Dashboard'}
               </button>
           </div>

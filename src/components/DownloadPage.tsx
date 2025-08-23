@@ -155,9 +155,15 @@ const DownloadPage: React.FC = () => {
       link.href = downloadData.downloadUrl;
       link.download = downloadData.fileName;
       link.target = '_blank'; // Open in new tab for external URLs
+      link.rel = 'noopener noreferrer';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      // For mobile devices, also try to open in new window
+      if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        window.open(downloadData.downloadUrl, '_blank');
+      }
 
       // Show success message
       setTimeout(() => {
