@@ -70,7 +70,7 @@ const Signup: React.FC = () => {
       await signup(email, password, name);
       // Fire welcome email (non-blocking)
       try {
-        fetch('http://localhost:5000/api/send-welcome-email', {
+        fetch(`${process.env.REACT_APP_API_URL}/send-welcome-email`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ to: email, name })

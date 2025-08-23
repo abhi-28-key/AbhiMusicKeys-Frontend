@@ -37,7 +37,7 @@ const DownloadPage: React.FC = () => {
     }
     
     try {
-      const response = await fetch('http://localhost:5000/api/verify-download-access', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/verify-download-access`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const DownloadPage: React.FC = () => {
     }
     
     try {
-      const response = await fetch('http://localhost:5000/api/user-purchases', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user-purchases`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ const DownloadPage: React.FC = () => {
       }, 200);
 
       // Call backend API to get download link
-      const response = await fetch(`http://localhost:5000/api/download/${fileType}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/download/${fileType}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
