@@ -12,39 +12,39 @@ interface ReceiptData {
 
 export const generateReceiptText = (data: ReceiptData): string => {
   const receiptText = `
-╔══════════════════════════════════════════════════════════════╗
-║                    ABHIMUSICKEYS                             ║
-║                 Your Journey to Piano Mastery                ║
-╠══════════════════════════════════════════════════════════════╣
-║                        PAYMENT RECEIPT                       ║
-╠══════════════════════════════════════════════════════════════╣
-║                                                              ║
-║  Receipt Details:                                            ║
-║  Date: ${data.purchaseDate.toLocaleDateString()}                    ║
-║  Time: ${data.purchaseDate.toLocaleTimeString()}                    ║
-║  Receipt #: ${data.paymentId}                                ║
-║  Order #: ${data.orderId}                                     ║
-║                                                              ║
-║  Customer Information:                                        ║
-║  Name: ${data.userName}                                       ║
-║  Email: ${data.userEmail}                                     ║
-║                                                              ║
-║  Purchase Details:                                            ║
-║  ┌─────────────────┬─────────────────┬─────────────────────┐ ║
-║  │ Item            │ Duration        │ Amount              │ ║
-║  ├─────────────────┼─────────────────┼─────────────────────┤ ║
-║  │ ${data.planName.padEnd(15)} │ ${data.planDuration.padEnd(15)} │ ${data.currency} ${data.amount.toLocaleString().padEnd(15)} │ ║
-║  └─────────────────┴─────────────────┴─────────────────────┘ ║
-║                                                              ║
-║  Total: ${data.currency} ${data.amount.toLocaleString()}                    ║
-║                                                              ║
-╠══════════════════════════════════════════════════════════════╣
-║                                                              ║
-║  Thank you for choosing AbhiMusicKeys!                      ║
-║  Start your musical journey today.                          ║
-║  For support: abhimusickeys@gmail.com                       ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
+ABHIMUSICKEYS
+Your Journey to Piano Mastery
+==========================================
+
+PAYMENT RECEIPT
+==========================================
+
+Receipt Details:
+Date: ${data.purchaseDate.toLocaleDateString()}
+Time: ${data.purchaseDate.toLocaleTimeString()}
+Receipt #: ${data.paymentId}
+Order #: ${data.orderId}
+
+Customer Information:
+Name: ${data.userName}
+Email: ${data.userEmail}
+
+Purchase Details:
+==========================================
+Item: ${data.planName}
+Duration: ${data.planDuration}
+Amount: ${data.currency} ${data.amount.toLocaleString()}
+==========================================
+
+Total: ${data.currency} ${data.amount.toLocaleString()}
+
+==========================================
+
+Thank you for choosing AbhiMusicKeys!
+Start your musical journey today.
+For support: abhimusickeys@gmail.com
+
+==========================================
 `;
 
   return receiptText;

@@ -26,9 +26,12 @@ const PaymentSuccess: React.FC = () => {
         localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
         console.log('User enrolled in intermediate course');
       } else if (planId === 'advanced') {
+        // Advanced course automatically unlocks intermediate course too
         localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`enrolled_${currentUser.uid}_advanced`, 'true');
-        console.log('User enrolled in advanced course');
+        localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
+        localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
+        console.log('User enrolled in advanced course (includes intermediate access)');
       }
     }
   }, [planId, currentUser, grantSubscription]);

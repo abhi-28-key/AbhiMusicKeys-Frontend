@@ -395,7 +395,9 @@ export const PaymentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if (planId === 'intermediate') {
       localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
     } else if (planId === 'advanced') {
+      // Advanced course automatically unlocks intermediate course too
       localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
+      localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
     }
     
     // No page reload - let React handle the state updates
