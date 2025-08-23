@@ -14,11 +14,30 @@ const DownloadPage: React.FC = () => {
   const [downloadProgress, setDownloadProgress] = useState(0);
 
   const paymentId = searchParams.get('paymentId');
+  const planId = searchParams.get('planId');
 
   useEffect(() => {
     if (!currentUser) {
       navigate('/login');
       return;
+    }
+
+    // Check if this is a course purchase that should redirect to course content
+    if (planId === 'intermediate' || planId === 'advanced') {
+      // Grant subscription and set enrollment flags
+      if (planId === 'intermediate') {
+        localStorage.setItem(`intermediate_access_${currentUser.uid}`, 'true');
+        localStorage.setItem(`enrolled_${currentUser.uid}_intermediate`, 'true');
+        console.log('User enrolled in intermediate course');
+        navigate('/intermediate-content');
+        return;
+      } else if (planId === 'advanced') {
+        localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
+        localStorage.setItem(`enrolled_${currentUser.uid}_advanced`, 'true');
+        console.log('User enrolled in advanced course');
+        navigate('/advanced-content');
+        return;
+      }
     }
 
     // If paymentId is provided, verify it
@@ -28,7 +47,7 @@ const DownloadPage: React.FC = () => {
       // Check if user has any valid purchases
       checkUserPurchases();
     }
-  }, [currentUser, navigate, paymentId]);
+  }, [currentUser, navigate, paymentId, planId]);
 
   const verifyPayment = async (paymentId: string) => {
     if (!currentUser) {
