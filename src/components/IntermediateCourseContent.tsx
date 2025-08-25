@@ -7,6 +7,119 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import RatingModal from './ui/RatingModal';
 
+// Lazy Video Player Component
+const LazyVideoPlayer: React.FC<{
+  videoId: string;
+  title: string;
+  thumbnailUrl: string;
+  loadingColor: string;
+}> = ({ videoId, title, thumbnailUrl, loadingColor }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handlePlayClick = () => {
+    setIsLoading(true);
+    setShowVideo(true);
+    setHasError(false);
+  };
+
+  const handleVideoLoad = () => {
+    setIsLoading(false);
+  };
+
+  const handleVideoError = () => {
+    setIsLoading(false);
+    setHasError(true);
+  };
+
+  const getLoadingSpinnerColor = () => {
+    switch (loadingColor) {
+      case 'orange': return 'border-orange-500';
+      case 'blue': return 'border-blue-500';
+      default: return 'border-pink-500';
+    }
+  };
+
+  return (
+    <div className="relative">
+      {!showVideo ? (
+        // Show thumbnail with play button overlay
+        <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+          <img 
+            src={thumbnailUrl} 
+            alt={title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Fallback to default thumbnail if YouTube thumbnail fails
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          
+          {/* Play Button Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+            <button
+              onClick={handlePlayClick}
+              className="bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-4 transition-all duration-200 transform hover:scale-110 shadow-lg"
+            >
+              <Play className="w-8 h-8 text-slate-800 ml-1" fill="currentColor" />
+            </button>
+          </div>
+        </div>
+      ) : (
+        // Show actual video player
+        <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+          {/* Loading Animation */}
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-700 rounded-xl z-10">
+              <div className="flex flex-col items-center gap-3">
+                <div className={`w-8 h-8 border-4 ${getLoadingSpinnerColor()} border-t-transparent rounded-full animate-spin`}></div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Loading video...</p>
+              </div>
+            </div>
+          )}
+          
+          {/* Error State */}
+          {hasError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-700 rounded-xl z-10">
+              <div className="text-center">
+                <Play className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+                <p className="text-slate-600 dark:text-slate-300 mb-2">Video unavailable</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs">Check your internet connection</p>
+                <button 
+                  onClick={() => {
+                    setHasError(false);
+                    setIsLoading(true);
+                    // Force reload by updating iframe src
+                    const iframe = document.querySelector('iframe');
+                    if (iframe) {
+                      iframe.src = iframe.src;
+                    }
+                  }}
+                  className="mt-3 text-pink-500 hover:text-pink-600 text-sm font-medium"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          )}
+          
+          <iframe
+            className="w-full h-full"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&showinfo=0`}
+            title={title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            onLoad={handleVideoLoad}
+            onError={handleVideoError}
+          ></iframe>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const IntermediateCourseContent: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
@@ -879,33 +992,12 @@ const IntermediateCourseContent: React.FC = () => {
              {/* Video Player */}
              <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6">
                <div className="max-w-2xl mx-auto">
-                 <div className="relative">
-                   {/* Loading Animation */}
-                   <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-700 rounded-xl z-10" id="video-loading">
-                     <div className="flex flex-col items-center gap-3">
-                       <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                       <p className="text-gray-600 dark:text-gray-300 text-sm">Loading video...</p>
-                     </div>
-                   </div>
-                   
-                   {/* Video Container */}
-                   <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg">
-                     <iframe
-                       className="w-full h-full"
-                       src="https://www.youtube.com/embed/-T5bUxE8-no?modestbranding=1&rel=0&showinfo=0"
-                       title="How to play Major and Minor Families"
-                       frameBorder="0"
-                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                       allowFullScreen
-                       onLoad={() => {
-                         const loadingElement = document.getElementById('video-loading');
-                         if (loadingElement) {
-                           loadingElement.style.display = 'none';
-                         }
-                       }}
-                     ></iframe>
-                   </div>
-                 </div>
+                 <LazyVideoPlayer
+                   videoId="T5bUxE8-no"
+                   title="How to play Major and Minor Families"
+                   thumbnailUrl="https://img.youtube.com/vi/T5bUxE8-no/maxresdefault.jpg"
+                   loadingColor="orange"
+                 />
                </div>
              </div>
            </div>
@@ -930,33 +1022,12 @@ const IntermediateCourseContent: React.FC = () => {
              {/* Video Player */}
              <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 p-6">
                <div className="max-w-2xl mx-auto">
-                 <div className="relative">
-                   {/* Loading Animation */}
-                   <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-700 rounded-xl z-10" id="transpose-video-loading">
-                     <div className="flex flex-col items-center gap-3">
-                       <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                       <p className="text-gray-600 dark:text-gray-300 text-sm">Loading video...</p>
-                     </div>
-                   </div>
-                   
-                   {/* Video Container */}
-                   <div className="aspect-video w-full rounded-xl overflow-hidden shadow-lg">
-                     <iframe
-                       className="w-full h-full"
-                       src="https://www.youtube.com/embed/k3mCSERywf8?modestbranding=1&rel=0&showinfo=0"
-                       title="How to Use Transpose"
-                       frameBorder="0"
-                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                       allowFullScreen
-                       onLoad={() => {
-                         const loadingElement = document.getElementById('transpose-video-loading');
-                         if (loadingElement) {
-                           loadingElement.style.display = 'none';
-                         }
-                       }}
-                     ></iframe>
-                   </div>
-                 </div>
+                 <LazyVideoPlayer
+                   videoId="k3mCSERywf8"
+                   title="How to Use Transpose"
+                   thumbnailUrl="https://img.youtube.com/vi/k3mCSERywf8/maxresdefault.jpg"
+                   loadingColor="blue"
+                 />
                </div>
              </div>
            </div>

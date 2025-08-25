@@ -72,6 +72,9 @@ const DownloadsPage: React.FC = () => {
         setIsCheckingAccess(false);
         // Always fetch files for logged-in users
         fetchFiles();
+        
+        // Sync purchase status from Firestore to localStorage
+        syncPurchaseStatus();
       } else {
         // No user logged in
         setIsCheckingAccess(false);
@@ -81,6 +84,48 @@ const DownloadsPage: React.FC = () => {
 
     initializePage();
   }, [currentUser]);
+
+  // Function to sync purchase status from Firestore to localStorage
+  const syncPurchaseStatus = async () => {
+    if (!currentUser) return;
+    
+    try {
+      const db = getFirestore();
+      const userDoc = doc(db, 'users', currentUser.uid);
+      const userData = await getDoc(userDoc);
+      
+      if (userData.exists()) {
+        const data = userData.data();
+        console.log('Syncing purchase status from Firestore:', data);
+        
+        // Check and sync styles & tones access
+        const hasPurchasedIndianStyles = data.hasPurchasedIndianStyles || false;
+        const hasStylesTonesAccess = data.hasStylesTonesAccess || false;
+        const hasIndianStylesAccess = data.hasIndianStylesAccess || false;
+        const purchaseStatus = data.purchaseStatus || {};
+        
+        const hasStylesTones = hasPurchasedIndianStyles || hasStylesTonesAccess || hasIndianStylesAccess || 
+                              purchaseStatus.stylesTones || purchaseStatus.indianStyles;
+        
+        if (hasStylesTones) {
+          localStorage.setItem(`styles_tones_access_${currentUser.uid}`, 'true');
+          localStorage.setItem(`indian_styles_access_${currentUser.uid}`, 'true');
+          console.log('✅ Styles & Tones access synced to localStorage');
+        }
+        
+        // Check and sync advanced access
+        const hasAdvancedAccess = data.hasAdvancedAccess || false;
+        const hasAdvanced = hasAdvancedAccess || purchaseStatus.advanced;
+        
+        if (hasAdvanced) {
+          localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
+          console.log('✅ Advanced access synced to localStorage');
+        }
+      }
+    } catch (error) {
+      console.error('Error syncing purchase status:', error);
+    }
+  };
 
   // Initialize theme state
   useEffect(() => {
@@ -122,18 +167,40 @@ const DownloadsPage: React.FC = () => {
 
   // Close user menu when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Element;
-      if (!target.closest('.user-menu')) {
+      if (!target.closest('.user-menu') && !target.closest('.user-menu-toggle')) {
         setShowUserMenu(false);
       }
     };
 
+    // Add both mouse and touch event listeners for better mobile support
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, []);
+
+  // Handle mobile menu toggle with better touch support
+  const handleMobileMenuToggle = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowUserMenu(!showUserMenu);
+  };
+
+  // Handle mobile button clicks with proper event handling
+  const handleMobileButtonClick = (action: () => void) => (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowUserMenu(false);
+    // Add a small delay to ensure the menu closes before navigation
+    setTimeout(() => {
+      action();
+    }, 100);
+  };
 
   const handleDownload = async (fileType: 'styles' | 'tones') => {
     if (!currentUser) {
@@ -141,8 +208,46 @@ const DownloadsPage: React.FC = () => {
       return;
     }
 
-    // Check if user has purchased the styles & tones plan
-    const checkStylesAndTonesAccess = () => {
+    // Enhanced purchase verification - prioritize Firestore over localStorage
+    const checkPurchaseStatus = async () => {
+      try {
+        const db = getFirestore();
+        const userDoc = doc(db, 'users', currentUser.uid);
+        const userData = await getDoc(userDoc);
+        
+        if (userData.exists()) {
+          const data = userData.data();
+          console.log('User data from Firestore:', data);
+          
+          // Check multiple purchase indicators in Firestore
+          const hasPurchasedIndianStyles = data.hasPurchasedIndianStyles || false;
+          const hasStylesTonesAccess = data.hasStylesTonesAccess || false;
+          const hasIndianStylesAccess = data.hasIndianStylesAccess || false;
+          const purchaseStatus = data.purchaseStatus || {};
+          
+          // Check if user has any form of styles & tones access
+          const firestoreAccess = hasPurchasedIndianStyles || hasStylesTonesAccess || hasIndianStylesAccess || 
+                                 purchaseStatus.stylesTones || purchaseStatus.indianStyles;
+          
+          // If Firestore shows access, sync to localStorage for future use
+          if (firestoreAccess) {
+            localStorage.setItem(`styles_tones_access_${currentUser.uid}`, 'true');
+            localStorage.setItem(`indian_styles_access_${currentUser.uid}`, 'true');
+            console.log('✅ Purchase verified in Firestore, synced to localStorage');
+          }
+          
+          return firestoreAccess;
+        }
+        
+        return false;
+      } catch (error) {
+        console.error('Error checking Firestore purchase status:', error);
+        return false;
+      }
+    };
+
+    // Check localStorage as fallback
+    const checkLocalStorageAccess = () => {
       const stylesTonesAccess = localStorage.getItem(`styles_tones_access_${currentUser.uid}`);
       const enrolledStylesTones = localStorage.getItem(`enrolled_${currentUser.uid}_styles_tones`);
       const indianStylesAccess = localStorage.getItem(`indian_styles_access_${currentUser.uid}`);
@@ -152,25 +257,16 @@ const DownloadsPage: React.FC = () => {
              indianStylesAccess === 'true' || enrolledIndianStyles === 'true';
     };
 
-    // Check Firestore as fallback
-    const checkFirestoreStatus = async () => {
-      try {
-        const db = getFirestore();
-        const userDoc = doc(db, 'users', currentUser.uid);
-        const userData = await getDoc(userDoc);
-        return userData.exists() && userData.data().hasPurchasedIndianStyles;
-      } catch (error) {
-        console.error('Error checking Firestore:', error);
-        return false;
-      }
-    };
-
-    // Check purchase status
-    const hasLocalAccess = checkStylesAndTonesAccess();
-    let hasAccess = hasLocalAccess;
+    // Check purchase status - prioritize Firestore
+    let hasAccess = false;
     
-    if (!hasLocalAccess) {
-      hasAccess = await checkFirestoreStatus();
+    // First check Firestore (primary source of truth)
+    hasAccess = await checkPurchaseStatus();
+    
+    // If Firestore doesn't show access, check localStorage as fallback
+    if (!hasAccess) {
+      hasAccess = checkLocalStorageAccess();
+      console.log('Firestore check failed, using localStorage fallback:', hasAccess);
     }
 
     if (!hasAccess) {
@@ -179,6 +275,8 @@ const DownloadsPage: React.FC = () => {
       navigate('/psr-i500');
       return;
     }
+
+    console.log('✅ Purchase verified, proceeding with download');
 
     // Set specific loading state based on file type
     if (fileType === 'styles') {
@@ -221,7 +319,29 @@ const DownloadsPage: React.FC = () => {
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         if (isMobile) {
-          // For mobile devices, try multiple approaches
+          // For mobile devices, provide better handling for ZIP files
+          const isZipFile = filename.toLowerCase().includes('.zip');
+          
+          if (isZipFile) {
+            // For ZIP files on mobile, show specific instructions
+            const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
+              `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
+              `✅ Recommended Methods:\n` +
+              `1. Use a file manager app (like Files, My Files, or Documents)\n` +
+              `2. Use a ZIP extractor app from your app store\n` +
+              `3. Download on a computer and transfer to your phone\n\n` +
+              `🔗 Direct Download Link:\n${url}\n\n` +
+              `📋 Alternative Steps:\n` +
+              `1. Copy the link above\n` +
+              `2. Open your file manager app\n` +
+              `3. Paste the link to download\n` +
+              `4. Use a ZIP extractor app to open the file`;
+            
+            alert(mobileZipInstructions);
+            return;
+          }
+          
+          // For non-ZIP files, try the normal mobile download
           let downloadStarted = false;
           
           // First, try to open in new tab/window
@@ -250,13 +370,13 @@ const DownloadsPage: React.FC = () => {
           }
         } else {
           // For desktop, use the traditional method
-          const link = document.createElement('a');
+      const link = document.createElement('a');
           link.href = url;
           link.download = filename;
           link.style.display = 'none';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
         }
       };
 
@@ -283,48 +403,52 @@ const DownloadsPage: React.FC = () => {
       return;
     }
 
-    // Check different plan access based on file type/category
-    const checkStylesAndTonesAccess = () => {
+    // Enhanced purchase verification - prioritize Firestore over localStorage
+    const checkPurchaseStatus = async () => {
+      try {
+        const db = getFirestore();
+        const userDoc = doc(db, 'users', currentUser.uid);
+        const userData = await getDoc(userDoc);
+        
+        if (userData.exists()) {
+          const data = userData.data();
+          console.log('User data from Firestore for file download:', data);
+          
+          // Check multiple purchase indicators in Firestore
+          const hasPurchasedIndianStyles = data.hasPurchasedIndianStyles || false;
+          const hasStylesTonesAccess = data.hasStylesTonesAccess || false;
+          const hasIndianStylesAccess = data.hasIndianStylesAccess || false;
+          const hasAdvancedAccess = data.hasAdvancedAccess || false;
+          const purchaseStatus = data.purchaseStatus || {};
+          
+          return {
+            stylesTones: hasPurchasedIndianStyles || hasStylesTonesAccess || hasIndianStylesAccess || 
+                        purchaseStatus.stylesTones || purchaseStatus.indianStyles,
+            advanced: hasAdvancedAccess || purchaseStatus.advanced
+          };
+        }
+        
+        return { stylesTones: false, advanced: false };
+      } catch (error) {
+        console.error('Error checking Firestore purchase status:', error);
+        return { stylesTones: false, advanced: false };
+      }
+    };
+
+    // Check localStorage as fallback
+    const checkLocalStorageAccess = () => {
       const stylesTonesAccess = localStorage.getItem(`styles_tones_access_${currentUser.uid}`);
       const enrolledStylesTones = localStorage.getItem(`enrolled_${currentUser.uid}_styles_tones`);
       const indianStylesAccess = localStorage.getItem(`indian_styles_access_${currentUser.uid}`);
       const enrolledIndianStyles = localStorage.getItem(`enrolled_${currentUser.uid}_indian_styles`);
-      
-      return stylesTonesAccess === 'true' || enrolledStylesTones === 'true' || 
-             indianStylesAccess === 'true' || enrolledIndianStyles === 'true';
-    };
-
-    const checkAdvancedCourseAccess = () => {
       const advancedAccess = localStorage.getItem(`advanced_access_${currentUser.uid}`);
       const enrolledAdvanced = localStorage.getItem(`enrolled_${currentUser.uid}_advanced`);
       
-      return advancedAccess === 'true' || enrolledAdvanced === 'true';
-    };
-
-    // Check Firestore as fallback for styles & tones
-    const checkFirestoreStylesTones = async () => {
-      try {
-        const db = getFirestore();
-        const userDoc = doc(db, 'users', currentUser.uid);
-        const userData = await getDoc(userDoc);
-        return userData.exists() && userData.data().hasPurchasedIndianStyles;
-      } catch (error) {
-        console.error('Error checking Firestore:', error);
-        return false;
-      }
-    };
-
-    // Check Firestore as fallback for advanced course
-    const checkFirestoreAdvanced = async () => {
-      try {
-        const db = getFirestore();
-        const userDoc = doc(db, 'users', currentUser.uid);
-        const userData = await getDoc(userDoc);
-        return userData.exists() && userData.data().hasAdvancedAccess;
-      } catch (error) {
-        console.error('Error checking Firestore:', error);
-        return false;
-      }
+      return {
+        stylesTones: stylesTonesAccess === 'true' || enrolledStylesTones === 'true' || 
+                    indianStylesAccess === 'true' || enrolledIndianStyles === 'true',
+        advanced: advancedAccess === 'true' || enrolledAdvanced === 'true'
+      };
     };
 
     // Determine file category and required access
@@ -340,44 +464,39 @@ const DownloadsPage: React.FC = () => {
     const isAdvancedCourse = fileName.includes('.pdf') || fileName.includes('advanced') ||
                             fileCategory.includes('advanced') || fileCategory.includes('pdf');
 
+    // Check purchase status - prioritize Firestore
     let hasAccess = false;
     let redirectPage = '/pricing'; // Default redirect
 
+    // First check Firestore (primary source of truth)
+    const firestoreAccess = await checkPurchaseStatus();
+    
+    // If Firestore doesn't show access, check localStorage as fallback
+    const localStorageAccess = checkLocalStorageAccess();
+    
     if (isStylesAndTones) {
-      // Check styles & tones access
-      const hasLocalAccess = checkStylesAndTonesAccess();
-      hasAccess = hasLocalAccess;
-      
-      if (!hasLocalAccess) {
-        hasAccess = await checkFirestoreStylesTones();
-      }
-      
-      redirectPage = '/psr-i500'; // Redirect to PSR-I500 page for styles & tones
+      hasAccess = firestoreAccess.stylesTones || localStorageAccess.stylesTones;
+      redirectPage = '/psr-i500';
     } else if (isAdvancedCourse) {
-      // Check advanced course access
-      const hasLocalAccess = checkAdvancedCourseAccess();
-      hasAccess = hasLocalAccess;
-      
-      if (!hasLocalAccess) {
-        hasAccess = await checkFirestoreAdvanced();
-      }
-      
-      redirectPage = '/pricing'; // Redirect to pricing page for advanced course
+      hasAccess = firestoreAccess.advanced || localStorageAccess.advanced;
+      redirectPage = '/pricing';
     } else {
       // For other files, check both access types (more permissive)
-      const hasStylesAccess = checkStylesAndTonesAccess();
-      const hasAdvancedAccess = checkAdvancedCourseAccess();
-      
-      hasAccess = hasStylesAccess || hasAdvancedAccess;
-      
-      if (!hasAccess) {
-        // Check Firestore for both
-        const firestoreStyles = await checkFirestoreStylesTones();
-        const firestoreAdvanced = await checkFirestoreAdvanced();
-        hasAccess = firestoreStyles || firestoreAdvanced;
-      }
-      
-      redirectPage = '/pricing'; // Default to pricing page
+      hasAccess = firestoreAccess.stylesTones || firestoreAccess.advanced || 
+                  localStorageAccess.stylesTones || localStorageAccess.advanced;
+      redirectPage = '/pricing';
+    }
+
+    // Sync Firestore access to localStorage if found
+    if (firestoreAccess.stylesTones && !localStorageAccess.stylesTones) {
+      localStorage.setItem(`styles_tones_access_${currentUser.uid}`, 'true');
+      localStorage.setItem(`indian_styles_access_${currentUser.uid}`, 'true');
+      console.log('✅ Styles & Tones access synced from Firestore to localStorage');
+    }
+    
+    if (firestoreAccess.advanced && !localStorageAccess.advanced) {
+      localStorage.setItem(`advanced_access_${currentUser.uid}`, 'true');
+      console.log('✅ Advanced access synced from Firestore to localStorage');
     }
 
     if (!hasAccess) {
@@ -395,6 +514,8 @@ const DownloadsPage: React.FC = () => {
       return;
     }
 
+    console.log('✅ Purchase verified for file download, proceeding');
+
     setIsDownloadingFile(true);
     try {
       console.log('Downloading file:', file);
@@ -405,7 +526,29 @@ const DownloadsPage: React.FC = () => {
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         if (isMobile) {
-          // For mobile devices, try multiple approaches
+          // For mobile devices, provide better handling for ZIP files
+          const isZipFile = filename.toLowerCase().includes('.zip');
+          
+          if (isZipFile) {
+            // For ZIP files on mobile, show specific instructions
+            const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
+              `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
+              `✅ Recommended Methods:\n` +
+              `1. Use a file manager app (like Files, My Files, or Documents)\n` +
+              `2. Use a ZIP extractor app from your app store\n` +
+              `3. Download on a computer and transfer to your phone\n\n` +
+              `🔗 Direct Download Link:\n${url}\n\n` +
+              `📋 Alternative Steps:\n` +
+              `1. Copy the link above\n` +
+              `2. Open your file manager app\n` +
+              `3. Paste the link to download\n` +
+              `4. Use a ZIP extractor app to open the file`;
+            
+            alert(mobileZipInstructions);
+            return;
+          }
+          
+          // For non-ZIP files, try the normal mobile download
           let downloadStarted = false;
           
           // First, try to open in new tab/window
@@ -434,13 +577,13 @@ const DownloadsPage: React.FC = () => {
           }
         } else {
           // For desktop, use the traditional method
-          const link = document.createElement('a');
+      const link = document.createElement('a');
           link.href = url;
           link.download = filename;
           link.style.display = 'none';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
         }
       };
 
@@ -625,8 +768,9 @@ const DownloadsPage: React.FC = () => {
                   {/* User Avatar with Dropdown */}
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => setShowUserMenu(!showUserMenu)}
-                      className="flex items-center gap-2 hover:scale-105 transition-all duration-300 user-menu-toggle"
+                      onClick={handleMobileMenuToggle}
+                      onTouchEnd={handleMobileMenuToggle}
+                      className="flex items-center gap-2 hover:scale-105 transition-all duration-300 user-menu-toggle touch-manipulation"
                     >
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg">
                         {getUserInitials(currentUser.email || '')}
@@ -665,14 +809,14 @@ const DownloadsPage: React.FC = () => {
                             navigate('/psr-i500');
                             setShowUserMenu(false);
                           }}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 hover:scale-105 group mb-2"
+                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 hover:scale-105 group mb-2 touch-manipulation active:scale-95"
                         >
                           <Music className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
                           <span className="font-medium">PSR-I500 Styles</span>
                         </button>
                         <button
                           onClick={handleLogout}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 hover:scale-105 group"
+                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 hover:scale-105 group touch-manipulation active:scale-95"
                         >
                           <LogOut className="h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
                           <span className="font-medium">Logout</span>
@@ -715,8 +859,9 @@ const DownloadsPage: React.FC = () => {
               
               {/* Mobile Menu Button */}
               <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="p-2 text-white hover:text-blue-200 transition-colors duration-300"
+                onClick={handleMobileMenuToggle}
+                onTouchEnd={handleMobileMenuToggle}
+                className="p-2 text-white hover:text-blue-200 transition-colors duration-300 touch-manipulation"
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -724,7 +869,7 @@ const DownloadsPage: React.FC = () => {
 
             {/* Mobile Menu Dropdown */}
             {showUserMenu && (
-              <div className="md:hidden absolute top-16 right-4 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 min-w-48 z-[99999] backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 animate-in slide-in-from-top-2 duration-200">
+              <div className="md:hidden absolute top-16 right-4 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 min-w-48 z-[99999] backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 animate-in slide-in-from-top-2 duration-200 user-menu-dropdown">
                 {currentUser ? (
                   <div className="p-4">
                     <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200/50 dark:border-slate-700/50">
@@ -747,18 +892,17 @@ const DownloadsPage: React.FC = () => {
                       </div>
                     </div>
                     <button
-                      onClick={() => {
-                        navigate('/psr-i500');
-                        setShowUserMenu(false);
-                      }}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2"
+                      onClick={handleMobileButtonClick(() => navigate('/psr-i500'))}
+                      onTouchEnd={handleMobileButtonClick(() => navigate('/psr-i500'))}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <Music className="h-4 w-4" />
                       <span>PSR-I500 Styles</span>
                     </button>
                     <button
-                      onClick={handleLogout}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2"
+                      onClick={handleMobileButtonClick(handleLogout)}
+                      onTouchEnd={handleMobileButtonClick(handleLogout)}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <LogOut className="h-4 w-4" />
                       <span>Logout</span>
@@ -772,20 +916,16 @@ const DownloadsPage: React.FC = () => {
                 ) : (
                   <div className="p-4">
                     <button
-                      onClick={() => {
-                        navigate('/login');
-                        setShowUserMenu(false);
-                      }}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-all duration-300 mb-2"
+                      onClick={handleMobileButtonClick(() => navigate('/login'))}
+                      onTouchEnd={handleMobileButtonClick(() => navigate('/login'))}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <span>Login</span>
                     </button>
                     <button
-                      onClick={() => {
-                        navigate('/signup');
-                        setShowUserMenu(false);
-                      }}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 mb-2"
+                      onClick={handleMobileButtonClick(() => navigate('/signup'))}
+                      onTouchEnd={handleMobileButtonClick(() => navigate('/signup'))}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <span>Sign Up</span>
                     </button>
@@ -1233,6 +1373,32 @@ const DownloadsPage: React.FC = () => {
                </p>
              </div>
            )}
+
+          {/* Mobile ZIP File Note */}
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6 mb-8">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                  📱 Mobile Users - Important Note
+                </h3>
+                <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+                  <p>
+                    These are ZIP files that mobile browsers cannot open directly. For the best experience:
+                  </p>
+                  <ul className="mt-2 list-disc list-inside space-y-1">
+                    <li>Use a file manager app or ZIP extractor app</li>
+                    <li>Download on a computer and transfer to your phone</li>
+                    <li>Use the direct download links provided when you click download</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Installation Instructions */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-gray-700">

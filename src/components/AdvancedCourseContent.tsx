@@ -6,6 +6,122 @@ import { useTheme } from '../contexts/ThemeContext';
 import VideoSection from './ui/VideoSection';
 import RatingModal from './ui/RatingModal';
 
+// Lazy Video Player Component for Advanced Course Content
+const LazyVideoPlayer: React.FC<{
+  videoId: string;
+  title: string;
+  thumbnailUrl: string;
+  loadingColor: string;
+}> = ({ videoId, title, thumbnailUrl, loadingColor }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handlePlayClick = () => {
+    setIsLoading(true);
+    setShowVideo(true);
+    setHasError(false);
+  };
+
+  const handleVideoLoad = () => {
+    setIsLoading(false);
+  };
+
+  const handleVideoError = () => {
+    setIsLoading(false);
+    setHasError(true);
+  };
+
+  const getLoadingSpinnerColor = () => {
+    switch (loadingColor) {
+      case 'orange': return 'border-orange-500';
+      case 'blue': return 'border-blue-500';
+      case 'green': return 'border-green-500';
+      case 'pink': return 'border-pink-500';
+      case 'fuchsia': return 'border-fuchsia-500';
+      default: return 'border-pink-500';
+    }
+  };
+
+  return (
+    <div className="relative">
+      {!showVideo ? (
+        // Show thumbnail with play button overlay
+        <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+          <img 
+            src={thumbnailUrl} 
+            alt={title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Fallback to default thumbnail if YouTube thumbnail fails
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          
+          {/* Play Button Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+            <button
+              onClick={handlePlayClick}
+              className="bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-4 transition-all duration-200 transform hover:scale-110 shadow-lg"
+            >
+              <Play className="w-8 h-8 text-slate-800 ml-1" fill="currentColor" />
+            </button>
+          </div>
+        </div>
+      ) : (
+        // Show actual video player
+        <div className="relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+          {/* Loading Animation */}
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-xl z-10">
+              <div className="flex flex-col items-center gap-3">
+                <div className={`w-8 h-8 border-4 ${getLoadingSpinnerColor()} border-t-transparent rounded-full animate-spin`}></div>
+                <p className="text-slate-600 dark:text-slate-300 text-sm">Loading video...</p>
+              </div>
+            </div>
+          )}
+          
+          {/* Error State */}
+          {hasError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-xl z-10">
+              <div className="text-center">
+                <Play className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+                <p className="text-slate-600 dark:text-slate-300 mb-2">Video unavailable</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs">Check your internet connection</p>
+                <button 
+                  onClick={() => {
+                    setHasError(false);
+                    setIsLoading(true);
+                    // Force reload by updating iframe src
+                    const iframe = document.querySelector('iframe');
+                    if (iframe) {
+                      iframe.src = iframe.src;
+                    }
+                  }}
+                  className="mt-3 text-pink-500 hover:text-pink-600 text-sm font-medium"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          )}
+          
+          <iframe
+            className="w-full h-full"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&showinfo=0`}
+            title={title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            onLoad={handleVideoLoad}
+            onError={handleVideoError}
+          ></iframe>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const AdvancedCourseContent: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
@@ -1543,18 +1659,28 @@ const AdvancedCourseContent: React.FC = () => {
         </div>
 
         <div className="relative flex justify-between items-center p-3 sm:p-4 lg:p-6 min-h-[60px]">
-                      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-              <div className="p-1.5 bg-gradient-to-r from-pink-500 to-fuchsia-600 rounded-lg">
-                <Music className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-              </div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">
-                <span className="bg-gradient-to-r from-white via-pink-100 to-fuchsia-100 bg-clip-text text-transparent">
-                  AbhiMusicKeys
-                </span>
-              </h1>
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <div className="p-1.5 bg-gradient-to-r from-pink-500 to-fuchsia-600 rounded-lg">
+              <Music className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-wider">
+              <span className="bg-gradient-to-r from-white via-pink-100 to-fuchsia-100 bg-clip-text text-transparent">
+                AbhiMusicKeys
+              </span>
+            </h1>
+          </div>
           
-                      <div className="flex items-center gap-2 lg:gap-3 relative z-[99999] w-auto flex-shrink-0">
+          <div className="flex items-center gap-2 lg:gap-3 relative z-[99999] w-auto flex-shrink-0">
+            {/* Back to Home Button */}
+            <button
+              onClick={() => window.location.href = '/'}
+              className="flex items-center gap-2 p-2 sm:p-3 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-xs sm:text-sm"
+            >
+              <Home className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="hidden sm:inline">Back to Home</span>
+              <span className="sm:hidden">Home</span>
+            </button>
+            
             {currentUser ? (
               <div className="relative">
                 <button
@@ -1668,16 +1794,6 @@ const AdvancedCourseContent: React.FC = () => {
         {/* Left Sidebar Menu */}
         <div className={`${isMenuOpen ? 'block' : 'hidden'} lg:block w-full lg:w-80 bg-white dark:bg-slate-800 shadow-lg border-b lg:border-r border-slate-200 dark:border-slate-700 min-h-auto lg:min-h-screen overflow-y-auto max-h-[60vh] sm:max-h-[70vh] lg:max-h-none`}>
           <div className="p-2 sm:p-3 lg:p-6">
-            <div className="mb-3 sm:mb-4 lg:mb-6">
-              <button
-                onClick={() => window.location.href = '/'}
-                className="w-full flex items-center gap-2 p-2 sm:p-3 bg-gradient-to-r from-pink-500 to-fuchsia-600 hover:from-pink-600 hover:to-fuchsia-700 text-white font-semibold rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-xs sm:text-sm lg:text-base"
-              >
-                <Home className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span>Back to Home</span>
-              </button>
-            </div>
-
             <h2 className="text-sm sm:text-base lg:text-lg font-bold text-slate-800 dark:text-white mb-2 sm:mb-3 lg:mb-6">Advanced Course Modules</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1 sm:gap-2 lg:space-y-2">
               {menuSections.map((section) => {

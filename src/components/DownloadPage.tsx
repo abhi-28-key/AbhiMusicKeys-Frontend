@@ -189,7 +189,29 @@ const DownloadPage: React.FC = () => {
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         if (isMobile) {
-          // For mobile devices, try multiple approaches
+          // For mobile devices, provide better handling for ZIP files
+          const isZipFile = filename.toLowerCase().includes('.zip');
+          
+          if (isZipFile) {
+            // For ZIP files on mobile, show specific instructions
+            const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
+              `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
+              `✅ Recommended Methods:\n` +
+              `1. Use a file manager app (like Files, My Files, or Documents)\n` +
+              `2. Use a ZIP extractor app from your app store\n` +
+              `3. Download on a computer and transfer to your phone\n\n` +
+              `🔗 Direct Download Link:\n${url}\n\n` +
+              `📋 Alternative Steps:\n` +
+              `1. Copy the link above\n` +
+              `2. Open your file manager app\n` +
+              `3. Paste the link to download\n` +
+              `4. Use a ZIP extractor app to open the file`;
+            
+            alert(mobileZipInstructions);
+            return;
+          }
+          
+          // For non-ZIP files, try the normal mobile download
           let downloadStarted = false;
           
           // First, try to open in new tab/window

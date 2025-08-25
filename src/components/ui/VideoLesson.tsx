@@ -20,8 +20,10 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
   isPremium = false,
   onPlay
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   // Extract video ID from YouTube URL
   const getVideoId = (url: string) => {
@@ -31,10 +33,28 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
   };
 
   const videoId = getVideoId(videoUrl);
-  const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+  const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&showinfo=0` : '';
+
+  // Generate thumbnail URL from video ID
+  const getThumbnailUrl = (videoId: string) => {
+    return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  };
+
+  const handlePlayClick = () => {
+    if (!videoId) return;
+    
+    setIsLoading(true);
+    setShowVideo(true);
+    setHasError(false);
+    
+    if (onPlay) {
+      onPlay();
+    }
+  };
 
   const handleVideoLoad = () => {
     setIsLoading(false);
+    setIsVideoLoaded(true);
   };
 
   const handleVideoError = () => {
@@ -46,7 +66,38 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl transition-all duration-300">
       {/* Video Thumbnail/Player */}
       <div className="relative aspect-video bg-slate-100 dark:bg-slate-700">
-        {embedUrl ? (
+        {!showVideo ? (
+          // Show thumbnail with play button overlay
+          <div className="relative w-full h-full">
+            {videoId && (
+              <img 
+                src={getThumbnailUrl(videoId)} 
+                alt={title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback to default thumbnail if YouTube thumbnail fails
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            )}
+            
+            {/* Play Button Overlay */}
+            <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+              <button
+                onClick={handlePlayClick}
+                className="bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-4 transition-all duration-200 transform hover:scale-110 shadow-lg"
+              >
+                <Play className="w-8 h-8 text-slate-800 ml-1" fill="currentColor" />
+              </button>
+            </div>
+            
+            {/* Duration Badge */}
+            <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+              {duration}
+            </div>
+          </div>
+        ) : (
+          // Show actual video player
           <>
             {/* Loading Overlay */}
             {isLoading && (
@@ -84,24 +135,19 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
               </div>
             )}
             
-            <iframe
-              src={embedUrl}
-              title={title}
-              className="w-full h-full"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              onLoad={handleVideoLoad}
-              onError={handleVideoError}
-            ></iframe>
+            {embedUrl && (
+              <iframe
+                src={embedUrl}
+                title={title}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                onLoad={handleVideoLoad}
+                onError={handleVideoError}
+              ></iframe>
+            )}
           </>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="text-center">
-              <Play className="w-12 h-12 text-slate-400 mx-auto mb-2" />
-              <p className="text-slate-500 dark:text-slate-400">Video not available</p>
-            </div>
-          </div>
         )}
       </div>
 
