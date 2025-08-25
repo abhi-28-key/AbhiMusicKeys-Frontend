@@ -169,9 +169,11 @@ const DownloadsPage: React.FC = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Element;
-      if (!target.closest('.user-menu') && !target.closest('.user-menu-toggle')) {
-        setShowUserMenu(false);
+      // Don't close if clicking inside the menu or menu toggle
+      if (target.closest('.user-menu-dropdown') || target.closest('.user-menu-toggle')) {
+        return;
       }
+      setShowUserMenu(false);
     };
 
     // Add both mouse and touch event listeners for better mobile support
@@ -191,26 +193,18 @@ const DownloadsPage: React.FC = () => {
     setShowUserMenu(!showUserMenu);
   };
 
-  // Simplified mobile button handler
-  const handleMobileAction = (action: () => void) => {
-    setShowUserMenu(false);
-    setTimeout(() => {
-      action();
-    }, 150);
-  };
-
-  // Enhanced mobile touch handler
-  const handleMobileTouch = (action: () => void) => (e: React.TouchEvent | React.MouseEvent) => {
+  // Unified mobile menu button handler
+  const handleMobileMenuButton = (action: () => void) => (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // Close menu immediately
+    // Close menu first
     setShowUserMenu(false);
     
-    // Execute action with delay
+    // Execute action with a small delay to ensure menu closes
     setTimeout(() => {
       action();
-    }, 200);
+    }, 100);
   };
 
   const handleDownload = async (fileType: 'styles' | 'tones') => {
@@ -937,7 +931,7 @@ const DownloadsPage: React.FC = () => {
               <button
                 onClick={handleMobileMenuToggle}
                 onTouchEnd={handleMobileMenuToggle}
-                className="p-2 text-white hover:text-blue-200 transition-colors duration-300 touch-manipulation"
+                className="p-2 text-white hover:text-blue-200 transition-colors duration-300 touch-manipulation user-menu-toggle"
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -968,16 +962,16 @@ const DownloadsPage: React.FC = () => {
                       </div>
                     </div>
                     <button
-                      onClick={() => handleMobileAction(() => navigate('/psr-i500'))}
-                      onTouchEnd={() => handleMobileAction(() => navigate('/psr-i500'))}
+                      onClick={() => handleMobileMenuButton(() => navigate('/psr-i500'))}
+                      onTouchEnd={() => handleMobileMenuButton(() => navigate('/psr-i500'))}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <Music className="h-4 w-4" />
                       <span>PSR-I500 Styles</span>
                     </button>
                     <button
-                      onClick={() => handleMobileAction(handleLogout)}
-                      onTouchEnd={() => handleMobileAction(handleLogout)}
+                      onClick={() => handleMobileMenuButton(handleLogout)}
+                      onTouchEnd={() => handleMobileMenuButton(handleLogout)}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <LogOut className="h-4 w-4" />
@@ -992,13 +986,13 @@ const DownloadsPage: React.FC = () => {
                 ) : (
                   <div className="p-4">
                     <button
-                      onClick={handleMobileTouch(() => navigate('/login'))}
+                      onClick={handleMobileMenuButton(() => navigate('/login'))}
                       className="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <span>Login</span>
                     </button>
                     <button
-                      onClick={handleMobileTouch(() => navigate('/signup'))}
+                      onClick={handleMobileMenuButton(() => navigate('/signup'))}
                       className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <span>Sign Up</span>

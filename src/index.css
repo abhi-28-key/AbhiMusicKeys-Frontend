@@ -60,6 +60,12 @@
       max-width: calc(100vw - 1rem) !important;
       width: calc(100vw - 1rem) !important;
       overflow: hidden !important;
+      pointer-events: auto !important;
+    }
+    
+    .user-menu-dropdown button {
+      pointer-events: auto !important;
+      touch-action: manipulation !important;
     }
   }
   
@@ -68,6 +74,7 @@
     .user-menu-dropdown {
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      pointer-events: auto;
     }
     
     .touch-manipulation {
@@ -80,6 +87,7 @@
       -ms-user-select: none;
       user-select: none;
       cursor: pointer;
+      pointer-events: auto;
     }
     
     .active\:scale-95:active {
@@ -90,12 +98,18 @@
     button {
       min-height: 44px;
       min-width: 44px;
+      pointer-events: auto;
     }
     
     /* Better touch feedback */
     .touch-manipulation:active {
       transform: scale(0.98);
       transition: transform 0.1s ease;
+    }
+    
+    /* Prevent menu from closing when clicking inside */
+    .user-menu-dropdown * {
+      pointer-events: auto;
     }
   }
 }
