@@ -247,9 +247,9 @@ const PSRI500Page: React.FC = () => {
                                 </p>
                                 <div className="flex items-center gap-1.5 mt-1.5">
                                   <div className="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0"></div>
-                                                                      <span className="text-xs text-gray-600 dark:text-gray-400 font-medium truncate">
-                                      {getUserPlanStatus(currentUser)}
-                                    </span>
+                                  <span className="text-xs text-gray-600 dark:text-gray-400 font-medium truncate">
+                                    Premium
+                                  </span>
                                 </div>
                               </div>
                             </div>

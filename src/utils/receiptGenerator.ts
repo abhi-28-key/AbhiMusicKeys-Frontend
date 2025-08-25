@@ -42,7 +42,7 @@ Total: ${data.currency} ${data.amount.toLocaleString()}
 
 Thank you for choosing AbhiMusicKeys!
 Start your musical journey today.
-For support: abhimusickeys@gmail.com
+For support: abhimusickeys13@gmail.com
 
 ==========================================
 `;

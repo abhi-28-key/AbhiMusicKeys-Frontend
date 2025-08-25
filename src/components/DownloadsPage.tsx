@@ -5,7 +5,7 @@ import { Download, File, Music, Loader, ArrowLeft, ChevronDown, LogOut, Menu } f
 import { useNavigate } from 'react-router-dom';
 import { useNavigation } from '../contexts/NavigationContext';
 import { ThemeToggle } from './ui/theme-toggle';
-import { getUserPlanStatus } from '../utils/userPlanUtils';
+import { getUserPlanStatus, hasPlanAccess } from '../utils/userPlanUtils';
 
 const DownloadsPage: React.FC = () => {
   const { currentUser, logout } = useAuth();
@@ -191,15 +191,26 @@ const DownloadsPage: React.FC = () => {
     setShowUserMenu(!showUserMenu);
   };
 
-  // Handle mobile button clicks with proper event handling
-  const handleMobileButtonClick = (action: () => void) => (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // Simplified mobile button handler
+  const handleMobileAction = (action: () => void) => {
     setShowUserMenu(false);
-    // Add a small delay to ensure the menu closes before navigation
     setTimeout(() => {
       action();
-    }, 100);
+    }, 150);
+  };
+
+  // Enhanced mobile touch handler
+  const handleMobileTouch = (action: () => void) => (e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Close menu immediately
+    setShowUserMenu(false);
+    
+    // Execute action with delay
+    setTimeout(() => {
+      action();
+    }, 200);
   };
 
   const handleDownload = async (fileType: 'styles' | 'tones') => {
@@ -208,66 +219,18 @@ const DownloadsPage: React.FC = () => {
       return;
     }
 
-    // Enhanced purchase verification - prioritize Firestore over localStorage
-    const checkPurchaseStatus = async () => {
-      try {
-        const db = getFirestore();
-        const userDoc = doc(db, 'users', currentUser.uid);
-        const userData = await getDoc(userDoc);
-        
-        if (userData.exists()) {
-          const data = userData.data();
-          console.log('User data from Firestore:', data);
-          
-          // Check multiple purchase indicators in Firestore
-          const hasPurchasedIndianStyles = data.hasPurchasedIndianStyles || false;
-          const hasStylesTonesAccess = data.hasStylesTonesAccess || false;
-          const hasIndianStylesAccess = data.hasIndianStylesAccess || false;
-          const purchaseStatus = data.purchaseStatus || {};
-          
-          // Check if user has any form of styles & tones access
-          const firestoreAccess = hasPurchasedIndianStyles || hasStylesTonesAccess || hasIndianStylesAccess || 
-                                 purchaseStatus.stylesTones || purchaseStatus.indianStyles;
-          
-          // If Firestore shows access, sync to localStorage for future use
-          if (firestoreAccess) {
-            localStorage.setItem(`styles_tones_access_${currentUser.uid}`, 'true');
-            localStorage.setItem(`indian_styles_access_${currentUser.uid}`, 'true');
-            console.log('✅ Purchase verified in Firestore, synced to localStorage');
-          }
-          
-          return firestoreAccess;
-        }
-        
-        return false;
-      } catch (error) {
-        console.error('Error checking Firestore purchase status:', error);
-        return false;
+    try {
+      // Set specific loading state based on file type
+      if (fileType === 'styles') {
+        setIsDownloadingStyles(true);
+      } else if (fileType === 'tones') {
+        setIsDownloadingTones(true);
       }
-    };
 
-    // Check localStorage as fallback
-    const checkLocalStorageAccess = () => {
-      const stylesTonesAccess = localStorage.getItem(`styles_tones_access_${currentUser.uid}`);
-      const enrolledStylesTones = localStorage.getItem(`enrolled_${currentUser.uid}_styles_tones`);
-      const indianStylesAccess = localStorage.getItem(`indian_styles_access_${currentUser.uid}`);
-      const enrolledIndianStyles = localStorage.getItem(`enrolled_${currentUser.uid}_indian_styles`);
+      // Use the enhanced purchase verification system
+      const hasAccess = await hasPlanAccess(currentUser, 'styles-tones');
       
-      return stylesTonesAccess === 'true' || enrolledStylesTones === 'true' || 
-             indianStylesAccess === 'true' || enrolledIndianStyles === 'true';
-    };
-
-    // Check purchase status - prioritize Firestore
-    let hasAccess = false;
-    
-    // First check Firestore (primary source of truth)
-    hasAccess = await checkPurchaseStatus();
-    
-    // If Firestore doesn't show access, check localStorage as fallback
-    if (!hasAccess) {
-      hasAccess = checkLocalStorageAccess();
-      console.log('Firestore check failed, using localStorage fallback:', hasAccess);
-    }
+      console.log('Purchase status check for styles-tones:', hasAccess);
 
     if (!hasAccess) {
       // Redirect to PSR-I500 page for styles & tones
@@ -276,16 +239,8 @@ const DownloadsPage: React.FC = () => {
       return;
     }
 
-    console.log('✅ Purchase verified, proceeding with download');
-
-    // Set specific loading state based on file type
-    if (fileType === 'styles') {
-      setIsDownloadingStyles(true);
-    } else if (fileType === 'tones') {
-      setIsDownloadingTones(true);
-    }
-    
-    try {
+      console.log('✅ Purchase verified, proceeding with download');
+      
       // Determine the correct API URL for development vs production
       const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
@@ -323,21 +278,80 @@ const DownloadsPage: React.FC = () => {
           const isZipFile = filename.toLowerCase().includes('.zip');
           
           if (isZipFile) {
-            // For ZIP files on mobile, show specific instructions
-            const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
-              `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
-              `✅ Recommended Methods:\n` +
-              `1. Use a file manager app (like Files, My Files, or Documents)\n` +
-              `2. Use a ZIP extractor app from your app store\n` +
-              `3. Download on a computer and transfer to your phone\n\n` +
-              `🔗 Direct Download Link:\n${url}\n\n` +
-              `📋 Alternative Steps:\n` +
-              `1. Copy the link above\n` +
-              `2. Open your file manager app\n` +
-              `3. Paste the link to download\n` +
-              `4. Use a ZIP extractor app to open the file`;
+            // Try to copy link to clipboard first
+            const copyToClipboard = async (text: string) => {
+              try {
+                if (navigator.clipboard && window.isSecureContext) {
+                  await navigator.clipboard.writeText(text);
+                  return true;
+                } else {
+                  // Fallback for older browsers
+                  const textArea = document.createElement('textarea');
+                  textArea.value = text;
+                  textArea.style.position = 'fixed';
+                  textArea.style.left = '-999999px';
+                  textArea.style.top = '-999999px';
+                  document.body.appendChild(textArea);
+                  textArea.focus();
+                  textArea.select();
+                  const result = document.execCommand('copy');
+                  document.body.removeChild(textArea);
+                  return result;
+                }
+              } catch (err) {
+                console.error('Failed to copy: ', err);
+                return false;
+              }
+            };
             
-            alert(mobileZipInstructions);
+            // Copy link to clipboard
+            copyToClipboard(url).then((success) => {
+              if (success) {
+                const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
+                  `✅ Download link copied to clipboard!\n\n` +
+                  `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
+                  `📋 Next Steps:\n` +
+                  `1. Open your file manager app\n` +
+                  `2. Paste the copied link to download\n` +
+                  `3. Use a ZIP extractor app to open the file\n\n` +
+                  `🔗 Direct Download Link:\n${url}\n\n` +
+                  `💡 Alternative Methods:\n` +
+                  `• Use a ZIP extractor app from your app store\n` +
+                  `• Download on a computer and transfer to your phone`;
+                
+                alert(mobileZipInstructions);
+              } else {
+                // Fallback if clipboard copy fails
+                const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
+                  `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
+                  `✅ Recommended Methods:\n` +
+                  `1. Use a file manager app (like Files, My Files, or Documents)\n` +
+                  `2. Use a ZIP extractor app from your app store\n` +
+                  `3. Download on a computer and transfer to your phone\n\n` +
+                  `🔗 Direct Download Link:\n${url}\n\n` +
+                  `📋 Alternative Steps:\n` +
+                  `1. Long press and select "Copy" on the link above\n` +
+                  `2. Open your file manager app\n` +
+                  `3. Paste the link to download\n` +
+                  `4. Use a ZIP extractor app to open the file`;
+                
+                // Show the instructions first
+                alert(mobileZipInstructions);
+                
+                // Then show a second alert with just the link for easy copying
+                const copyLinkMessage = `🔗 Copy this download link:\n\n${url}\n\n` +
+                  `📋 Instructions:\n` +
+                  `1. Long press and select "Copy"\n` +
+                  `2. Open your file manager app\n` +
+                  `3. Paste the link to download\n` +
+                  `4. Use a ZIP extractor app to open the file`;
+                
+                setTimeout(() => {
+                  alert(copyLinkMessage);
+                }, 500);
+              }
+            });
+            
             return;
           }
           
@@ -530,21 +544,80 @@ const DownloadsPage: React.FC = () => {
           const isZipFile = filename.toLowerCase().includes('.zip');
           
           if (isZipFile) {
-            // For ZIP files on mobile, show specific instructions
-            const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
-              `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
-              `✅ Recommended Methods:\n` +
-              `1. Use a file manager app (like Files, My Files, or Documents)\n` +
-              `2. Use a ZIP extractor app from your app store\n` +
-              `3. Download on a computer and transfer to your phone\n\n` +
-              `🔗 Direct Download Link:\n${url}\n\n` +
-              `📋 Alternative Steps:\n` +
-              `1. Copy the link above\n` +
-              `2. Open your file manager app\n` +
-              `3. Paste the link to download\n` +
-              `4. Use a ZIP extractor app to open the file`;
+            // Try to copy link to clipboard first
+            const copyToClipboard = async (text: string) => {
+              try {
+                if (navigator.clipboard && window.isSecureContext) {
+                  await navigator.clipboard.writeText(text);
+                  return true;
+                } else {
+                  // Fallback for older browsers
+                  const textArea = document.createElement('textarea');
+                  textArea.value = text;
+                  textArea.style.position = 'fixed';
+                  textArea.style.left = '-999999px';
+                  textArea.style.top = '-999999px';
+                  document.body.appendChild(textArea);
+                  textArea.focus();
+                  textArea.select();
+                  const result = document.execCommand('copy');
+                  document.body.removeChild(textArea);
+                  return result;
+                }
+              } catch (err) {
+                console.error('Failed to copy: ', err);
+                return false;
+              }
+            };
             
-            alert(mobileZipInstructions);
+            // Copy link to clipboard
+            copyToClipboard(url).then((success) => {
+              if (success) {
+                const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
+                  `✅ Download link copied to clipboard!\n\n` +
+                  `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
+                  `📋 Next Steps:\n` +
+                  `1. Open your file manager app\n` +
+                  `2. Paste the copied link to download\n` +
+                  `3. Use a ZIP extractor app to open the file\n\n` +
+                  `🔗 Direct Download Link:\n${url}\n\n` +
+                  `💡 Alternative Methods:\n` +
+                  `• Use a ZIP extractor app from your app store\n` +
+                  `• Download on a computer and transfer to your phone`;
+                
+                alert(mobileZipInstructions);
+              } else {
+                // Fallback if clipboard copy fails
+                const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
+                  `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
+                  `✅ Recommended Methods:\n` +
+                  `1. Use a file manager app (like Files, My Files, or Documents)\n` +
+                  `2. Use a ZIP extractor app from your app store\n` +
+                  `3. Download on a computer and transfer to your phone\n\n` +
+                  `🔗 Direct Download Link:\n${url}\n\n` +
+                  `📋 Alternative Steps:\n` +
+                  `1. Long press and select "Copy" on the link above\n` +
+                  `2. Open your file manager app\n` +
+                  `3. Paste the link to download\n` +
+                  `4. Use a ZIP extractor app to open the file`;
+                
+                // Show the instructions first
+                alert(mobileZipInstructions);
+                
+                // Then show a second alert with just the link for easy copying
+                const copyLinkMessage = `🔗 Copy this download link:\n\n${url}\n\n` +
+                  `📋 Instructions:\n` +
+                  `1. Long press and select "Copy"\n` +
+                  `2. Open your file manager app\n` +
+                  `3. Paste the link to download\n` +
+                  `4. Use a ZIP extractor app to open the file`;
+                
+                setTimeout(() => {
+                  alert(copyLinkMessage);
+                }, 500);
+              }
+            });
+            
             return;
           }
           
@@ -797,7 +870,7 @@ const DownloadsPage: React.FC = () => {
                             <div className="flex items-center gap-2 mt-2">
                               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                               <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                                {getUserPlanStatus(currentUser)}
+                                Premium
                               </span>
                             </div>
                           </div>
@@ -886,22 +959,22 @@ const DownloadsPage: React.FC = () => {
                         <div className="flex items-center gap-1.5 mt-1.5">
                           <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0"></div>
                           <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                            {getUserPlanStatus(currentUser)}
+                            Premium
                           </span>
                         </div>
                       </div>
                     </div>
                     <button
-                      onClick={handleMobileButtonClick(() => navigate('/psr-i500'))}
-                      onTouchEnd={handleMobileButtonClick(() => navigate('/psr-i500'))}
+                      onClick={() => handleMobileAction(() => navigate('/psr-i500'))}
+                      onTouchEnd={() => handleMobileAction(() => navigate('/psr-i500'))}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <Music className="h-4 w-4" />
                       <span>PSR-I500 Styles</span>
                     </button>
                     <button
-                      onClick={handleMobileButtonClick(handleLogout)}
-                      onTouchEnd={handleMobileButtonClick(handleLogout)}
+                      onClick={() => handleMobileAction(handleLogout)}
+                      onTouchEnd={() => handleMobileAction(handleLogout)}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <LogOut className="h-4 w-4" />
@@ -916,15 +989,13 @@ const DownloadsPage: React.FC = () => {
                 ) : (
                   <div className="p-4">
                     <button
-                      onClick={handleMobileButtonClick(() => navigate('/login'))}
-                      onTouchEnd={handleMobileButtonClick(() => navigate('/login'))}
+                      onClick={handleMobileTouch(() => navigate('/login'))}
                       className="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <span>Login</span>
                     </button>
                     <button
-                      onClick={handleMobileButtonClick(() => navigate('/signup'))}
-                      onTouchEnd={handleMobileButtonClick(() => navigate('/signup'))}
+                      onClick={handleMobileTouch(() => navigate('/signup'))}
                       className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <span>Sign Up</span>
@@ -1029,7 +1100,7 @@ const DownloadsPage: React.FC = () => {
                           <div className="flex items-center gap-2 mt-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                             <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                              {getUserPlanStatus(currentUser)}
+                              Premium
                             </span>
                           </div>
                         </div>
@@ -1117,7 +1188,7 @@ const DownloadsPage: React.FC = () => {
                       <div className="flex items-center gap-1.5 mt-1.5">
                         <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0"></div>
                         <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                          {getUserPlanStatus(currentUser)}
+                          Premium
                         </span>
                       </div>
                     </div>

@@ -13,6 +13,7 @@ import {
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import Loading from '../components/ui/loading';
+import { syncPurchaseStatusToLocalStorage } from '../utils/userPlanUtils';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -142,8 +143,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Listen for auth state changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+      
+      // If user is logged in, sync purchase status from Firestore
+      if (user) {
+        try {
+          console.log('🔄 Syncing purchase status for user:', user.email);
+          await syncPurchaseStatusToLocalStorage(user);
+          console.log('✅ Purchase status synced successfully');
+        } catch (error) {
+          console.error('❌ Error syncing purchase status:', error);
+        }
+      }
+      
       setLoading(false);
     });
 

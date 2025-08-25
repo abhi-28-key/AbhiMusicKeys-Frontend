@@ -205,9 +205,9 @@ const AdvancedCourseOverview: React.FC = () => {
                               {currentUser.email}
                             </p>
                             <div className="flex items-center gap-1.5 mt-1.5">
-                              <div className={`w-1.5 h-1.5 rounded-full ${getUserPlanStatus(currentUser) === 'Premium' ? 'bg-green-500' : 'bg-green-500'}`}></div>
-                              <span className={`text-xs font-medium truncate ${getUserPlanStatus(currentUser) === 'Premium' ? 'text-green-600 dark:text-green-400' : 'text-green-600 dark:text-green-400'}`}>
-                                {getUserPlanStatus(currentUser)}
+                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0"></div>
+                              <span className="text-xs text-green-600 dark:text-green-400 font-medium truncate">
+                                Premium
                               </span>
                             </div>
                           </div>

@@ -79,10 +79,23 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      cursor: pointer;
     }
     
     .active\:scale-95:active {
       transform: scale(0.95);
+    }
+    
+    /* Improve button touch targets */
+    button {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Better touch feedback */
+    .touch-manipulation:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
     }
   }
 }
