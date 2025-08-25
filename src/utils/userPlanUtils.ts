@@ -20,14 +20,16 @@ export const getUserPlanStatus = async (currentUser: User | null): Promise<strin
       }
       
       // Check for specific access flags in Firestore
-      if (data.intermediateAccess || data.advancedAccess || data.hasPurchasedIndianStyles) {
+      if (data.intermediateAccess || data.advancedAccess || data.hasPurchasedIndianStyles || 
+          data.hasStylesTonesAccess || data.hasIndianStylesAccess) {
         return 'Premium';
       }
       
       // Check purchase status object
       if (data.purchaseStatus) {
         const purchaseStatus = data.purchaseStatus;
-        if (purchaseStatus.intermediate || purchaseStatus.advanced || purchaseStatus.stylesTones) {
+        if (purchaseStatus.intermediate || purchaseStatus.advanced || purchaseStatus.stylesTones || 
+            purchaseStatus.indianStyles) {
           return 'Premium';
         }
       }
@@ -45,8 +47,11 @@ export const getUserPlanStatus = async (currentUser: User | null): Promise<strin
     // Check for specific access flags in localStorage
     const intermediateAccess = localStorage.getItem(`intermediate_access_${currentUser.uid}`);
     const advancedAccess = localStorage.getItem(`advanced_access_${currentUser.uid}`);
+    const stylesTonesAccess = localStorage.getItem(`styles_tones_access_${currentUser.uid}`);
+    const indianStylesAccess = localStorage.getItem(`indian_styles_access_${currentUser.uid}`);
     
-    if (intermediateAccess === 'true' || advancedAccess === 'true') {
+    if (intermediateAccess === 'true' || advancedAccess === 'true' || 
+        stylesTonesAccess === 'true' || indianStylesAccess === 'true') {
       return 'Premium';
     }
     
@@ -74,8 +79,11 @@ const getUserPlanStatusFallback = (currentUser: User | null): string => {
   // Check for specific access flags
   const intermediateAccess = localStorage.getItem(`intermediate_access_${currentUser.uid}`);
   const advancedAccess = localStorage.getItem(`advanced_access_${currentUser.uid}`);
+  const stylesTonesAccess = localStorage.getItem(`styles_tones_access_${currentUser.uid}`);
+  const indianStylesAccess = localStorage.getItem(`indian_styles_access_${currentUser.uid}`);
   
-  if (intermediateAccess === 'true' || advancedAccess === 'true') {
+  if (intermediateAccess === 'true' || advancedAccess === 'true' || 
+      stylesTonesAccess === 'true' || indianStylesAccess === 'true') {
     return 'Premium';
   }
   
@@ -107,7 +115,9 @@ export const hasPlanAccess = async (currentUser: User | null, planId: string): P
         case 'advanced':
           return data.advancedAccess === true || data.purchaseStatus?.advanced === true;
         case 'styles-tones':
-          return data.hasPurchasedIndianStyles === true || data.purchaseStatus?.stylesTones === true;
+          return data.hasPurchasedIndianStyles === true || data.purchaseStatus?.stylesTones === true || 
+                 data.hasStylesTonesAccess === true || data.hasIndianStylesAccess === true ||
+                 data.purchaseStatus?.indianStyles === true;
         default:
           return false;
       }
@@ -131,7 +141,8 @@ const hasPlanAccessFallback = (currentUser: User | null, planId: string): boolea
     case 'advanced':
       return localStorage.getItem(`advanced_access_${currentUser.uid}`) === 'true';
     case 'styles-tones':
-      return localStorage.getItem(`styles_tones_access_${currentUser.uid}`) === 'true';
+      return localStorage.getItem(`styles_tones_access_${currentUser.uid}`) === 'true' || 
+             localStorage.getItem(`indian_styles_access_${currentUser.uid}`) === 'true';
     default:
       return false;
   }
@@ -162,7 +173,8 @@ export const syncPurchaseStatusToLocalStorage = async (currentUser: User | null)
       }
       
       // Sync styles & tones access
-      if (data.hasPurchasedIndianStyles || data.purchaseStatus?.stylesTones) {
+      if (data.hasPurchasedIndianStyles || data.purchaseStatus?.stylesTones || 
+          data.hasStylesTonesAccess || data.hasIndianStylesAccess || data.purchaseStatus?.indianStyles) {
         localStorage.setItem(`styles_tones_access_${currentUser.uid}`, 'true');
         localStorage.setItem(`indian_styles_access_${currentUser.uid}`, 'true');
       }
@@ -206,7 +218,13 @@ export const updatePurchaseStatusInFirestore = async (
         break;
       case 'styles-tones':
         updateData.hasPurchasedIndianStyles = status;
+        updateData.hasStylesTonesAccess = status;
         updateData['purchaseStatus.stylesTones'] = status;
+        break;
+      case 'indian-styles':
+        updateData.hasPurchasedIndianStyles = status;
+        updateData.hasIndianStylesAccess = status;
+        updateData['purchaseStatus.indianStyles'] = status;
         break;
     }
     

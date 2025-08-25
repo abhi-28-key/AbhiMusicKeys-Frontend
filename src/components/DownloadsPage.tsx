@@ -231,6 +231,9 @@ const DownloadsPage: React.FC = () => {
       const hasAccess = await hasPlanAccess(currentUser, 'styles-tones');
       
       console.log('Purchase status check for styles-tones:', hasAccess);
+      console.log('Current user:', currentUser.uid);
+      console.log('localStorage styles_tones_access:', localStorage.getItem(`styles_tones_access_${currentUser.uid}`));
+      console.log('localStorage indian_styles_access:', localStorage.getItem(`indian_styles_access_${currentUser.uid}`));
 
     if (!hasAccess) {
       // Redirect to PSR-I500 page for styles & tones

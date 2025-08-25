@@ -211,11 +211,41 @@ const PaymentSuccess: React.FC = () => {
             {/* Action Buttons */}
             <div className="space-y-4">
               <button
-                onClick={() => navigate('/')}
+                onClick={() => {
+                  // Navigate based on plan type
+                  if (planId === 'styles-tones' || planId === 'indian-styles') {
+                    navigate('/downloads');
+                  } else if (planId === 'intermediate') {
+                    navigate('/intermediate-content');
+                  } else if (planId === 'advanced') {
+                    navigate('/advanced-content');
+                  } else {
+                    navigate('/');
+                  }
+                }}
                 className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
-                <Home className="inline-block w-5 h-5 mr-2" />
-                Go to Dashboard
+                {planId === 'styles-tones' || planId === 'indian-styles' ? (
+                  <>
+                    <Download className="inline-block w-5 h-5 mr-2" />
+                    Go to Downloads
+                  </>
+                ) : planId === 'intermediate' ? (
+                  <>
+                    <Home className="inline-block w-5 h-5 mr-2" />
+                    Go to Intermediate Course
+                  </>
+                ) : planId === 'advanced' ? (
+                  <>
+                    <Home className="inline-block w-5 h-5 mr-2" />
+                    Go to Advanced Course
+                  </>
+                ) : (
+                  <>
+                    <Home className="inline-block w-5 h-5 mr-2" />
+                    Go to Dashboard
+                  </>
+                )}
               </button>
               
               <button
@@ -232,8 +262,13 @@ const PaymentSuccess: React.FC = () => {
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 You will receive a confirmation email shortly. If you have any questions, 
                 please contact us at{' '}
-                <a href="mailto:support@abhimusickeys.com" className="text-blue-600 hover:text-blue-700 dark:text-blue-400">
-                  support@abhimusickeys.com
+                <a 
+                  href="mailto:abhimusickeys13@gmail.com?subject=Support%20Request%20-%20AbhiMusicKeys&body=Hello,%0A%0AI%20need%20support%20regarding%20my%20purchase.%0A%0APayment%20ID:%20${paymentId}%0APlan:%20${getPlanName(planId)}%0A%0AThank%20you!" 
+                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  abhimusickeys13@gmail.com
                 </a>
               </p>
             </div>
