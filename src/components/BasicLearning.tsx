@@ -879,7 +879,6 @@ const BasicLearning: React.FC = () => {
                                     <button
                           onClick={() => {
                             markScaleCompleted(selectedScaleData.name);
-                            alert(`Great job! You've learned ${selectedScaleData.name} perfectly! 🎉`);
                             setSelectedScale(null);
                           }}
                           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-4 sm:px-6 lg:px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -999,7 +998,6 @@ const BasicLearning: React.FC = () => {
           <button
             onClick={() => {
               markScaleCompleted(selectedSharpScale.name);
-              alert(`Great job! You've learned ${selectedSharpScale.name} perfectly! 🎉`);
               setSelectedSharpScale(null);
             }}
             className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -1118,7 +1116,6 @@ const BasicLearning: React.FC = () => {
           <button
             onClick={() => {
               markScaleCompleted(selectedSharpMinorScale.name);
-              alert(`Great job! You've learned ${selectedSharpMinorScale.name} perfectly! 🎉`);
               setSelectedSharpMinorScale(null);
             }}
             className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -1297,7 +1294,6 @@ const BasicLearning: React.FC = () => {
                 <button
                   onClick={() => {
                     markSectionCompleted('introduction');
-                    alert('🎉 Introduction completed! Great job!');
                   }}
                   disabled={!areAllSubsectionsCompleted()}
                                     className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
@@ -1599,7 +1595,6 @@ const BasicLearning: React.FC = () => {
                 <button
                   onClick={() => {
                     markSectionCompleted('basics');
-                    alert('🎉 Basics completed! You\'re doing great!');
                   }}
                   disabled={!areAllSubsectionsCompleted()}
                   className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold transition-all duration-300 text-xs sm:text-sm ${
@@ -1804,7 +1799,6 @@ const BasicLearning: React.FC = () => {
                           <button
                             onClick={() => {
                               markScaleCompleted(selectedScale.name);
-                              alert(`Great job! You've learned ${selectedScale.name} perfectly! 🎉`);
                               setSelectedScale(null);
                             }}
                             className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -1967,11 +1961,10 @@ const BasicLearning: React.FC = () => {
                       {/* Done Button */}
                       <div className="text-center mt-2">
                         <button
-                          onClick={() => {
-                            markScaleCompleted(selectedSharpScale.name);
-                            alert(`Great job! You've learned ${selectedSharpScale.name} perfectly! 🎉`);
-                            setSelectedSharpScale(null);
-                          }}
+                                      onClick={() => {
+              markScaleCompleted(selectedSharpScale.name);
+              setSelectedSharpScale(null);
+            }}
                           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
                         >
                           ✅ Done Abhi! I've Learned This Scale Perfectly
@@ -2000,7 +1993,6 @@ const BasicLearning: React.FC = () => {
                 <button
                   onClick={() => {
                     markSectionCompleted('majorScales');
-                    alert('🎉 Major Scales section completed! Excellent work!');
                   }}
                   disabled={!areAllMajorScalesCompleted()}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
@@ -2191,11 +2183,10 @@ const BasicLearning: React.FC = () => {
                       {/* Done Button */}
                       <div className="text-center">
                         <button
-                          onClick={() => {
-                            markScaleCompleted(selectedMinorScale.name);
-                            alert(`Great job! You've learned ${selectedMinorScale.name} perfectly! 🎉`);
-                            setSelectedMinorScale(null);
-                          }}
+                                                      onClick={() => {
+                              markScaleCompleted(selectedMinorScale.name);
+                              setSelectedMinorScale(null);
+                            }}
                           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
                         >
                           ✅ Done Abhi! I've Learned This Scale Perfectly
@@ -2358,7 +2349,6 @@ const BasicLearning: React.FC = () => {
                         <button
                           onClick={() => {
                             markScaleCompleted(selectedSharpMinorScale.name);
-                            alert(`Great job! You've learned ${selectedSharpMinorScale.name} perfectly! 🎉`);
                             setSelectedSharpMinorScale(null);
                           }}
                           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -2389,7 +2379,6 @@ const BasicLearning: React.FC = () => {
                 <button
                   onClick={() => {
                     markSectionCompleted('minorScales');
-                    alert('🎉 Minor Scales section completed! Fantastic progress!');
                   }}
                   disabled={!areAllMinorScalesCompleted()}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
@@ -2409,10 +2398,12 @@ const BasicLearning: React.FC = () => {
                 </button>
                 
                 <button
-                  onClick={goToNextSection}
+                  onClick={() => {
+                    setActiveSection('major-family-chords');
+                  }}
                   className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold transition-all duration-300"
                 >
-                  ➡️ Next: Inversions
+                  ➡️ Next: Major Families
                 </button>
               </div>
             </div>
@@ -2438,7 +2429,6 @@ const BasicLearning: React.FC = () => {
                   onPlay={() => console.log('Playing Chord Inversions video')}
                   onVideoComplete={() => {
                     markSectionCompleted('inversions');
-                    alert('🎉 Inversions video completed! Great job!');
                     console.log('✅ Inversions video completed!');
                   }}
                   sectionId="inversions"
@@ -2460,7 +2450,6 @@ const BasicLearning: React.FC = () => {
                 <button
                   onClick={() => {
                     markSectionCompleted('inversions');
-                    alert('🎉 Inversions section completed! Excellent work!');
                   }}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
                     courseProgress.inversions
@@ -2501,7 +2490,6 @@ const BasicLearning: React.FC = () => {
                   onPlay={() => console.log('Playing Practice video')}
                   onVideoComplete={() => {
                     markSectionCompleted('practicing');
-                    alert('🎉 Practice video completed! Excellent work!');
                     console.log('✅ Practice video completed!');
                   }}
                   sectionId="practicing"
@@ -2522,7 +2510,6 @@ const BasicLearning: React.FC = () => {
                 <button
                   onClick={() => {
                     markSectionCompleted('practicing');
-                    alert('🎉 Practicing section completed! You\'re ready to excel!');
                   }}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
                     courseProgress.practicing
@@ -2533,14 +2520,16 @@ const BasicLearning: React.FC = () => {
                   {courseProgress.practicing ? '✅ Completed' : '🎯 Mark as Complete'}
                 </button>
                 
-                <button
-                  onClick={goToNextSection}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold transition-all duration-300"
-                >
-                  ➡️ Next: Chord Family Sets
-                </button>
+                                  <button
+                    onClick={() => setShowGuidedLearningCompleteModal(true)}
+                    className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    🏆 Guided Learning Complete
+                  </button>
               </div>
             </div>
+
+
           </div>
         );
       case 'major-family-chords':
@@ -2654,7 +2643,6 @@ const BasicLearning: React.FC = () => {
                         <button
                           onClick={() => {
                             markFamilyCompleted(selectedFamily.name);
-                            alert(`Great job! You've learned ${selectedFamily.name} perfectly! 🎉`);
                             setSelectedFamily(null);
                           }}
                           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -2766,7 +2754,6 @@ const BasicLearning: React.FC = () => {
                         <button
                           onClick={() => {
                             markFamilyCompleted(selectedSharpFamily.name);
-                            alert(`Great job! You've learned ${selectedSharpFamily.name} perfectly! 🎉`);
                             setSelectedSharpFamily(null);
                           }}
                           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -2797,7 +2784,6 @@ const BasicLearning: React.FC = () => {
                 <button
                   onClick={() => {
                     markSectionCompleted('majorFamilyChords');
-                    alert('🎉 Major Family Chords section completed! Excellent work!');
                   }}
                   disabled={!areAllMajorFamilyChordsCompleted()}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
@@ -2816,13 +2802,15 @@ const BasicLearning: React.FC = () => {
                   }
                 </button>
                 
-                {calculateProgress() === 45 && (
+                {calculateProgress() === 45 && areAllMajorFamilyChordsCompleted() && (
                   <button
-                    onClick={() => setShowGuidedLearningCompleteModal(true)}
-                    className="px-6 py-3 bg-yellow-600 hover:bg-yellow-700 rounded-xl font-bold transition-all duration-300"
+                    onClick={() => {
+                      setActiveSection('minor-family-chords');
+                    }}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all duration-300"
                   >
-                    🏆 Guided Learning Complete!
-                  </button>
+                    ➡️ Next: Minor Families
+                </button>
                 )}
               </div>
             </div>
@@ -2939,7 +2927,6 @@ const BasicLearning: React.FC = () => {
                         <button
                           onClick={() => {
                             markFamilyCompleted(selectedFamily.name);
-                            alert(`Great job! You've learned ${selectedFamily.name} perfectly! 🎉`);
                             setSelectedFamily(null);
                           }}
                           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -3051,7 +3038,6 @@ const BasicLearning: React.FC = () => {
                         <button
                           onClick={() => {
                             markFamilyCompleted(selectedSharpFamily.name);
-                            alert(`Great job! You've learned ${selectedSharpFamily.name} perfectly! 🎉`);
                             setSelectedSharpFamily(null);
                           }}
                           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm lg:text-base"
@@ -3082,7 +3068,6 @@ const BasicLearning: React.FC = () => {
                 <button
                   onClick={() => {
                     markSectionCompleted('minorFamilyChords');
-                    alert('🎉 Minor Family Chords section completed! Fantastic work!');
                   }}
                   disabled={!areAllMinorFamilyChordsCompleted()}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
@@ -3544,125 +3529,126 @@ const BasicLearning: React.FC = () => {
 
       {/* Guided Learning Complete Modal */}
       {showGuidedLearningCompleteModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-1">
-          <div className="bg-white dark:bg-slate-800 rounded shadow-2xl w-[260px] sm:w-[320px] lg:w-[400px] transform transition-all duration-300 scale-100">
-            {/* Header with Gradient Background */}
-            <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 rounded-t p-1.5 text-white text-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-black/10"></div>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-[90vw] max-w-md sm:max-w-lg lg:max-w-xl transform transition-all duration-300 scale-100 max-h-[90vh] overflow-y-auto">
+            {/* Header with Professional Background */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-t-xl p-6 text-white text-center relative">
+              <div className="absolute inset-0 bg-black/10 rounded-t-xl"></div>
               <div className="relative z-10">
-                <div className="text-sm sm:text-base mb-0.5">🎉🎉🎉</div>
-                <h2 className="text-xs font-bold mb-0.5">CONGRATULATIONS!</h2>
-                <p className="text-xs opacity-90">You've completed the guided portion (45%) of the Basic Piano Course!</p>
+                <div className="text-2xl mb-2">🎉</div>
+                <h2 className="text-xl sm:text-2xl font-bold mb-2">Congratulations!</h2>
+                <p className="text-sm sm:text-base opacity-95">You've completed the guided portion (45%) of the Basic Piano Course!</p>
               </div>
+
             </div>
 
             {/* Content */}
-            <div className="p-1.5 space-y-0.5">
+            <div className="p-6 space-y-4">
               {/* Important Note */}
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded p-1 border border-blue-200 dark:border-blue-800">
-                <div className="flex items-center gap-1 mb-0.5">
-                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                    📝
+              <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4 border border-slate-200 dark:border-slate-600">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    ℹ️
                   </div>
-                  <h3 className="text-xs font-bold text-blue-800 dark:text-blue-200">IMPORTANT NOTE</h3>
+                  <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">Important Note</h3>
                 </div>
-                <p className="text-xs text-blue-700 dark:text-blue-300 font-semibold">
+                <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">
                   You still have more to learn! The remaining 55% is self-directed practice.
                 </p>
               </div>
 
               {/* What You've Learned */}
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded p-1 border border-green-200 dark:border-green-800">
-                <div className="flex items-center gap-1 mb-0.5">
-                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+              <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4 border border-slate-200 dark:border-slate-600">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     🎹
                   </div>
-                  <h3 className="text-xs font-bold text-green-800 dark:text-green-200">What You've Learned</h3>
+                  <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">What You've Learned</h3>
                 </div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-green-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-green-700 dark:text-green-300">Basic piano fundamentals</span>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Basic piano fundamentals</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-green-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-green-700 dark:text-green-300">Major and Minor scales</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Major and Minor scales</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-green-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-green-700 dark:text-green-300">Family chords and progressions</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Family chords and progressions</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-green-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-green-700 dark:text-green-300">Hand positioning and technique</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Hand positioning and technique</span>
                   </div>
                 </div>
               </div>
 
               {/* Next Steps */}
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded p-1 border border-purple-200 dark:border-purple-800">
-                <div className="flex items-center gap-1 mb-0.5">
-                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+              <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4 border border-slate-200 dark:border-slate-600">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     🎯
                   </div>
-                  <h3 className="text-xs font-bold text-purple-800 dark:text-purple-200">Next Steps for Remaining 55%</h3>
+                  <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">Next Steps for Remaining 55%</h3>
                 </div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-purple-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-purple-700 dark:text-purple-300">Keep practicing regularly</span>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Keep practicing regularly</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-purple-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-purple-700 dark:text-purple-300">Try playing church songs and hymns</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Try playing church songs and hymns</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-purple-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-purple-700 dark:text-purple-300">Follow professional piano players on YouTube</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Follow professional piano players on YouTube</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-purple-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-purple-700 dark:text-purple-300">Study advanced techniques and music theory</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Study advanced techniques and music theory</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-purple-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-purple-700 dark:text-purple-300">Practice with different genres and styles</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Practice with different genres and styles</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-0.5 h-0.5 bg-purple-500 rounded-full flex-shrink-0"></div>
-                    <span className="text-xs text-purple-700 dark:text-purple-300">Join piano communities and forums</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                    <span className="text-sm text-slate-700 dark:text-slate-300">Join piano communities and forums</span>
                   </div>
                 </div>
               </div>
 
               {/* Key Reminder */}
-              <div className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded p-1 border border-orange-200 dark:border-orange-800">
-                <div className="flex items-center gap-1 mb-0.5">
-                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+              <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4 border border-slate-200 dark:border-slate-600">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     💡
                   </div>
-                  <h3 className="text-xs font-bold text-orange-800 dark:text-orange-200">Key Reminder</h3>
+                  <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">Key Reminder</h3>
                 </div>
-                <p className="text-xs text-orange-700 dark:text-orange-300 font-semibold">
+                <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">
                   The remaining 55% is self-directed learning where you apply your knowledge and develop your own style!
                 </p>
               </div>
 
               {/* Final Encouragement */}
-              <div className="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded p-1 border border-pink-200 dark:border-pink-800 text-center">
-                <div className="text-sm sm:text-base mb-0.5">🌟</div>
-                <h3 className="text-xs font-bold text-pink-800 dark:text-pink-200 mb-0.5">All the best on your continued piano journey!</h3>
-                <p className="text-xs text-pink-700 dark:text-pink-300 font-semibold">Keep practicing and never give up! 🌟</p>
+              <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4 border border-slate-200 dark:border-slate-600 text-center">
+                <div className="text-2xl mb-2">🌟</div>
+                <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-2">All the best on your continued piano journey!</h3>
+                <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">Keep practicing and never give up!</p>
               </div>
             </div>
 
             {/* Action Button */}
-            <div className="p-1.5 pt-0">
+            <div className="p-6 pt-0">
               <button
                 onClick={() => setShowGuidedLearningCompleteModal(false)}
-                className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-1 px-2 rounded shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-base"
               >
-                🎉 Thank You! I'm Ready to Continue Learning! 🎉
+                Thank You! I'm Ready to Continue Learning
               </button>
             </div>
           </div>

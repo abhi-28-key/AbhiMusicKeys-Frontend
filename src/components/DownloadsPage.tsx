@@ -285,13 +285,13 @@ const DownloadsPage: React.FC = () => {
     }
 
     try {
-      // Set specific loading state based on file type
-      if (fileType === 'styles') {
-        setIsDownloadingStyles(true);
-      } else if (fileType === 'tones') {
-        setIsDownloadingTones(true);
-      }
-
+    // Set specific loading state based on file type
+    if (fileType === 'styles') {
+      setIsDownloadingStyles(true);
+    } else if (fileType === 'tones') {
+      setIsDownloadingTones(true);
+    }
+    
       // Use the enhanced purchase verification system
       const hasAccess = await hasPlanAccess(currentUser, 'styles-tones');
       
@@ -1259,20 +1259,20 @@ const DownloadsPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                                     <button
+                  <button
                      onClick={handlePSRButton}
                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
-                   >
-                     <Music className="h-4 w-4" />
-                     <span>PSR-I500 Styles</span>
-                   </button>
-                   <button
+                  >
+                    <Music className="h-4 w-4" />
+                    <span>PSR-I500 Styles</span>
+                  </button>
+                  <button
                      onClick={handleLogoutButton}
                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
-                   >
-                     <LogOut className="h-4 w-4" />
-                     <span>Logout</span>
-                   </button>
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
+                  </button>
                   
                   {/* Theme Toggle in Mobile Menu */}
                   <div className="flex items-center justify-center pt-2 border-t border-slate-200/50 dark:border-slate-700/50">
