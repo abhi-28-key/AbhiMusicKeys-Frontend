@@ -769,8 +769,8 @@ const BasicLearning: React.FC = () => {
     const NoteBox: React.FC<{ note: string; className?: string }> = ({ note, className = '' }) => (
       <div className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg border-2 flex items-center justify-center font-bold text-sm sm:text-base lg:text-lg transition-all duration-200 ${
         isSharp(note) 
-          ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-          : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+          ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+          : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
       } ${className}`}>
         {note}
       </div>
@@ -899,8 +899,8 @@ const BasicLearning: React.FC = () => {
     const NoteBox: React.FC<{ note: string; className?: string }> = ({ note, className = '' }) => (
       <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
         isSharp(note)
-          ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-          : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+          ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+          : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
       } ${className}`}>
         {note}
       </div>
@@ -1017,8 +1017,8 @@ const BasicLearning: React.FC = () => {
     const NoteBox: React.FC<{ note: string; className?: string }> = ({ note, className = '' }) => (
       <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
         isSharp(note)
-          ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-          : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+          ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+          : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
       } ${className}`}>
         {note}
       </div>
@@ -1314,14 +1314,9 @@ const BasicLearning: React.FC = () => {
                 
                 <button
                   onClick={goToNextSection}
-                  disabled={!areAllIntroductionSubsectionsCompleted()}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                    areAllIntroductionSubsectionsCompleted()
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
+                  className="px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  {areAllIntroductionSubsectionsCompleted() ? '➡️ Next: Basics' : '🔒 Complete All Sections First'}
+                  ➡️ Next: Basics
                 </button>
               </div>
             </div>
@@ -1615,14 +1610,9 @@ const BasicLearning: React.FC = () => {
                 
                 <button
                   onClick={goToNextSection}
-                  disabled={!areAllSubsectionsCompleted()}
-                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold transition-all duration-300 text-xs sm:text-sm ${
-                    areAllSubsectionsCompleted()
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
+                  className="px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold transition-all duration-300 text-xs sm:text-sm bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  {areAllSubsectionsCompleted() ? '➡️ Next: Major Scales' : '🔒 Complete All Sections First'}
+                  ➡️ Next: Major Scales
                 </button>
               </div>
             </div>
@@ -1706,8 +1696,8 @@ const BasicLearning: React.FC = () => {
                             <div key={index} className="flex flex-col items-center">
                               <div className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                 note.includes('#') || note.includes('b')
-                                  ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                  : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                  ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                  : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                               }`}>
                                 {note}
                               </div>
@@ -1741,8 +1731,8 @@ const BasicLearning: React.FC = () => {
                                 <div key={index} className="flex flex-col items-center">
                                   <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                     note.includes('#') || note.includes('b')
-                                      ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                      : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                      ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                      : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                   }`}>
                                     {note}
                                   </div>
@@ -1767,8 +1757,8 @@ const BasicLearning: React.FC = () => {
                                 <div key={index} className="flex flex-col items-center">
                                   <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                     note.includes('#') || note.includes('b')
-                                      ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                      : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                      ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                      : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                   }`}>
                                     {note}
                                   </div>
@@ -1870,8 +1860,8 @@ const BasicLearning: React.FC = () => {
                             <div key={index} className="flex flex-col items-center">
                               <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                 note.includes('#') || note.includes('b')
-                                  ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                  : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                  ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                  : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                               }`}>
                                 {note}
                               </div>
@@ -1905,8 +1895,8 @@ const BasicLearning: React.FC = () => {
                               <div key={index} className="flex flex-col items-center">
                                 <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                   note.includes('#') || note.includes('b')
-                                    ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                    : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                    ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                    : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                 }`}>
                                   {note}
                                 </div>
@@ -1931,8 +1921,8 @@ const BasicLearning: React.FC = () => {
                               <div key={index} className="flex flex-col items-center">
                                 <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                   note.includes('#') || note.includes('b')
-                                    ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                    : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                    ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                    : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                 }`}>
                                   {note}
                                 </div>
@@ -2092,8 +2082,8 @@ const BasicLearning: React.FC = () => {
                             <div key={index} className="flex flex-col items-center">
                               <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                 note.includes('#') || note.includes('b')
-                                  ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                  : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                  ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                  : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                               }`}>
                                 {note}
                               </div>
@@ -2122,14 +2112,14 @@ const BasicLearning: React.FC = () => {
                               </div>
                               <span className="font-medium text-xs text-slate-700 dark:text-slate-300">Up</span>
                             </div>
-                            <div className="flex gap-1 justify-center flex-wrap">
-                              {selectedMinorScale.notes.up.map((note, index) => (
-                                <div key={index} className="flex flex-col items-center">
-                                  <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
-                                    note.includes('#') || note.includes('b')
-                                      ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                      : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
-                                  }`}>
+                                                      <div className="flex gap-1 justify-center flex-wrap">
+                            {selectedMinorScale.notes.up.map((note, index) => (
+                              <div key={index} className="flex flex-col items-center">
+                                <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
+                                  note.includes('#') || note.includes('b')
+                                    ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                    : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
+                                }`}>
                                     {note}
                                   </div>
                                   <span className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium">
@@ -2148,14 +2138,14 @@ const BasicLearning: React.FC = () => {
                               </div>
                               <span className="font-medium text-xs text-slate-700 dark:text-slate-300">Down</span>
                             </div>
-                            <div className="flex gap-1 justify-center flex-wrap">
-                              {selectedMinorScale.notes.down.map((note, index) => (
-                                <div key={index} className="flex flex-col items-center">
-                                  <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
-                                    note.includes('#') || note.includes('b')
-                                      ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                      : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
-                                  }`}>
+                                                      <div className="flex gap-1 justify-center flex-wrap">
+                            {selectedMinorScale.notes.down.map((note, index) => (
+                              <div key={index} className="flex flex-col items-center">
+                                <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
+                                  note.includes('#') || note.includes('b')
+                                    ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                    : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
+                                }`}>
                                     {note}
                                   </div>
                                   <span className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium">
@@ -2256,8 +2246,8 @@ const BasicLearning: React.FC = () => {
                             <div key={index} className="flex flex-col items-center">
                               <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                 note.includes('#') || note.includes('b')
-                                  ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                  : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                  ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                  : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                               }`}>
                                 {note}
                               </div>
@@ -2291,8 +2281,8 @@ const BasicLearning: React.FC = () => {
                               <div key={index} className="flex flex-col items-center">
                                 <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                   note.includes('#') || note.includes('b')
-                                    ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                    : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                    ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                    : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                 }`}>
                                   {note}
                                 </div>
@@ -2317,8 +2307,8 @@ const BasicLearning: React.FC = () => {
                               <div key={index} className="flex flex-col items-center">
                                 <div className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-lg border-2 flex items-center justify-center font-bold text-xs sm:text-sm lg:text-base transition-all duration-200 ${
                                   note.includes('#') || note.includes('b')
-                                    ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                    : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                    ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                    : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                 }`}>
                                   {note}
                                 </div>
@@ -2606,8 +2596,8 @@ const BasicLearning: React.FC = () => {
                                   <div key={noteIndex} className="flex flex-col items-center">
                                     <div className={`w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-lg border-2 flex items-center justify-center font-bold text-xs transition-all duration-200 ${
                                       note.includes('#') || note.includes('b')
-                                        ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                        : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                        ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                        : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                     }`}>
                                       {note}
                                     </div>
@@ -2717,8 +2707,8 @@ const BasicLearning: React.FC = () => {
                                   <div key={noteIndex} className="flex flex-col items-center">
                                     <div className={`w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-lg border-2 flex items-center justify-center font-bold text-xs transition-all duration-200 ${
                                       note.includes('#') || note.includes('b')
-                                        ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                        : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                        ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                        : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                     }`}>
                                       {note}
                                     </div>
@@ -2812,6 +2802,15 @@ const BasicLearning: React.FC = () => {
                     ➡️ Next: Minor Families
                 </button>
                 )}
+                
+                <button
+                  onClick={() => {
+                    setActiveSection('minor-family-chords');
+                  }}
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all duration-300"
+                >
+                  ➡️ Next: Minor Families
+                </button>
               </div>
             </div>
           </div>
@@ -2890,8 +2889,8 @@ const BasicLearning: React.FC = () => {
                                   <div key={noteIndex} className="flex flex-col items-center">
                                     <div className={`w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-lg border-2 flex items-center justify-center font-bold text-xs transition-all duration-200 ${
                                       note.includes('#') || note.includes('b')
-                                        ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                        : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                        ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                        : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                     }`}>
                                       {note}
                                     </div>
@@ -3001,8 +3000,8 @@ const BasicLearning: React.FC = () => {
                                   <div key={noteIndex} className="flex flex-col items-center">
                                     <div className={`w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-lg border-2 flex items-center justify-center font-bold text-xs transition-all duration-200 ${
                                       note.includes('#') || note.includes('b')
-                                        ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 border-slate-600 dark:border-slate-400' 
-                                        : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-500'
+                                        ? 'bg-slate-800 dark:bg-slate-800 text-white dark:text-white border-slate-600 dark:border-slate-400' 
+                                        : 'bg-white dark:bg-white text-slate-800 dark:text-slate-800 border-slate-300 dark:border-slate-500'
                                     }`}>
                                       {note}
                                     </div>
