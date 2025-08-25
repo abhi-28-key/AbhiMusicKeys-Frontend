@@ -655,11 +655,11 @@ const BasicCourseOverview: React.FC = () => {
           className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 hover:from-green-600 hover:via-emerald-600 hover:to-teal-700 text-white font-bold px-4 py-3 rounded-full shadow-2xl border-2 border-white/20 backdrop-blur-sm transition-all duration-300 transform hover:shadow-3xl"
         >
           <div className="flex items-center gap-3">
-            <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center">
+            <div className="w-5.5 h-5.5 bg-white/20 rounded-full flex items-center justify-center">
               <GraduationCap className="h-3.5 w-3.5 text-white" />
             </div>
             <div className="text-left">
-              <div className="text-lg font-semibold">
+              <div className="text-sm font-semibold">
                 {isEnrolled ? 'Continue Learning' : 'Enroll Now'}
               </div>
               {/* <div className="text-xs opacity-90">

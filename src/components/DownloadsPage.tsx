@@ -316,7 +316,7 @@ const DownloadsPage: React.FC = () => {
                   `3. Use a ZIP extractor app to open the file\n\n` +
                   `🔗 Direct Download Link:\n${url}\n\n` +
                   `💡 Alternative Methods:\n` +
-                  `• Use a ZIP extractor app from your app store\n` +
+                  // `• Use a ZIP extractor app from your app store\n` +
                   `• Download on a computer and transfer to your phone`;
                 
                 alert(mobileZipInstructions);
@@ -325,8 +325,8 @@ const DownloadsPage: React.FC = () => {
                 const mobileZipInstructions = `📱 Mobile Download Instructions for ${filename}:\n\n` +
                   `Since this is a ZIP file, mobile browsers cannot open it directly.\n\n` +
                   `✅ Recommended Methods:\n` +
-                  `1. Use a file manager app (like Files, My Files, or Documents)\n` +
-                  `2. Use a ZIP extractor app from your app store\n` +
+                  // `1. Use a file manager app (like Files, My Files, or Documents)\n` +
+                  // `2. Use a ZIP extractor app from your app store\n` +
                   `3. Download on a computer and transfer to your phone\n\n` +
                   `🔗 Direct Download Link:\n${url}\n\n` +
                   `📋 Alternative Steps:\n` +
