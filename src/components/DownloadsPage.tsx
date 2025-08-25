@@ -169,10 +169,22 @@ const DownloadsPage: React.FC = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Element;
+      
       // Don't close if clicking inside the menu or menu toggle
       if (target.closest('.user-menu-dropdown') || target.closest('.user-menu-toggle')) {
         return;
       }
+      
+      // Don't close if clicking on a button inside the menu
+      if (target.closest('button') && target.closest('.user-menu-dropdown')) {
+        return;
+      }
+      
+      // Don't close if clicking on the theme toggle inside the menu
+      if (target.closest('.theme-toggle') && target.closest('.user-menu-dropdown')) {
+        return;
+      }
+      
       setShowUserMenu(false);
     };
 
@@ -204,6 +216,65 @@ const DownloadsPage: React.FC = () => {
     // Execute action with a small delay to ensure menu closes
     setTimeout(() => {
       action();
+    }, 100);
+  };
+
+  // Enhanced mobile menu button handler that prevents immediate closing
+  const handleMobileMenuButtonEnhanced = (action: () => void) => (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Execute action immediately
+    action();
+    
+    // Close menu after a short delay
+    setTimeout(() => {
+      setShowUserMenu(false);
+    }, 50);
+  };
+
+  // Simple direct button handlers for mobile menu
+  const handlePSRButton = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowUserMenu(false);
+    setTimeout(() => {
+      navigate('/psr-i500');
+    }, 100);
+  };
+
+  const handleLogoutButton = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowUserMenu(false);
+    setTimeout(() => {
+      handleLogout();
+    }, 100);
+  };
+
+  const handleLoginButton = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowUserMenu(false);
+    setTimeout(() => {
+      navigate('/login');
+    }, 100);
+  };
+
+  const handleSignupButton = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowUserMenu(false);
+    setTimeout(() => {
+      navigate('/signup');
     }, 100);
   };
 
@@ -962,16 +1033,14 @@ const DownloadsPage: React.FC = () => {
                       </div>
                     </div>
                     <button
-                      onClick={() => handleMobileMenuButton(() => navigate('/psr-i500'))}
-                      onTouchEnd={() => handleMobileMenuButton(() => navigate('/psr-i500'))}
+                      onClick={handlePSRButton}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <Music className="h-4 w-4" />
                       <span>PSR-I500 Styles</span>
                     </button>
                     <button
-                      onClick={() => handleMobileMenuButton(handleLogout)}
-                      onTouchEnd={() => handleMobileMenuButton(handleLogout)}
+                      onClick={handleLogoutButton}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <LogOut className="h-4 w-4" />
@@ -986,13 +1055,13 @@ const DownloadsPage: React.FC = () => {
                 ) : (
                   <div className="p-4">
                     <button
-                      onClick={handleMobileMenuButton(() => navigate('/login'))}
+                      onClick={handleLoginButton}
                       className="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <span>Login</span>
                     </button>
                     <button
-                      onClick={handleMobileMenuButton(() => navigate('/signup'))}
+                      onClick={handleSignupButton}
                       className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                     >
                       <span>Sign Up</span>
@@ -1160,7 +1229,7 @@ const DownloadsPage: React.FC = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="p-2 text-white hover:text-blue-200 transition-colors duration-300"
+              className="p-2 text-white hover:text-blue-200 transition-colors duration-300 user-menu-toggle"
             >
               <Menu className="h-5 w-5" />
             </button>
@@ -1168,7 +1237,7 @@ const DownloadsPage: React.FC = () => {
 
           {/* Mobile Menu Dropdown */}
           {showUserMenu && (
-            <div className="md:hidden absolute top-16 right-4 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 min-w-48 z-[99999] backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 animate-in slide-in-from-top-2 duration-200">
+            <div className="md:hidden absolute top-16 right-4 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 min-w-48 z-[99999] backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 animate-in slide-in-from-top-2 duration-200 user-menu-dropdown">
               {currentUser ? (
                 <div className="p-4">
                   <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200/50 dark:border-slate-700/50">
@@ -1190,23 +1259,20 @@ const DownloadsPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => {
-                      navigate('/psr-i500');
-                      setShowUserMenu(false);
-                    }}
-                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2"
-                  >
-                    <Music className="h-4 w-4" />
-                    <span>PSR-I500 Styles</span>
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>Logout</span>
-                  </button>
+                                     <button
+                     onClick={handlePSRButton}
+                     className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
+                   >
+                     <Music className="h-4 w-4" />
+                     <span>PSR-I500 Styles</span>
+                   </button>
+                   <button
+                     onClick={handleLogoutButton}
+                     className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
+                   >
+                     <LogOut className="h-4 w-4" />
+                     <span>Logout</span>
+                   </button>
                   
                   {/* Theme Toggle in Mobile Menu */}
                   <div className="flex items-center justify-center pt-2 border-t border-slate-200/50 dark:border-slate-700/50">
@@ -1216,20 +1282,14 @@ const DownloadsPage: React.FC = () => {
               ) : (
                 <div className="p-4">
                   <button
-                    onClick={() => {
-                      navigate('/login');
-                      setShowUserMenu(false);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-all duration-300 mb-2"
+                    onClick={handleLoginButton}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                   >
                     <span>Login</span>
                   </button>
                   <button
-                    onClick={() => {
-                      navigate('/signup');
-                      setShowUserMenu(false);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 mb-2"
+                    onClick={handleSignupButton}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
                   >
                     <span>Sign Up</span>
                   </button>
@@ -1505,8 +1565,8 @@ const DownloadsPage: React.FC = () => {
           <div className="text-center mt-8">
             <p className="text-gray-600 dark:text-gray-300">
               Need help? Contact us at{' '}
-              <a href="mailto:support@abhimusickeys.com" className="text-blue-600 hover:text-blue-700 dark:text-blue-400">
-                support@abhimusickeys.com
+               <a href="mailto:abhimusickeys13@gmail.com" className="text-blue-600 hover:text-blue-700 dark:text-blue-400">
+                 abhimusickeys13@gmail.com
               </a>
             </p>
           </div>

@@ -98,7 +98,70 @@
     button {
       min-height: 44px;
       min-width: 44px;
-      pointer-events: auto;
+    }
+    
+    /* Enhanced mobile menu button handling */
+    .user-menu-dropdown button {
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: transparent !important;
+      pointer-events: auto !important;
+      position: relative;
+      z-index: 10;
+      cursor: pointer !important;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    
+    /* Prevent menu closing when clicking buttons */
+    .user-menu-dropdown button:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
+    }
+    
+    /* Ensure buttons are clickable on mobile */
+    .user-menu-dropdown button:hover {
+      opacity: 0.9;
+    }
+    
+    /* Force button to be interactive */
+    .user-menu-dropdown button:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+    
+    /* Ensure buttons are immediately responsive */
+    .user-menu-dropdown button {
+      transition: all 0.15s ease !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+    }
+    
+    /* Prevent any interference with button clicks */
+    .user-menu-dropdown {
+      pointer-events: auto !important;
+    }
+    
+    .user-menu-dropdown * {
+      pointer-events: auto !important;
+    }
+    
+    /* Enhanced mobile button handling */
+    .user-menu-dropdown button:active {
+      transform: scale(0.95) !important;
+      transition: transform 0.1s ease !important;
+    }
+    
+    /* Ensure proper touch targets */
+    .user-menu-dropdown button {
+      min-height: 44px !important;
+      min-width: 44px !important;
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: transparent !important;
     }
     
     /* Better touch feedback */

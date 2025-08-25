@@ -107,6 +107,27 @@ const BasicLearning: React.FC = () => {
     }
   }, [currentUser, navigate]);
 
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Element;
+      // Don't close if clicking inside the menu or menu toggle
+      if (target.closest('.user-menu-dropdown') || target.closest('.user-menu-toggle')) {
+        return;
+      }
+      setShowUserMenu(false);
+    };
+
+    // Add both mouse and touch event listeners for better mobile support
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, []);
+
   // Load progress from localStorage
   const loadProgress = () => {
     if (!currentUser) return;
@@ -171,6 +192,11 @@ const BasicLearning: React.FC = () => {
   // Check if all subsections are completed
   const areAllSubsectionsCompleted = () => {
     return Object.values(sectionProgress).every(Boolean);
+  };
+
+  // Check if all introduction subsections are completed
+  const areAllIntroductionSubsectionsCompleted = () => {
+    return sectionProgress.keyboardIntro && sectionProgress.octaveIntro;
   };
 
   // Mark scale as completed
@@ -1274,17 +1300,17 @@ const BasicLearning: React.FC = () => {
                     alert('🎉 Introduction completed! Great job!');
                   }}
                   disabled={!areAllSubsectionsCompleted()}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                    courseProgress.introduction
+                                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
+                    courseProgress.introduction 
                       ? 'bg-green-600 hover:bg-green-700 text-white'
-                      : areAllSubsectionsCompleted()
+                      : areAllIntroductionSubsectionsCompleted()
                       ? 'bg-white text-green-600 hover:bg-green-50'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
                 >
                   {courseProgress.introduction 
                     ? '✅ Completed' 
-                    : areAllSubsectionsCompleted()
+                    : areAllIntroductionSubsectionsCompleted()
                     ? '🎯 Mark as Complete'
                     : '🔒 Complete All Sections First'
                   }
@@ -1292,14 +1318,14 @@ const BasicLearning: React.FC = () => {
                 
                 <button
                   onClick={goToNextSection}
-                  disabled={!areAllSubsectionsCompleted()}
+                  disabled={!areAllIntroductionSubsectionsCompleted()}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
-                    areAllSubsectionsCompleted()
+                    areAllIntroductionSubsectionsCompleted()
                       ? 'bg-blue-600 hover:bg-blue-700 text-white'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
                 >
-                  {areAllSubsectionsCompleted() ? '➡️ Next: Basics' : '🔒 Complete All Sections First'}
+                  {areAllIntroductionSubsectionsCompleted() ? '➡️ Next: Basics' : '🔒 Complete All Sections First'}
                 </button>
               </div>
             </div>
@@ -3257,14 +3283,92 @@ const BasicLearning: React.FC = () => {
               <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} />
             </button>
             
-            {/* Back to Home Button - Mobile */}
-            <button
-              onClick={goBack}
-              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm"
-            >
-              <Home className="h-4 w-4" />
-              <span>Back</span>
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Back to Home Button - Mobile */}
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm"
+              >
+                <Home className="h-4 w-4" />
+                <span>Back</span>
+              </button>
+              
+              {/* Mobile User Menu Button */}
+              {currentUser && (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center gap-2 p-2 text-slate-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 touch-manipulation user-menu-toggle"
+                  >
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg">
+                      {getUserInitials(currentUser.email || '')}
+                    </div>
+                  </button>
+                  
+                  {/* Mobile User Dropdown Menu */}
+                  {showUserMenu && (
+                    <div className="absolute top-12 right-0 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 min-w-48 z-[99999] backdrop-blur-sm bg-white/95 dark:bg-slate-800/95 animate-in slide-in-from-top-2 duration-200 user-menu-dropdown">
+                      <div className="p-4">
+                        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200/50 dark:border-slate-700/50">
+                          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            {getUserInitials(currentUser.email || '')}
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-slate-800 dark:text-white">
+                              {getUserDisplayName(currentUser.email || '')}
+                            </p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                              {currentUser.email}
+                            </p>
+                            <div className="flex items-center gap-1.5 mt-1.5">
+                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0"></div>
+                              <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                                Free Plan
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            navigate('/psr-i500');
+                            setShowUserMenu(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
+                        >
+                          <Music className="h-4 w-4" />
+                          <span>PSR-I500 Styles</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            navigate('/downloads');
+                            setShowUserMenu(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
+                        >
+                          <Download className="h-4 w-4" />
+                          <span>Downloads</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setShowUserMenu(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 mb-2 touch-manipulation active:scale-95"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          <span>Logout</span>
+                        </button>
+                        
+                        {/* Theme Toggle in Mobile Menu */}
+                        <div className="flex items-center justify-center pt-2 border-t border-slate-200/50 dark:border-slate-700/50">
+                          <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
