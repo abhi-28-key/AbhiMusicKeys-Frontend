@@ -659,7 +659,7 @@ const BasicCourseOverview: React.FC = () => {
               <GraduationCap className="h-3.5 w-3.5 text-white" />
             </div>
             <div className="text-left">
-              <div className="text-sm font-semibold">
+              <div className="text-lg font-semibold">
                 {isEnrolled ? 'Continue Learning' : 'Enroll Now'}
               </div>
               {/* <div className="text-xs opacity-90">

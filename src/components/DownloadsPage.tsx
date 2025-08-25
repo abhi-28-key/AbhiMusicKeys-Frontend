@@ -82,6 +82,12 @@ const DownloadsPage: React.FC = () => {
     initializePage();
   }, [currentUser]);
 
+  // Initialize theme state
+  useEffect(() => {
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    setIsDark(isDarkMode);
+  }, []);
+
   const handleLogout = async () => {
     try {
       setShowUserMenu(false);
@@ -203,14 +209,53 @@ const DownloadsPage: React.FC = () => {
         throw new Error(data.error || 'Download failed');
       }
       
-      // Create a temporary link to trigger download
-      const link = document.createElement('a');
-      link.href = data.downloadUrl;
-      link.download = data.fileName;
-      // Remove target="_blank" to ensure download dialog appears
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Mobile-friendly download implementation
+      const downloadFile = (url: string, filename: string) => {
+        // Check if it's a mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+          // For mobile devices, try multiple approaches
+          let downloadStarted = false;
+          
+          // First, try to open in new tab/window
+          const newWindow = window.open(url, '_blank');
+          if (newWindow) {
+            downloadStarted = true;
+            // Close the window after a short delay to avoid cluttering
+            setTimeout(() => {
+              try {
+                newWindow.close();
+              } catch (e) {
+                // Window might already be closed
+              }
+            }, 2000);
+          }
+          
+          // If popup was blocked or failed, show manual instructions
+          if (!downloadStarted) {
+            const manualDownloadMessage = `Download Link for ${filename}:\n\n${url}\n\nInstructions:\n1. Copy the link above\n2. Open a new tab in your browser\n3. Paste the link and press Enter\n4. The file should download automatically\n\nIf you're still having issues, try:\n- Using a different browser\n- Checking your download settings\n- Ensuring you have enough storage space`;
+            
+            // Show the message in a more user-friendly way
+            const userWantsInstructions = window.confirm('Automatic download failed. Would you like to see the manual download instructions?');
+            if (userWantsInstructions) {
+              alert(manualDownloadMessage);
+            }
+          }
+        } else {
+          // For desktop, use the traditional method
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename;
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      };
+
+      // Trigger the download
+      downloadFile(data.downloadUrl, data.fileName);
 
       alert(`Downloading ${data.fileName}...`);
     } catch (error) {
@@ -348,14 +393,53 @@ const DownloadsPage: React.FC = () => {
     try {
       console.log('Downloading file:', file);
       
-      // Create a temporary link to trigger download
-      const link = document.createElement('a');
-      link.href = file.downloadUrl;
-      link.download = file.name;
-      // Remove target="_blank" to ensure download dialog appears
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Mobile-friendly download implementation
+      const downloadFile = (url: string, filename: string) => {
+        // Check if it's a mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+          // For mobile devices, try multiple approaches
+          let downloadStarted = false;
+          
+          // First, try to open in new tab/window
+          const newWindow = window.open(url, '_blank');
+          if (newWindow) {
+            downloadStarted = true;
+            // Close the window after a short delay to avoid cluttering
+            setTimeout(() => {
+              try {
+                newWindow.close();
+              } catch (e) {
+                // Window might already be closed
+              }
+            }, 2000);
+          }
+          
+          // If popup was blocked or failed, show manual instructions
+          if (!downloadStarted) {
+            const manualDownloadMessage = `Download Link for ${filename}:\n\n${url}\n\nInstructions:\n1. Copy the link above\n2. Open a new tab in your browser\n3. Paste the link and press Enter\n4. The file should download automatically\n\nIf you're still having issues, try:\n- Using a different browser\n- Checking your download settings\n- Ensuring you have enough storage space`;
+            
+            // Show the message in a more user-friendly way
+            const userWantsInstructions = window.confirm('Automatic download failed. Would you like to see the manual download instructions?');
+            if (userWantsInstructions) {
+              alert(manualDownloadMessage);
+            }
+          }
+        } else {
+          // For desktop, use the traditional method
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename;
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      };
+
+      // Trigger the download
+      downloadFile(file.downloadUrl, file.name);
 
       alert(`Downloading ${file.name}...`);
     } catch (error) {
@@ -581,16 +665,6 @@ const DownloadsPage: React.FC = () => {
                           <span className="font-medium">PSR-I500 Styles</span>
                         </button>
                         <button
-                          onClick={() => {
-                            navigate('/downloads');
-                            setShowUserMenu(false);
-                          }}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-300 hover:scale-105 group mb-2"
-                        >
-                          <Download className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
-                          <span className="font-medium">Downloads</span>
-                        </button>
-                        <button
                           onClick={handleLogout}
                           className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 hover:scale-105 group"
                         >
@@ -675,16 +749,6 @@ const DownloadsPage: React.FC = () => {
                     >
                       <Music className="h-4 w-4" />
                       <span>PSR-I500 Styles</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigate('/downloads');
-                        setShowUserMenu(false);
-                      }}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-300 mb-2"
-                    >
-                      <Download className="h-4 w-4" />
-                      <span>Downloads</span>
                     </button>
                     <button
                       onClick={handleLogout}
@@ -837,16 +901,6 @@ const DownloadsPage: React.FC = () => {
                         <span className="font-medium">PSR-I500 Styles</span>
                       </button>
                       <button
-                        onClick={() => {
-                          navigate('/downloads');
-                          setShowUserMenu(false);
-                        }}
-                        className="w-full flex items-center gap-3 px-4 py-3 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-300 hover:scale-105 group mb-2"
-                      >
-                        <Download className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
-                        <span className="font-medium">Downloads</span>
-                      </button>
-                      <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-300 hover:scale-105 group"
                       >
@@ -931,16 +985,6 @@ const DownloadsPage: React.FC = () => {
                   >
                     <Music className="h-4 w-4" />
                     <span>PSR-I500 Styles</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigate('/downloads');
-                      setShowUserMenu(false);
-                    }}
-                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-300 mb-2"
-                  >
-                    <Download className="h-4 w-4" />
-                    <span>Downloads</span>
                   </button>
                   <button
                     onClick={handleLogout}

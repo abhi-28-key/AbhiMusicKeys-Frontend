@@ -177,21 +177,53 @@ const DownloadPage: React.FC = () => {
       clearInterval(progressInterval);
       setDownloadProgress(100);
 
-      // Create a temporary link and trigger download
-      const link = document.createElement('a');
-      link.href = downloadData.downloadUrl;
-      link.download = downloadData.fileName;
-      link.target = '_blank'; // Open in new tab for external URLs
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // For mobile devices, also try to open in new window
-      if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        window.open(downloadData.downloadUrl, '_blank');
-      }
+      // Mobile-friendly download implementation
+      const downloadFile = (url: string, filename: string) => {
+        // Check if it's a mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+          // For mobile devices, try multiple approaches
+          let downloadStarted = false;
+          
+          // First, try to open in new tab/window
+          const newWindow = window.open(url, '_blank');
+          if (newWindow) {
+            downloadStarted = true;
+            // Close the window after a short delay to avoid cluttering
+            setTimeout(() => {
+              try {
+                newWindow.close();
+              } catch (e) {
+                // Window might already be closed
+              }
+            }, 2000);
+          }
+          
+          // If popup was blocked or failed, show manual instructions
+          if (!downloadStarted) {
+            const manualDownloadMessage = `Download Link for ${filename}:\n\n${url}\n\nInstructions:\n1. Copy the link above\n2. Open a new tab in your browser\n3. Paste the link and press Enter\n4. The file should download automatically\n\nIf you're still having issues, try:\n- Using a different browser\n- Checking your download settings\n- Ensuring you have enough storage space`;
+            
+            // Show the message in a more user-friendly way
+            if (window.confirm('Automatic download failed. Would you like to see the manual download instructions?')) {
+              alert(manualDownloadMessage);
+            }
+          }
+        } else {
+          // For desktop, use the traditional method
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename;
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      };
 
+      // Trigger the download
+      downloadFile(downloadData.downloadUrl, downloadData.fileName);
+      
       // Show success message
       setTimeout(() => {
         alert(`✅ ${fileType === 'styles' ? 'Indian Styles' : 'Indian Tones'} downloaded successfully!`);
