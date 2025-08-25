@@ -1674,7 +1674,7 @@ const AdvancedCourseContent: React.FC = () => {
             {/* Back to Home Button */}
             <button
               onClick={() => window.location.href = '/'}
-              className="flex items-center gap-2 p-2 sm:p-3 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-xs sm:text-sm"
+              className="flex items-center gap-2 p-2 sm:p-3 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-xs sm:text-sm border border-white/30 hover:border-white/50 backdrop-blur-sm"
             >
               <Home className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="hidden sm:inline">Back to Home</span>
