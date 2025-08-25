@@ -157,7 +157,13 @@ const DownloadPage: React.FC = () => {
       }, 200);
 
       // Call backend API to get download link
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/download/${fileType}`, {
+      // Determine the correct API URL for development vs production
+      const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const apiBaseUrl = isDevelopment 
+        ? 'http://localhost:5000' 
+        : 'https://abhimusickeys-backend.onrender.com'; // Your deployed backend URL
+      
+      const response = await fetch(`${apiBaseUrl}/api/download/${fileType}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
